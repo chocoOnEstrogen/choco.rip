@@ -32,13 +32,13 @@ const webhookSchema = z.object({
     head_commit: z.object({
         id: z.string().min(1),
         message: z.string(),
-        timestamp: z.string().datetime(),
+        timestamp: z.string(),
         author: z.object({
             name: z.string().min(1),
             email: z.string().email(),
         }),
     }),
-})
+});
 
 type WebhookPayload = z.infer<typeof webhookSchema>
 
