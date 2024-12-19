@@ -149,11 +149,15 @@ router.post('/webhook', limiter, async (req: Request, res: Response) => {
 
         // Verify GitHub event type
         const event = req.headers['x-github-event']
-        if (event !== 'push') {
+        if (event !== 'push' && event !== 'ping') {
             return res.status(400).json({ 
                 error: 'Invalid event type',
-                message: `Expected 'push' event, got '${event}'`
+                message: `Expected 'push' or 'ping' event, got '${event}'`
             })
+        }
+
+        if (event === 'ping') {
+            return res.status(200).json({ message: 'Pong' })
         }
 
         // Validate webhook payload
