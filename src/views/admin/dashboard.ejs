@@ -1,0 +1,783 @@
+<%- contentFor('body') %>
+
+<div class="container mt-4">
+    <% if (locals.message && locals.alert) { %>
+        <div class="alert alert-<%= alert === 'error' ? 'danger' : alert %> alert-dismissible fade show" role="alert">
+            <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Manage your website content</p>
+        </div>
+        <div>
+            <a href="/admin/blocklist" class="btn btn-outline-primary me-2">
+                <i class="fas fa-ban me-2"></i>Blocklist
+            </a>
+            <a href="/admin/logout" class="btn btn-outline-danger">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm bg-glass">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="card-title mb-0">Links</h3>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLinkModal">
+                    <i class="fas fa-plus me-2"></i>Add New
+                </button>
+            </div>
+            <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>TITLE</th>
+                            <th>URL</th>
+                            <th>TYPE</th>
+                            <th>PRIORITY</th>
+                            <th>STATUS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% $links.forEach(link => { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="<%= link.icon %> me-2"></i>
+                                        <%= link.title %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="<%= link.url %>" target="_blank" class="text-decoration-none">
+                                        <%= link.url %>
+                                    </a>
+                                </td>
+                                <td><span class="badge bg-primary"><%= link.type %></span></td>
+                                <td><%= link.priority %></td>
+                                <td>
+                                    <span class="badge bg-<%= link.active ? 'success' : 'danger' %>">
+                                        <%= link.active ? 'Active' : 'Inactive' %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-link text-decoration-none" 
+                                            onclick="editLink('<%= link._id %>', '<%= link.title %>', '<%= link.url %>', '<%= link.type %>', <%= link.priority %>, `<%= link.description %>`, '<%= link.icon %>', <%= link.active %>)"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editLinkModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-link text-decoration-none text-danger"
+                                            onclick="confirmDelete('<%= link._id %>', '<%= link.title %>')"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Link Modal -->
+<div class="modal fade" id="addLinkModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-glass">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Add New Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addLinkForm" action="/admin/links" method="POST">
+                    <!-- Alert -->
+                    <div id="addLinkAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Links can take up to an hour to update
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">URL</label>
+                            <input type="url" class="form-control" name="url" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" name="type" required>
+                                <option value="social">Social</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Priority</label>
+                            <input type="number" class="form-control" name="priority" value="0" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description (optional)</label>
+                        <textarea class="form-control" name="description" rows="2"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Icon *</label>
+                        <input type="hidden" id="selectedIcon" name="icon" required>
+                        <small class="text-muted d-block mb-2">
+                            <i class="fas fa-info-circle me-1" style="color: var(--text-color);"></i>
+                            Want to filter by icon type? Use the $brands, $regular, or $solid prefix.
+                            <br>
+                            <br>
+                            <code class="iconSearchExample">
+                                $solid search
+                            </code>
+                        </small>
+                        <div class="icon-search mb-2 position-relative">
+                            <input type="text" class="form-control" id="iconSearch" placeholder="Search icons...">
+                            <div class="search-spinner" id="searchSpinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="icon-grid-container">
+                            <div class="icon-grid" id="iconGrid">
+                                <% Object.entries(icons).forEach(([name, data]) => { 
+                                    if (data.free && data.free.length > 0) {
+                                        data.free.forEach(style => {
+                                            const prefix = style === 'brands' ? 'fab' : style === 'regular' ? 'far' : 'fas';
+                                            const iconClass = `${prefix} fa-${name}`;
+                                            const searchTerms = [name, data.label, ...(data.search?.terms || [])].join(' ').toLowerCase();
+                                %>
+                                    <div class="icon-item" 
+                                         data-icon="<%= iconClass %>"
+                                         data-name="<%= name %>"
+                                         data-terms="<%= searchTerms %>"
+                                         data-style="<%= style %>">
+                                        <i class="<%= iconClass %>"></i>
+                                        <span class="icon-label"><%= data.label || name %></span>
+                                    </div>
+                                <%  });
+                                    }
+                                }); %>
+                            </div>
+                            <div id="noResults" class="no-results-message" style="display: none;">
+                                <i class="fas fa-search me-2"></i>
+                                No icons found matching your search
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="active" checked>
+                        <label class="form-check-label">Active</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="addLinkForm" class="btn btn-primary">Add Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Link Modal -->
+<div class="modal fade" id="editLinkModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-glass">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Edit Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editLinkForm" action="/admin/links" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="id" id="editLinkId">
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="title" id="editLinkTitle" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">URL</label>
+                            <input type="url" class="form-control" name="url" id="editLinkUrl" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" name="type" id="editLinkType" required>
+                                <option value="social">Social</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Priority</label>
+                            <input type="number" class="form-control" name="priority" id="editLinkPriority" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description (optional)</label>
+                        <textarea class="form-control" name="description" id="editLinkDescription" rows="2"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Icon *</label>
+                        <input type="hidden" id="editSelectedIcon" name="icon" required>
+                        <small class="text-muted d-block mb-2">
+                            <i class="fas fa-info-circle me-1" style="color: var(--text-color);"></i>
+                            Want to filter by icon type? Use the $brands, $regular, or $solid prefix.
+                            <br>
+                            <br>
+                            <code class="iconSearchExample">
+                                $solid search
+                            </code>
+                        </small>
+                        <div class="icon-search mb-2 position-relative">
+                            <input type="text" class="form-control" id="editIconSearch" placeholder="Search icons...">
+                            <div class="search-spinner" id="editSearchSpinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="icon-grid-container">
+                            <div class="icon-grid" id="editIconGrid">
+                                <% Object.entries(icons).forEach(([name, data]) => { 
+                                    if (data.free && data.free.length > 0) {
+                                        data.free.forEach(style => {
+                                            const prefix = style === 'brands' ? 'fab' : style === 'regular' ? 'far' : 'fas';
+                                            const iconClass = `${prefix} fa-${name}`;
+                                            const searchTerms = [name, data.label, ...(data.search?.terms || [])].join(' ').toLowerCase();
+                                %>
+                                    <div class="icon-item" 
+                                         data-icon="<%= iconClass %>"
+                                         data-name="<%= name %>"
+                                         data-terms="<%= searchTerms %>"
+                                         data-style="<%= style %>">
+                                        <i class="<%= iconClass %>"></i>
+                                        <span class="icon-label"><%= data.label || name %></span>
+                                    </div>
+                                <%  });
+                                    }
+                                }); %>
+                            </div>
+                            <div id="editNoResults" class="no-results-message" style="display: none;">
+                                <i class="fas fa-search me-2"></i>
+                                No icons found matching your search
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="active" id="editLinkActive">
+                        <label class="form-check-label">Active</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="editLinkForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-glass">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Delete Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="deleteLinkTitle"></span>"?</p>
+                <p class="text-danger"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer border-0">
+                <form id="deleteLinkForm" action="/admin/links" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="id" id="deleteLinkId">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-glass {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color) !important;
+    }
+
+    .icon-search {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 10px 0;
+    }
+
+    .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .icon-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.5rem;
+        border: 1px solid var(--border-color);
+        padding: 8px;
+        text-align: center;
+    }
+
+    .icon-label {
+        font-size: 0.7rem;
+        margin-top: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    .icon-item:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .icon-item.selected {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    /* Form controls */
+    .form-control, .form-select {
+        background-color: var(--bg-color);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background-color: var(--bg-color);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+    }
+
+    /* Dark mode specific styles */
+    [data-theme="dark"] {
+        --table-hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] .table {
+        --bs-table-bg: var(--card-bg);
+        --bs-table-striped-bg: var(--card-bg);
+        --bs-table-hover-bg: var(--border-color);
+        --bs-table-color: var(--text-color);
+        --bs-table-striped-color: var(--text-color);
+        --bs-table-hover-color: var(--text-color);
+        --bs-table-active-bg: var(--border-color);
+        --bs-table-active-color: var(--text-color);
+        border-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .table > :not(caption) > * > * {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border-bottom-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .table tbody tr:hover td {
+        background-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    .card-title {
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .card-title {
+        color: var(--text-color);
+    }
+
+    /* Fix table hover in dark mode */
+    [data-theme="dark"] .table-hover > tbody > tr:hover > * {
+        background-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .modal-content {
+        background: var(--card-bg);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .form-control,
+    [data-theme="dark"] .form-select {
+        background: var(--bg-color);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    [data-theme="dark"] .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    [data-theme="dark"] .icon-item {
+        background: var(--bg-color);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .badge.bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    [data-theme="dark"] .btn-link {
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .btn-link:hover {
+        color: var(--primary-color);
+    }
+
+    [data-theme="dark"] .btn-link.text-danger {
+        color: #ef4444 !important;
+    }
+
+    [data-theme="dark"] .btn-link.text-danger:hover {
+        color: #dc2626 !important;
+    }
+
+    /* Animation */
+    .card {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Status badges */
+    .badge.bg-success {
+        background-color: #10b981 !important;
+    }
+
+    .badge.bg-danger {
+        background-color: #ef4444 !important;
+    }
+
+    /* Form labels */
+    .form-label {
+        color: var(--text-color);
+        font-weight: 500;
+    }
+
+    /* Modal header text */
+    .modal-title {
+        color: var(--text-color);
+    }
+
+    /* Add these styles */
+    .icon-grid-container {
+        position: relative;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    .no-results-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: var(--text-muted);
+        padding: 1rem;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .icon-grid {
+        min-height: 200px; /* Ensure grid has minimum height even when empty */
+    }
+
+    /* Add spinner styles */
+    .icon-search {
+        position: relative;
+    }
+
+    .search-spinner {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    /* Ensure the spinner doesn't overlap with text */
+    .icon-search input {
+        padding-right: 35px;
+    }
+</style>
+
+<script>
+// Define debounce function at the top level so it can be used by both search implementations
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const iconSearch = document.getElementById('iconSearch');
+    const iconItems = document.querySelectorAll('.icon-item');
+    const selectedIconInput = document.getElementById('selectedIcon');
+    const noResults = document.getElementById('noResults');
+    const searchSpinner = document.getElementById('searchSpinner');
+
+    // First search implementation
+    const performSearch = debounce((searchTerm) => {
+        const term = searchTerm.toLowerCase().trim();
+        let hasVisibleItems = false;
+        
+        // If search is empty, show all icons
+        if (!term) {
+            iconSearchData.forEach(({ element }) => {
+                element.style.display = '';
+            });
+            noResults.style.display = 'none';
+            return;
+        }
+
+        // Check for type filter
+        let typeFilter = null;
+        let searchText = term;
+        
+        if (term.startsWith('$')) {
+            const parts = term.split(' ');
+            const filterPart = parts[0].substring(1); // Remove the $ prefix
+            
+            // Valid type filters
+            // Get everything with data-style attribute
+            const validTypes = iconSearchData.filter(item => item.style).map(item => item.style);
+            if (validTypes.includes(filterPart)) {
+                typeFilter = filterPart;
+                searchText = parts.slice(1).join(' ').trim();
+            }
+        }
+
+        // Perform search with optional type filter
+        iconSearchData.forEach(({ element, searchText: itemSearchText, name, style }) => {
+            let matches = true;
+            
+            // Apply type filter if present
+            if (typeFilter) {
+                matches = style === typeFilter;
+            }
+            
+            // Apply text search if there's a search term
+            if (searchText && matches) {
+                matches = itemSearchText.includes(searchText) || name.includes(searchText);
+            }
+            
+            element.style.display = matches ? '' : 'none';
+            if (matches) hasVisibleItems = true;
+        });
+
+        // Show/hide no results message
+        noResults.style.display = hasVisibleItems ? 'none' : 'block';
+    }, 150);
+
+    // Update iconSearchData to include style information
+    const iconSearchData = Array.from(iconItems).map(item => ({
+        element: item,
+        searchText: item.dataset.terms.toLowerCase(),
+        name: item.dataset.name.toLowerCase(),
+        style: item.dataset.style
+    }));
+
+    // Search event listener
+    iconSearch.addEventListener('input', (e) => {
+        performSearch(e.target.value);
+    });
+
+    // Icon selection
+    iconItems.forEach(item => {
+        item.addEventListener('click', () => {
+            iconItems.forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            selectedIconInput.value = item.dataset.icon;
+        });
+    });
+
+    // Clear search when modal is hidden
+    const modal = document.getElementById('addLinkModal');
+    if (modal) {
+        modal.addEventListener('hidden.bs.modal', () => {
+            iconSearch.value = '';
+            performSearch('');
+        });
+    }
+
+    // Clear search when edit modal is hidden
+    const editModal = document.getElementById('editLinkModal');
+    if (editModal) {
+        editModal.addEventListener('hidden.bs.modal', () => {
+            const editIconSearch = editModal.querySelector('#iconSearch');
+            if (editIconSearch) {
+                editIconSearch.value = '';
+                performSearch('');
+            }
+        });
+    }
+});
+
+function editLink(id, title, url, type, priority, description, icon, active) {
+    // Set form values
+    document.getElementById('editLinkId').value = id;
+    document.getElementById('editLinkTitle').value = title;
+    document.getElementById('editLinkUrl').value = url;
+    document.getElementById('editLinkType').value = type;
+    document.getElementById('editLinkPriority').value = priority;
+    document.getElementById('editLinkDescription').value = description || '';
+    document.getElementById('editSelectedIcon').value = icon;
+    document.getElementById('editLinkActive').checked = active;
+
+    // Update icon selection
+    const iconItems = document.querySelectorAll('#editLinkModal .icon-item');
+    iconItems.forEach(item => {
+        if (item.dataset.icon === icon) {
+            item.classList.add('selected');
+        } else {
+            item.classList.remove('selected');
+        }
+    });
+}
+
+// Icon selection for edit modal
+document.querySelectorAll('#editLinkModal .icon-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('#editLinkModal .icon-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        document.getElementById('editSelectedIcon').value = item.dataset.icon;
+    });
+});
+
+function confirmDelete(id, title) {
+    document.getElementById('deleteLinkId').value = id;
+    document.getElementById('deleteLinkTitle').textContent = title;
+}
+
+// Add search functionality for edit modal
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code for add modal ...
+
+    // Edit modal search functionality
+    const editIconSearch = document.getElementById('editIconSearch');
+    const editIconItems = document.querySelectorAll('#editLinkModal .icon-item');
+    const editSelectedIconInput = document.getElementById('editSelectedIcon');
+    const editNoResults = document.getElementById('editNoResults');
+    const editSearchSpinner = document.getElementById('editSearchSpinner');
+
+    const editIconSearchData = Array.from(editIconItems).map(item => ({
+        element: item,
+        searchText: item.dataset.terms.toLowerCase(),
+        name: item.dataset.name.toLowerCase()
+    }));
+
+    const performEditSearch = debounce((searchTerm) => {
+        const term = searchTerm.toLowerCase().trim();
+        let hasVisibleItems = false;
+        
+        if (!term) {
+            editIconSearchData.forEach(({ element }) => {
+                element.style.display = '';
+            });
+            editNoResults.style.display = 'none';
+            return;
+        }
+
+        editIconSearchData.forEach(({ element, searchText, name }) => {
+            const matches = searchText.includes(term) || name.includes(term);
+            element.style.display = matches ? '' : 'none';
+            if (matches) hasVisibleItems = true;
+        });
+
+        editNoResults.style.display = hasVisibleItems ? 'none' : 'block';
+    }, 150);
+
+    editIconSearch.addEventListener('input', (e) => {
+        editSearchSpinner.style.display = 'block';
+        performEditSearch(e.target.value);
+    });
+
+    // Icon selection for edit modal
+    editIconItems.forEach(item => {
+        item.addEventListener('click', () => {
+            editIconItems.forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            editSelectedIconInput.value = item.dataset.icon;
+        });
+    });
+
+    // Clear search when edit modal is hidden
+    const editModal = document.getElementById('editLinkModal');
+    if (editModal) {
+        editModal.addEventListener('hidden.bs.modal', () => {
+            editIconSearch.value = '';
+            performEditSearch('');
+            editSearchSpinner.style.display = 'none';
+        });
+    }
+});
+</script> 

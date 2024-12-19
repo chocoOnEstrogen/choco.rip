@@ -1,0 +1,133 @@
+<%- contentFor('body') %>
+
+<article class="blog-post">
+  <!-- Hero Section -->
+  <header class="blog-hero" style="background-image: url('<%= post.coverImage %>')">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="display-4 mb-3"><%= post.title %></h1>
+        <div class="d-flex align-items-center text-white">
+          <div class="me-4">
+            <i class="fas fa-user me-2"></i>
+            <%= post.author %>
+          </div>
+          <div class="me-4">
+            <i class="fas fa-calendar me-2"></i>
+            <%= post.publishedAt.toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            }) %>
+          </div>
+          <div class="me-4">
+            <i class="fas fa-clock me-2"></i>
+            <%= post.readingTime %> min read
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Tags -->
+        <div class="mb-4">
+          <% post.tags.forEach(tag => { %>
+            <a href="/blog/tag/<%= tag %>" class="badge bg-primary me-2 text-decoration-none">
+              <%= tag %>
+            </a>
+          <% }) %>
+        </div>
+
+        <!-- Post Content -->
+        <div class="blog-content markdown-body">
+          <%- post.content %>
+        </div>
+
+        <!-- Share Buttons -->
+        <div class="share-buttons mt-5">
+          <h5 class="mb-3">Share this post</h5>
+          <div class="d-flex gap-2">
+            <a href="https://twitter.com/intent/tweet?text=<%= post.title %>&url=<%= encodeURIComponent(post.url) %>" 
+               class="btn btn-outline-primary" target="_blank">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(post.url) %>" 
+               class="btn btn-outline-primary" target="_blank">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=<%= encodeURIComponent(post.url) %>&title=<%= post.title %>" 
+               class="btn btn-outline-primary" target="_blank">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Related Posts -->
+        <% if (relatedPosts.length > 0) { %>
+          <div class="related-posts mt-5">
+            <h3 class="mb-4">Related Posts</h3>
+            <div class="row g-4">
+              <% relatedPosts.forEach(related => { %>
+                <div class="col-md-4">
+                  <a href="/blog/<%= related.publishedAt.getFullYear() %>/<%= (related.publishedAt.getMonth() + 1).toString().padStart(2, '0') %>/<%= related.publishedAt.getDate().toString().padStart(2, '0') %>/<%= related.slug %>" 
+                     class="card h-100 border-0 shadow-sm bg-glass hover-card text-decoration-none">
+                    <% if (related.coverImage) { %>
+                      <img src="<%= related.coverImage %>" class="card-img-top" alt="<%= related.title %>">
+                    <% } %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= related.title %></h5>
+                    </div>
+                  </a>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+.blog-hero {
+  min-height: 60vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: white;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.blog-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.blog-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.hover-card {
+  transition: transform 0.2s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+}
+</style> 

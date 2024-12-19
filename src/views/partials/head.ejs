@@ -1,0 +1,40 @@
+<head>
+    <title><%= seo.fullTitle %></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="<%= seo.description %>" />
+    <meta property="og:title" content="<%= seo.fullTitle %>" />
+    <meta property="og:description" content="<%= seo.description %>" />
+    <meta property="og:image" content="<%= seo.image %>" />
+    <meta property="og:url" content="<%= seo.canonicalUrl %>" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="<%= seo.twitterHandle %>" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpg" href="/me.jpg" />
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/stats.css">
+    <link rel="stylesheet" href="/css/markdown.css">
+    <link rel="stylesheet" href="/css/scrollbar.css">
+
+    <% if (path.includes('docs')) { %>
+      <link rel="stylesheet" href="/css/docs.css">
+    <% } %>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <script src="/js/captcha.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+</head> 

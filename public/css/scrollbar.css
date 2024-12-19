@@ -1,0 +1,123 @@
+/* Modern Scrollbar Styles */
+
+/* Light Mode */
+:root {
+    --scrollbar-width: 10px;
+    --scrollbar-height: 10px;
+    --scrollbar-track-color: #f1f5f9;
+    --scrollbar-thumb-color: #cbd5e1;
+    --scrollbar-thumb-hover-color: #94a3b8;
+    --scrollbar-thumb-active-color: #64748b;
+    --scrollbar-border-radius: 100vh;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    --scrollbar-track-color: #1e293b;
+    --scrollbar-thumb-color: #334155;
+    --scrollbar-thumb-hover-color: #475569;
+    --scrollbar-thumb-active-color: #64748b;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-height);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color);
+    border-radius: var(--scrollbar-border-radius);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    border-radius: var(--scrollbar-border-radius);
+    border: 2px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-active-color);
+}
+
+/* Corner where scrollbars meet */
+::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track-color);
+}
+
+/* For elements that need custom scrollbars */
+.custom-scrollbar {
+    scrollbar-gutter: stable;
+    overflow: auto;
+}
+
+/* Hide scrollbar while keeping functionality */
+.scrollbar-hidden {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari and Opera */
+}
+
+/* Thin variant */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* Rounded variant */
+.scrollbar-rounded::-webkit-scrollbar-thumb {
+    border-radius: 100vh;
+}
+
+/* Custom scrollbar for code blocks */
+pre::-webkit-scrollbar {
+    height: 8px;              /* Smaller height for horizontal scrollbar in code blocks */
+}
+
+/* Custom scrollbar for modals */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Custom scrollbar for dropdowns */
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Custom scrollbar for textareas */
+textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    :root {
+        --scrollbar-width: 6px;
+        --scrollbar-height: 6px;
+    }
+}
+
+/* Hover effect only on non-touch devices */
+@media (hover: hover) {
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover-color);
+    }
+} 

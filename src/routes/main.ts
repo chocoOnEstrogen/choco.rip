@@ -1,0 +1,203 @@
+import { Router, Request, Response } from 'express'
+import { render } from '@/utils/request'
+import * as constants from '@/constants'
+import linksSchema from '@/schemas/links.schema'
+import { analyzeLogFile } from '@/scripts/analyzeRequests'
+import { formatDistance, subDays } from 'date-fns'
+import NodeCache from 'node-cache'
+import { createContent } from '@/utils/content'
+import { GitHubService } from '@/services/github'
+import BskyService from '@/services/bsky'
+import { getAllPosts } from '@/utils/blog'
+import { generateBreadcrumbs, getAdjacentPages } from '@/utils/docs'
+import { getDocsStructure } from '@/utils/docs'
+
+const content = createContent('content', {
+	markdown: {
+		gfm: true,
+	},
+	highlight: true,
+	draft: true, // Show drafts in development
+})
+
+const router = Router()
+
+// Initialize cache with 5-minute TTL
+const statsCache = new NodeCache({ stdTTL: 300 })
+
+router.get('/', async (req: Request, res: Response) => {
+	const stats = await new GitHubService().getStats()
+	const allPosts = await getAllPosts()
+
+	// Get the 3 most recent posts
+	const recentPosts = allPosts
+		.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+		.slice(0, 3)
+
+	render(req, res, 'index', {
+		title: 'Home',
+		stats,
+		recentPosts,
+		formatDistance,
+	})
+})
+
+router.get('/links', async (req: Request, res: Response) => {
+	render(req, res, 'links', {
+		title: 'Links',
+		description: `Check out ${constants.USERNAME}'s links and social media profiles`,
+	})
+})
+
+router.get('/links/:slug', async (req: Request, res: Response) => {
+	try {
+		const searchSlug = req.params.slug.toLowerCase()
+
+		// Create a case-insensitive regex pattern
+		const searchPattern = new RegExp(searchSlug, 'i')
+
+		// Find all active links that match the pattern
+		const matchingLinks = await linksSchema.find({
+			active: true,
+			$or: [{ title: searchPattern }],
+		})
+
+		if (matchingLinks.length === 0) {
+			return render(req, res, 'link', {
+				title: 'Link Not Found',
+				link: null,
+				matchingLinks: [],
+			})
+		}
+
+		// If only one match is found, show the single link page
+		if (matchingLinks.length === 1) {
+			return render(req, res, 'link', {
+				title: matchingLinks[0].title,
+				description: matchingLinks[0].description,
+				link: matchingLinks[0],
+				matchingLinks: [],
+			})
+		}
+
+		// If multiple matches are found, render the list view
+		render(req, res, 'link', {
+			title: 'Multiple Links Found',
+			link: null,
+			matchingLinks,
+		})
+	} catch (err) {
+		console.error('Error fetching link:', err)
+		res.redirect('/links')
+	}
+})
+
+router.get('/stats', async (req: Request, res: Response) => {
+	try {
+		const timeframes = {
+			'1h': 1 / 24,
+			'24h': 1,
+		}
+
+		const selectedTimeframe = (req.query.timeframe as string) || '24h'
+		const days = timeframes[selectedTimeframe as keyof typeof timeframes] || 1
+
+		// Try to get cached data
+		const cacheKey = `stats-${selectedTimeframe}`
+		let analytics: any = statsCache.get(cacheKey)
+
+		if (!analytics) {
+			analytics = await analyzeLogFile('logs/requests.log', {
+				days,
+				minTime: 1000, // Track requests slower than 1 second
+			})
+			statsCache.set(cacheKey, analytics)
+		}
+
+		// Calculate additional metrics
+		const successRate =
+			((analytics.statusCodes[200] || 0) / analytics.totalRequests) * 100
+		const errorRate =
+			(Object.entries(analytics.statusCodes)
+				.filter(([code]) => code.startsWith('5'))
+				.reduce((acc, [, count]) => acc + (count as number), 0) /
+				analytics.totalRequests) *
+			100
+
+		render(req, res, 'stats', {
+			title: 'Site Statistics',
+			description: 'Real-time analytics and statistics',
+			analytics,
+			timeframes,
+			selectedTimeframe,
+			successRate,
+			errorRate,
+			formatDistance,
+		})
+	} catch (error) {
+		console.error('Error generating stats:', error)
+		res.redirect('/')
+	}
+})
+
+router.get('/about', async (req: Request, res: Response) => {
+	try {
+		const about = await content.parse('about.md')
+		render(req, res, 'about', {
+			title: 'About Me',
+			description: 'Learn more about me and my work',
+			about,
+		})
+	} catch (error) {
+		console.error('Error loading about page:', error)
+		res.redirect('/')
+	}
+})
+
+router.get('/me.jpg', async (req: Request, res: Response) => {
+	// This returns a buffer
+	const image = await new GitHubService().getProfileImage()
+	res.redirect(image)
+})
+
+router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
+	try {
+		const { category, page } = req.params
+		const docPath =
+			category && page ? `${category}/${page}` : category || 'index'
+
+		const doc = await content.parse(`docs/${docPath}.md`)
+		const structure = await getDocsStructure()
+
+		// Generate breadcrumbs
+		const breadcrumbs = generateBreadcrumbs(category, page)
+
+		// Get previous and next pages
+		const { previousPage, nextPage } = getAdjacentPages(
+			structure,
+			category,
+			page,
+		)
+
+		render(req, res, 'docs/page', {
+			layout: 'layouts/docs',
+			title: doc.frontmatter.title || 'Documentation',
+			description: doc.frontmatter.description || 'Documentation page',
+			doc,
+			structure,
+			breadcrumbs,
+			previousPage,
+			nextPage,
+			category,
+			page,
+			path: req.path,
+			lastUpdated: doc.frontmatter.lastUpdated || new Date().toISOString(),
+			editUrl: `https://github.com/chocoOnEstrogen/choco.rip/edit/main/content/docs/${docPath}.md`,
+		})
+	} catch (error) {
+		console.error('Error loading documentation:', error)
+		res.redirect('/docs')
+	}
+})
+
+export default router

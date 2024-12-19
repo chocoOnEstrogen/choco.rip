@@ -1,0 +1,310 @@
+/* Modern Modal Styles */
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 0.5rem 1.5rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1.25rem;
+}
+
+/* Modern form controls within modals */
+.modal .form-control,
+.modal .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.modal .form-control:focus,
+.modal .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
+}
+
+.modal .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+/* Modern buttons within modals */
+.modal .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.modal .btn-primary {
+    background: var(--primary-color);
+    border: none;
+}
+
+.modal .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.modal .btn-secondary {
+    background: var(--border-color);
+    border: none;
+    color: var(--text-color);
+}
+
+.modal .btn-secondary:hover {
+    background: var(--bg-color);
+    transform: translateY(-1px);
+}
+
+/* Close button */
+.modal .btn-close {
+    background: var(--border-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    opacity: 1;
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.modal .btn-close::before,
+.modal .btn-close::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 2px;
+    background-color: var(--text-color);
+    top: 50%;
+    left: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.modal .btn-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modal .btn-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+[data-theme="dark"] .modal .btn-close::before,
+[data-theme="dark"] .modal .btn-close::after {
+    background-color: var(--text-color);
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Remove the default close button background image */
+.modal .btn-close {
+    background-image: none;
+}
+
+/* Modal backdrop */
+.modal-backdrop.show {
+    opacity: 0.3;
+    backdrop-filter: blur(4px);
+}
+
+/* Modal animations */
+.modal.fade .modal-dialog {
+    transform: scale(0.95);
+    transition: transform 0.2s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Modal sizes */
+.modal-sm {
+    max-width: 400px;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+/* Form groups */
+.modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Checkbox styles */
+.modal .form-check {
+    padding-left: 1.8rem;
+}
+
+.modal .form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-left: -1.8rem;
+    border-radius: 6px;
+    border: 2px solid var(--border-color);
+}
+
+.modal .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Alert styles within modals */
+.modal .alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Scrollbar styles for modal content */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Grid layout improvements */
+.modal .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+.modal .col,
+.modal [class*="col-"] {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .modal-content {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .modal .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Loading states */
+.modal .form-control:disabled,
+.modal .form-select:disabled {
+    background-color: var(--border-color);
+    opacity: 0.75;
+}
+
+/* Icon grid specific styles */
+.modal .icon-grid {
+    border-radius: 12px;
+    background: var(--bg-color);
+}
+
+.modal .icon-item {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.modal .icon-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Settings specific styles */
+#settingsModal .form-switch {
+    padding-left: 2.5em;
+}
+
+#settingsModal .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-left: -2.5em;
+    background-image: var(--switch-bg);
+    border: none;
+    cursor: pointer;
+}
+
+#settingsModal .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+#settingsModal code {
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-size: 0.875em;
+    background: var(--border-color);
+    color: var(--text-color);
+}
+
+#settingsModal h6 {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+#settingsModal .modal-body > div:not(:last-child) {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Toast Styles */
+.toast {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.toast-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    color: var(--text-color);
+}
+
+.toast-body {
+    color: var(--text-color);
+}
+
+/* Disable transitions class */
+.no-transitions * {
+    transition: none !important;
+}
+
+.modal {
+    z-index: 1055;
+}
+
+.modal-backdrop {
+    z-index: 1050;
+} 

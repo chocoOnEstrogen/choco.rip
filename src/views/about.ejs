@@ -1,0 +1,172 @@
+<%- contentFor('body') %>
+
+<section class="about-section">
+    <div class="container py-5">
+        <div class="about-content markdown-body" data-aos="fade-up">
+            <!-- Render the markdown content -->
+            <%- about.body %>
+        </div>
+    </div>
+</section>
+
+<style>
+.about-section {
+    min-height: calc(100vh - var(--navbar-height));
+    margin-top: var(--navbar-height);
+}
+
+.about-content {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography styles */
+.about-content h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.about-content h2 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.about-content h3 {
+    font-size: 1.4rem;
+    color: var(--text-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.about-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* List styles */
+.about-content ul {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-content ul li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.about-content ul li::before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: -1.5rem;
+}
+
+/* Code block styles */
+.about-content code {
+    background: var(--bg-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--primary-color);
+}
+
+/* Link styles */
+.about-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.about-content a:hover {
+    color: var(--primary-color-hover);
+    text-decoration: underline;
+}
+
+/* Progress bars for skills */
+.skill-level {
+    background: var(--bg-color);
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.skill-level-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .about-content {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Emoji styles */
+.about-content h2 .emoji {
+    font-size: 1.5rem;
+}
+
+/* Table styles */
+.about-content table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+.about-content th,
+.about-content td {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+}
+
+.about-content th {
+    background: var(--bg-color);
+    font-weight: 600;
+}
+
+/* Badge styles for technologies */
+.tech-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-color);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    margin: 0.25rem;
+    color: var(--text-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .about-content {
+        padding: 1.5rem;
+    }
+
+    .about-content h1 {
+        font-size: 2rem;
+    }
+
+    .about-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-content h3 {
+        font-size: 1.2rem;
+    }
+}
+</style> 

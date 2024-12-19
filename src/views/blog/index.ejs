@@ -1,0 +1,290 @@
+<%- contentFor('body') %>
+
+<div class="container py-5" id="blog">
+  <header class="blog-header text-center mb-5">
+    <h1 class="display-4 mb-3">Blog</h1>
+    <p class="lead text-muted">Thoughts, stories and ideas</p>
+  </header>
+
+  <!-- Search and Filter Section -->
+  <div class="blog-filters mb-5">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="search-wrapper">
+          <input type="search" 
+                 id="blog-search" 
+                 class="form-control form-control-lg" 
+                 placeholder="Search posts..."
+                 aria-label="Search posts">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select id="tag-filter" class="form-select form-select-lg">
+          <option value="">All Tags</option>
+          <% const uniqueTags = [...new Set(posts.flatMap(post => post.tags))].sort() %>
+          <% uniqueTags.forEach(tag => { %>
+            <option value="<%= tag %>"><%= tag %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select id="sort-filter" class="form-select form-select-lg">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filters -->
+  <div id="active-filters" class="mb-4 d-none">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="text-muted">Active filters:</span>
+      <div class="active-filter-tags"></div>
+      <button class="btn btn-link btn-sm text-decoration-none ms-auto" onclick="clearFilters()">
+        Clear all filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div id="results-count" class="mb-4">
+    <p class="text-muted">Showing <span id="visible-posts"><%= posts.length %></span> posts</p>
+  </div>
+
+  <!-- Posts Grid -->
+  <div class="row g-4" id="posts-grid">
+    <% posts.forEach((post, index) => { %>
+      <div class="col-md-<%= index === 0 && post.featured ? '12' : '6' %> post-item"
+           data-tags="<%= post.tags.join(',') %>"
+           data-date="<%= post.publishedAt.getTime() %>"
+           data-title="<%= post.title.toLowerCase() %>"
+           data-excerpt="<%= post.excerpt.toLowerCase() %>">
+        <article class="card h-100 border-0 shadow-sm bg-glass hover-card">
+          <a href="/blog/<%= post.publishedAt.getFullYear() %>/<%= (post.publishedAt.getMonth() + 1).toString().padStart(2, '0') %>/<%= post.publishedAt.getDate().toString().padStart(2, '0') %>/<%= post.slug %>" 
+             class="text-decoration-none">
+            <% if (post.coverImage) { %>
+              <img src="<%= post.coverImage %>" 
+                   class="card-img-top" 
+                   alt="<%= post.title %>"
+                   style="height: <%= index === 0 && post.featured ? '400px' : '200px' %>; object-fit: cover;">
+            <% } %>
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <% post.tags.forEach(tag => { %>
+                  <a href="/blog/tag/<%= tag %>" class="badge bg-primary me-2 text-decoration-none">
+                    <%= tag %>
+                  </a>
+                <% }) %>
+                <small class="text-muted ms-auto">
+                  <%= formatDistance(post.publishedAt, new Date(), { addSuffix: true }) %>
+                </small>
+              </div>
+              <h2 class="card-title h4 mb-2" onclick="window.location.href='/blog/<%= post.publishedAt.getFullYear() %>/<%= (post.publishedAt.getMonth() + 1).toString().padStart(2, '0') %>/<%= post.publishedAt.getDate().toString().padStart(2, '0') %>/<%= post.slug %>'"><%= post.title %></h2>
+              <p class="card-text text-muted"><%= post.excerpt %></p>
+              <div class="d-flex align-items-center mt-3">
+                <div class="d-flex align-items-center text-muted ms-3">
+                  <i class="fas fa-clock me-1"></i>
+                  <small><%= post.readingTime %> min read</small>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- No Results Message -->
+  <div id="no-results" class="text-center py-5 d-none">
+    <div class="mb-4">
+      <i class="fas fa-search fa-3x text-muted"></i>
+    </div>
+    <h2 class="h4 mb-3">No posts found</h2>
+    <p class="text-muted">Try adjusting your search or filters to find what you're looking for.</p>
+  </div>
+
+  <!-- Pagination -->
+  <% if (pagination && pagination.total > 1) { %>
+    <nav aria-label="Blog pagination" class="mt-5">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <%= !pagination.hasPrev ? 'disabled' : '' %>">
+          <a class="page-link" href="/blog?page=<%= pagination.current - 1 %>">Previous</a>
+        </li>
+        
+        <% for(let i = 1; i <= pagination.total; i++) { %>
+          <li class="page-item <%= pagination.current === i ? 'active' : '' %>">
+            <a class="page-link" href="/blog?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+        
+        <li class="page-item <%= !pagination.hasNext ? 'disabled' : '' %>">
+          <a class="page-link" href="/blog?page=<%= pagination.current + 1 %>">Next</a>
+        </li>
+      </ul>
+    </nav>
+  <% } %>
+</div>
+
+<style>
+.search-wrapper {
+  position: relative;
+}
+
+.search-wrapper .search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.active-filter-tags .filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 100px;
+  font-size: 0.875rem;
+}
+
+.active-filter-tags .filter-tag button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity var(--transition-normal) ease;
+}
+
+.active-filter-tags .filter-tag button:hover {
+  opacity: 1;
+}
+
+[data-theme="dark"] #blog h2 {
+  color: #fff;
+}
+</style>
+
+<!-- Add this script block at the end of the file -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('blog-search');
+  const tagFilter = document.getElementById('tag-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  const postsGrid = document.getElementById('posts-grid');
+  const noResults = document.getElementById('no-results');
+  const visiblePostsCount = document.getElementById('visible-posts');
+  const activeFilters = document.getElementById('active-filters');
+  const activeFilterTags = activeFilters.querySelector('.active-filter-tags');
+
+  function updateResults() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const selectedTag = tagFilter.value;
+    const sortBy = sortFilter.value;
+    
+    const posts = Array.from(document.querySelectorAll('.post-item'));
+    let visiblePosts = posts.filter(post => {
+      const title = post.dataset.title;
+      const excerpt = post.dataset.excerpt;
+      const tags = post.dataset.tags.split(',');
+      
+      const matchesSearch = searchTerm === '' || 
+        title.includes(searchTerm) || 
+        excerpt.includes(searchTerm);
+      
+      const matchesTag = !selectedTag || 
+        tags.includes(selectedTag);
+      
+      return matchesSearch && matchesTag;
+    });
+
+    // Sort posts
+    visiblePosts.sort((a, b) => {
+      const dateA = parseInt(a.dataset.date);
+      const dateB = parseInt(b.dataset.date);
+      
+      switch(sortBy) {
+        case 'oldest':
+          return dateA - dateB;
+        case 'newest':
+          return dateB - dateA;
+        default:
+          return dateB - dateA; // Default to newest
+      }
+    });
+
+    // Reorder the posts in the DOM
+    const fragment = document.createDocumentFragment();
+    visiblePosts.forEach(post => {
+      post.style.display = '';
+      fragment.appendChild(post);
+    });
+    
+    // Hide non-matching posts
+    posts.forEach(post => {
+      if (!visiblePosts.includes(post)) {
+        post.style.display = 'none';
+      }
+    });
+    
+    // Clear and repopulate the grid
+    postsGrid.innerHTML = '';
+    postsGrid.appendChild(fragment);
+
+    // Update active filters
+    const activeFiltersList = [];
+    if (searchTerm) {
+      activeFiltersList.push(`
+        <span class="filter-tag">
+          Search: ${searchTerm}
+          <button onclick="clearSearch()">&times;</button>
+        </span>
+      `);
+    }
+    if (selectedTag) {
+      activeFiltersList.push(`
+        <span class="filter-tag">
+          Tag: ${selectedTag}
+          <button onclick="clearTags()">&times;</button>
+        </span>
+      `);
+    }
+    
+    activeFilters.classList.toggle('d-none', activeFiltersList.length === 0);
+    activeFilterTags.innerHTML = activeFiltersList.join('');
+
+    // Update count and no results message
+    visiblePostsCount.textContent = visiblePosts.length;
+    noResults.classList.toggle('d-none', visiblePosts.length > 0);
+    postsGrid.classList.toggle('d-none', visiblePosts.length === 0);
+  }
+
+  // Event listeners
+  searchInput.addEventListener('input', updateResults);
+  tagFilter.addEventListener('change', updateResults);
+  sortFilter.addEventListener('change', updateResults);
+
+  // Clear filter functions
+  window.clearSearch = function() {
+    searchInput.value = '';
+    updateResults();
+  }
+
+  window.clearTags = function() {
+    tagFilter.value = '';
+    updateResults();
+  }
+
+  window.clearFilters = function() {
+    searchInput.value = '';
+    tagFilter.value = '';
+    sortFilter.value = 'newest';
+    updateResults();
+  }
+});
+</script>

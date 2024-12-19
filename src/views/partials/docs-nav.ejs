@@ -1,0 +1,172 @@
+<!-- Root Level Pages -->
+<% if (structure.pages && structure.pages.length > 0) { %>
+    <div class="docs-nav-section">
+        <% structure.pages.forEach(function(page) { %>
+            <% if (page.showInNav) { %>
+                <a href="<%= page.url %>" 
+                   data-type="root"
+                   class="docs-nav-item <%= path === page.url ? 'active' : '' %>">
+                    <%= page.title %>
+                </a>
+            <% } %>
+        <% }); %>
+    </div>
+<% } %>
+
+<!-- Categories -->
+<% if (structure.categories && structure.categories.length > 0) { %>
+    <% structure.categories.forEach(function(category) { %>
+        <div class="docs-nav-section">
+            <div class="docs-nav-category">
+                <span class="docs-nav-category-title">
+                    <%= category.title.replace(/-/g, ' ') %>
+                </span>
+                <button class="docs-nav-toggle" 
+                        data-category="<%= category.slug %>"
+                        aria-expanded="<%= path.includes(category.slug) ? 'true' : 'false' %>">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="docs-nav-pages <%= path.includes(category.slug) ? 'show' : '' %>"
+                 data-category="<%= category.slug %>">
+                <% category.pages.forEach(function(page) { %>
+                        <a href="<%= page.url %>" 
+                           class="docs-nav-item <%= path === page.url ? 'active' : '' %>">
+                           <i class="<%= page.icon || 'fas fa-file-alt' %> me-2" style="font-size: 0.9rem;"></i> <%= page.title %>
+                        </a>
+                <% }); %>
+            </div>
+        </div>
+    <% }); %>
+<% } %>
+
+<style>
+.docs-nav-section {
+    margin-bottom: 1rem;
+}
+
+.docs-nav-category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.docs-nav-category-title {
+    margin-right: 0.5rem;
+}
+
+.docs-nav-toggle {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.docs-nav-toggle[aria-expanded="true"] {
+    transform: rotate(90deg);
+}
+
+.docs-nav-pages {
+    display: none;
+    padding-left: 1rem;
+}
+
+.docs-nav-pages.show {
+    display: block;
+}
+
+.docs-nav-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 6px;
+    margin: 0.25rem 0;
+    transition: all 0.2s ease;
+}
+
+.docs-nav-item:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary-color);
+}
+
+.docs-nav-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .docs-nav-category {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .docs-nav-toggle {
+    color: #94a3b8;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .docs-nav-section {
+        margin-bottom: 0.5rem;
+    }
+
+    .docs-nav-category {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .docs-nav-item {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+
+    /* Increase touch targets */
+    .docs-nav-toggle {
+        padding: 0.5rem;
+        margin: -0.5rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle category toggles
+    document.querySelectorAll('.docs-nav-toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            const category = e.currentTarget.dataset.category;
+            const pages = document.querySelector(`.docs-nav-pages[data-category="${category}"]`);
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            
+            // Toggle aria-expanded
+            toggle.setAttribute('aria-expanded', !isExpanded);
+            
+            // Toggle pages visibility
+            pages.classList.toggle('show');
+            
+            // Save state to localStorage
+            localStorage.setItem(`docs-category-${category}`, !isExpanded);
+        });
+    });
+
+    // Restore category states from localStorage
+    document.querySelectorAll('.docs-nav-toggle').forEach(toggle => {
+        const category = toggle.dataset.category;
+        const isExpanded = localStorage.getItem(`docs-category-${category}`) === 'true';
+        
+        if (isExpanded) {
+            toggle.setAttribute('aria-expanded', 'true');
+            document.querySelector(`.docs-nav-pages[data-category="${category}"]`)
+                   .classList.add('show');
+        }
+    });
+});
+</script> 

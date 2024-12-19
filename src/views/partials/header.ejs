@@ -1,0 +1,57 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-glass">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <span class="brand-text"><%= constants.NAVBAR_BRAND %></span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <% const renderNavItems = function(links) { %>
+                    <% links.forEach((link) => { %>
+                        <% if (link.children) { %>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                                    <% if (link.icon) { %>
+                                        <i class="<%= link.icon %>"></i>
+                                    <% } %>
+                                    <%= link.title %>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <% link.children.forEach((child) => { %>
+                                        <li>
+                                            <a class="dropdown-item" href="<%= child.url %>">
+                                                <% if (child.icon) { %>
+                                                    <i class="<%= child.icon %>"></i>
+                                                <% } %>
+                                                <%= child.title %>
+                                            </a>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                            </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="<%= link.url %>">
+                                    <% if (link.icon) { %>
+                                        <i class="<%= link.icon %>"></i>
+                                    <% } %>
+                                    <%= link.title %>
+                                </a>
+                            </li>
+                        <% } %>
+                    <% }) %>
+                <% } %>
+                <% renderNavItems(cfg.navigation.main_links) %>
+            </ul>
+        </div>
+    </div>
+</nav> 

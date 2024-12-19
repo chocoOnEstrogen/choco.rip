@@ -1,0 +1,166 @@
+<div class="docs-page">
+    <!-- Page Header -->
+    <header class="docs-page-header">
+        <h1><%= doc.frontmatter.title %></h1>
+        <% if (doc.frontmatter.description) { %>
+            <p class="lead text-muted"><%= doc.frontmatter.description %></p>
+        <% } %>
+        
+        <% if (doc.frontmatter.tags && doc.frontmatter.tags.length > 0) { %>
+            <div class="docs-tags">
+                <% doc.frontmatter.tags.forEach(function(tag) { %>
+                    <span class="badge bg-primary"><%= tag %></span>
+                <% }); %>
+            </div>
+        <% } %>
+    </header>
+
+    <!-- Page Content -->
+    <div class="docs-page-content markdown-body">
+        <%- doc.body %>
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="docs-page-footer">
+        <% if (doc.frontmatter.contributors && doc.frontmatter.contributors.length > 0) { %>
+            <div class="contributors-section">
+                <h6>Contributors</h6>
+                <div class="contributors-list">
+                    <% doc.frontmatter.contributors.forEach(function(contributor) { %>
+                        <a href="<%= contributor.url %>" target="_blank" class="contributor-link">
+                            <img src="<%= contributor.avatar %>" alt="<%= contributor.name %>" class="contributor-avatar">
+                            <span class="contributor-name"><%= contributor.name %></span>
+                        </a>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+    </footer>
+</div>
+
+<style>
+/* Page-specific styles */
+.docs-page {
+    max-width: 100%;
+}
+
+.docs-page-header {
+    margin-bottom: 2rem;
+}
+
+.docs-page-header h1 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.docs-tags {
+    margin-top: 1rem;
+}
+
+.docs-tags .badge {
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+
+.docs-page-content {
+    margin-bottom: 3rem;
+}
+
+.docs-page-footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.feedback-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.feedback-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.contributors-section {
+    margin-top: 2rem;
+}
+
+.contributors-section h6 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.contributors-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.contributor-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.contributor-link:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary-color);
+}
+
+.contributor-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.contributor-name {
+    font-size: 0.875rem;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .docs-page-footer {
+    border-color: var(--border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .docs-page-header h1 {
+        font-size: 2rem;
+    }
+
+    .feedback-buttons {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+function sendFeedback(type) {
+    // You can implement feedback tracking here
+    const button = event.target.closest('button');
+    const buttons = document.querySelectorAll('.feedback-buttons button');
+    
+    buttons.forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    
+    // Optional: Send feedback to server
+    fetch('/api/docs/feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            page: window.location.pathname,
+            type: type,
+            timestamp: new Date().toISOString()
+        })
+    }).catch(console.error);
+}
+</script> 

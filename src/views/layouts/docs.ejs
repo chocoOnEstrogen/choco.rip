@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+</head>
+
+<body>
+  <!-- Main Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Stella</a>
+      
+      <!-- Mobile search toggle -->
+      <button class="navbar-search-toggle d-lg-none" type="button">
+        <i class="fas fa-search"></i>
+      </button>
+
+      <!-- Navigation items -->
+      <div class="navbar-nav navbar-nav-docs collapse navbar-collapse" id="navbarMain">
+        <% const renderNavItems = function(links) { %>
+            <% links.forEach((link) => { %>
+                <% if (link.children) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                            <% if (link.icon) { %>
+                                <i class="<%= link.icon %>"></i>
+                            <% } %>
+                            <%= link.title %>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <% link.children.forEach((child) => { %>
+                                <li>
+                                    <a class="dropdown-item" href="<%= child.url %>">
+                                        <% if (child.icon) { %>
+                                            <i class="<%= child.icon %>"></i>
+                                        <% } %>
+                                        <%= child.title %>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" href="<%= link.url %>">
+                            <% if (link.icon) { %>
+                                <i class="<%= link.icon %>"></i>
+                            <% } %>
+                            <%= link.title %>
+                        </a>
+                    </li>
+                <% } %>
+            <% }) %>
+        <% } %>
+        <% renderNavItems(cfg.navigation.main_links) %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile search overlay -->
+  <div class="mobile-search-overlay">
+    <div class="mobile-search-container">
+      <input type="search" class="form-control" placeholder="Search docs...">
+      <button class="mobile-search-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Documentation Layout -->
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-search">
+        <input type="search" id="docs-search" class="form-control" placeholder="Search docs...">
+      </div>
+      
+      <nav class="docs-nav">
+        <%- include('../partials/docs-nav') %>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+
+      <div class="content-body">
+        <h1><%= doc.frontmatter.title %></h1>
+        <p class="lead"><%= doc.frontmatter.description %></p>
+        
+        <div class="markdown-content markdown-body">
+          <%- doc.body %>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar - Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-header">
+        <h6>On this page</h6>
+      </div>
+      <nav class="toc-nav">
+        <!-- Generated dynamically by docs.js -->
+      </nav>
+    </aside>
+  </div>
+
+          <!-- Settings Modal -->
+          <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="settingsModalLabel">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">                    
+                        <!-- Animation Settings -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Animations</h6>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span>Enable Oneko</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="onekoSwitch" checked>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keyboard Shortcuts -->
+                        <div>
+                            <h6 class="mb-3">Keyboard Shortcuts</h6>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span>Toggle Theme</span>
+                                <code>Ctrl/Cmd + K</code>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span>Open Settings</span>
+                                <code>Ctrl/Cmd + S</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Toast -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="settingsToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong class="me-auto">Success</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Settings saved successfully!
+                </div>
+            </div>
+        </div>
+
+  <button class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon" id="moon" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Dark Mode (Ctrl+K)"></i>
+    <i class="fas fa-sun" id="sun" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Light Mode (Ctrl+K)"></i>
+</button>
+  
+  <%- include('../partials/scripts') %>
+  <script src="/js/docs.js"></script>
+</body>
+
+</html>

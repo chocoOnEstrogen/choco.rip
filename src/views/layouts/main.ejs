@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head') %>
+    <body>
+        <!-- Preloader and animations -->
+        <div class="preloader"></div>
+        <div class="loading-animation"></div>
+
+        <div class="page-transition-overlay"></div>
+        <div class="page-content">
+            <%- include('../partials/header') %>
+            <div class="scroll-progress"></div>
+
+            <main>
+                <%- body %>
+            </main>
+
+            <%- include('../partials/footer') %>
+        </div>
+
+        <%- include('../partials/scripts') %>
+
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-moon" id="moon" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Dark Mode (Ctrl+K)"></i>
+            <i class="fas fa-sun" id="sun" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Light Mode (Ctrl+K)"></i>
+        </button>
+
+        <!-- Settings Modal -->
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="settingsModalLabel">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">                    
+                        <!-- Animation Settings -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Animations</h6>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span>Enable Oneko</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="onekoSwitch" checked>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keyboard Shortcuts -->
+                        <div>
+                            <h6 class="mb-3">Keyboard Shortcuts</h6>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span>Toggle Theme</span>
+                                <code>Ctrl/Cmd + K</code>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span>Open Settings</span>
+                                <code>Ctrl/Cmd + S</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Toast -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="settingsToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong class="me-auto">Success</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Settings saved successfully!
+                </div>
+            </div>
+        </div>
+    </body>
+</html> 

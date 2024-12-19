@@ -1,0 +1,81 @@
+<%- contentFor('body') %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card error-card">
+                <div class="card-body text-center">
+                    <div class="error-icon mb-4">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    
+                    <h1 class="error-title mb-4">
+                        <%= error.message || 'An error occurred' %>
+                    </h1>
+                    
+                    <% if (error.details && process.env.NODE_ENV === 'development') { %>
+                        <div class="error-details mb-4">
+                            <pre class="text-start"><code><%= error.details %></code></pre>
+                        </div>
+                    <% } %>
+                    
+                    <div class="error-actions">
+                        <a href="javascript:history.back()" class="btn btn-outline-primary me-3">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </a>
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.error-icon {
+    font-size: 4rem;
+    color: var(--primary-color);
+}
+
+.error-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.error-details {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.error-details pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.error-actions {
+    margin-top: 2rem;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .error-card {
+    background: var(--card-bg);
+}
+
+[data-theme="dark"] .error-details {
+    background: rgba(0, 0, 0, 0.2);
+}
+</style> 

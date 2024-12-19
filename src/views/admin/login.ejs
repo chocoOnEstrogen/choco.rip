@@ -1,0 +1,135 @@
+<%- contentFor('body') %>
+
+<div class="container mt-5" style="margin-bottom: 100px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-lg bg-glass">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-lock fa-3x mb-3 text-primary"></i>
+                        <h2 class="fw-bold" style="color: #007bff;">Admin Login</h2>
+                        <p class="text-muted">Please enter your password to continue</p>
+                    </div>
+                    
+                    <% if (locals.error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <form method="POST" action="/admin/login" class="login-form">
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0">
+                                    <i class="fas fa-key text-muted"></i>
+                                </span>
+                                <input type="password" 
+                                       class="form-control border-start-0 ps-0 bg-transparent" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Enter password"
+                                       required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                        <a href="/" class="btn btn-link w-100 text-decoration-none">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Home
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-glass {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color) !important;
+    }
+
+    .login-form .form-control {
+        padding: 0.75rem 1rem;
+        background: var(--bg-color);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    /* Make the placeholder text color white */
+    .login-form .form-control::placeholder {
+        color: white;
+    }
+
+    .login-form .form-control:focus {
+        box-shadow: none;
+        border-color: var(--primary-color);
+    }
+
+    .login-form .input-group-text {
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    .login-form .btn-primary {
+        background: var(--gradient-1);
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .login-form .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .login-form .btn-link {
+        color: var(--text-color);
+    }
+
+    .login-form .btn-link:hover {
+        color: var(--primary-color);
+    }
+
+    /* Dark mode specific styles */
+    [data-theme="dark"] .bg-glass {
+        background: rgba(21, 30, 45, 0.8);
+    }
+
+    [data-theme="dark"] .login-form .form-control,
+    [data-theme="dark"] .login-form .input-group-text {
+        background: var(--card-bg);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .alert-danger {
+        background-color: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.2);
+        color: #fecaca;
+    }
+
+    /* Animation */
+    .card {
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style> 

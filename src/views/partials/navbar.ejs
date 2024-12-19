@@ -1,0 +1,153 @@
+<nav class="navbar navbar-expand-lg fixed-top bg-glass">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+            <span class="ms-2"><%= constants.USERNAME %></span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Main Navigation -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link <%= path === '/' ? 'active' : '' %>" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= path.startsWith('/blog') ? 'active' : '' %>" href="/blog">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= path.startsWith('/docs') ? 'active' : '' %>" href="/docs">Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= path === '/about' ? 'active' : '' %>" href="/about">About</a>
+                </li>
+            </ul>
+
+            <!-- Right Side Navigation -->
+            <ul class="navbar-nav">
+                <!-- Search Button (for mobile) -->
+                <li class="nav-item d-lg-none">
+                    <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#searchModal">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Search Modal (for mobile) -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/search" method="GET">
+                    <input type="search" class="form-control" 
+                           placeholder="Search..." name="q" 
+                           value="<%= locals.query || '' %>">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.navbar {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar-logo {
+    transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover .navbar-logo {
+    transform: scale(1.1);
+}
+
+.search-form {
+    width: 300px;
+}
+
+.search-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .navbar {
+    background: rgba(21, 30, 45, 0.8);
+}
+
+[data-theme="dark"] .search-input {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem;
+    }
+
+    .search-form {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+
+    /* Adjust active indicator for mobile */
+    .nav-link.active::after {
+        left: 0;
+        right: 0;
+        bottom: -2px;
+    }
+
+    /* Stack navbar items vertically on mobile */
+    .navbar-collapse {
+        background: var(--bg-color);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Improve mobile search modal */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-content {
+        border-radius: 12px;
+    }
+}
+</style> 
