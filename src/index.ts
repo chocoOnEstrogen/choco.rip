@@ -15,6 +15,7 @@ import { checkBlocklist } from '@/middleware/blockList'
 import { requestLogger } from '@/middleware/requestLogger'
 import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
+import updaterRouter from '@/routes/updater'
 import { CronService } from '@/services/cron'
 
 dotenv.config()
@@ -60,6 +61,7 @@ app.use('/.cache', cacheRouter)
 app.use('/admin', adminRouter)
 app.use('/og-image', ogImageRouter)
 app.use('/blog', blogRouter)
+app.use('/updater', updaterRouter)
 
 app.use((req: Request, res: Response) => {
 	if (req.path.includes('.php')) {
