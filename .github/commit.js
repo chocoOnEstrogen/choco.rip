@@ -79,9 +79,9 @@ async function getIssueReferences() {
 
 async function createBranch() {
     const branchType = await ask('Select branch type (feature/hotfix/release):');
-    const branchDesc = await ask('Enter branch description:');
+    const rnd = Math.random().toString(36).substring(2, 8);
     const date = new Date().toISOString().split('T')[0];
-    return `${branchType}/${date}-${branchDesc.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    return `${branchType}/${date}-${rnd}`;
 }
 
 async function main() {
@@ -140,6 +140,14 @@ async function main() {
         if (pushNow.toLowerCase() === 'y') {
             executeCommand(`git push origin ${branchName}`);
         }
+
+        // Switch back to original branch
+        console.log(`\nSwitching back to ${currentBranch}...`);
+        executeCommand(`git checkout ${currentBranch}`);
+
+        // Delete local feature branch
+        console.log(`\nDeleting local branch ${branchName}...`);
+        executeCommand(`git branch -D ${branchName}`);
         
         console.log('\nDone! 🎉');
         rl.close();
