@@ -8,13 +8,20 @@
   },
   "scripts": {
     "format": "prettier --cache --write . --ignore-path .prettierignore",
-    "build": "tsc",
+    "build": "tsc && node scripts/copy.js && tsc-alias",
     "dev": "ts-node src/index.ts",
     "start": "node -r tsconfig-paths/register dist/index.js",
     "tsc": "tsc",
     "analyze-requests": "ts-node src/scripts/analyzeRequests.ts",
     "edit-config": "ts-node src/scripts/editConfig.ts",
-    "commit": "node .github/commit.js"
+    "commit": "node .github/commit.js",
+    "copy": "node scripts/copy.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop ecosystem.config.js",
+    "pm2:restart": "pm2 restart ecosystem.config.js",
+    "pm2:delete": "pm2 delete ecosystem.config.js",
+    "pm2:logs": "pm2 logs",
+    "pm2:monitor": "pm2 monit"
   },
   "repository": {
     "type": "git",
@@ -49,6 +56,7 @@
     "@types/uuid": "^10.0.0",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   },
@@ -97,6 +105,7 @@
     "unified": "^11.0.5",
     "uuid": "^11.0.3",
     "winston": "^3.17.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "pm2": "^5.3.1"
   }
 }

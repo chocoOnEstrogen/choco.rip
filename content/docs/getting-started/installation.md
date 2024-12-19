@@ -48,6 +48,7 @@ BLUESKY_PASSWORD=<your-bluesky-password>
 BLOG_MEDIA=<your-blog-media-directory>
 HOST=<your-host>
 PORT=<your-port>
+GITHUB_WEBHOOK_SECRET=<your-github-webhook-secret>
 ```
 
 5. Start development server:
