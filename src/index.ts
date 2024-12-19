@@ -15,6 +15,7 @@ import { checkBlocklist } from '@/middleware/blockList'
 import { requestLogger } from '@/middleware/requestLogger'
 import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
+import { CronService } from '@/services/cron'
 
 dotenv.config()
 
@@ -34,6 +35,9 @@ app.use(
 		allowedHeaders: ['Content-Type', 'Authorization'],
 	}),
 )
+
+// Clear .cache folder
+const cronService = CronService.getInstance()
 
 // Setup view engine and layouts
 app.use(expressLayouts)
@@ -89,6 +93,22 @@ server.listen(
 		console.clear()
 		console.log(`Server is running on port ${process.env.PORT} ${process.env.HOST}`)
 		console.log('MongoDB connected')
+
+		cronService.registerJob({
+			name: 'clear-cache',
+			schedule: '0 0 * * *',
+			task: () => {
+				fs.rmSync('cache', { recursive: true, force: true })
+			},
+		})
+		
+		cronService.registerJob({
+			name: 'clear-logs',
+			schedule: '0 0 * * *',
+			task: () => {
+				fs.writeFileSync('logs/requests.log', '')
+			},
+		})
 	} catch (error) {
 		console.error('Startup error:', error)
 		process.exit(1)
