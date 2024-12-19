@@ -1,7 +1,7 @@
 {
   "name": "website",
   "version": "1.0.0",
-  "description": "A basic TypeScript template",
+  "description": "choco.rip",
   "main": "dist/index.js",
   "directories": {
     "doc": "docs"
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chocoOnEstrogen/repo-template.git"
+    "url": "git+https://github.com/chocoOnEstrogen/choco.rip.git"
   },
   "author": "choco <choco.rip>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/chocoOnEstrogen/repo-template/issues"
+    "url": "https://github.com/chocoOnEstrogen/choco.rip/issues"
   },
-  "homepage": "https://github.com/chocoOnEstrogen/repo-template#readme",
+  "homepage": "https://github.com/chocoOnEstrogen/choco.rip#readme",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
