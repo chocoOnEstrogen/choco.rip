@@ -46,7 +46,8 @@ SESSION_TOKEN=<your-actual-secure-token>
 BLUESKY_IDENTIFIER=<your-bluesky-identifier>
 BLUESKY_PASSWORD=<your-bluesky-password>
 BLOG_MEDIA=<your-blog-media-directory>
-
+HOST=<your-host>
+PORT=<your-port>
 ```
 
 5. Start development server:
@@ -55,7 +56,7 @@ BLOG_MEDIA=<your-blog-media-directory>
 npm run dev
 ```
 
-6. Access the application at `http://localhost:9000`.
+6. Access the application at `http://localhost:{PORT,9000}`.
 
 ## Production Deployment
 
@@ -73,7 +74,7 @@ npm run build
 npm start
 ```
 
-3. Access the application at `http://localhost:9000`.
+3. Access the application at `http://localhost:{PORT,9000}`.
 
 ## Troubleshooting
 

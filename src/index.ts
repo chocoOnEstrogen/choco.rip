@@ -74,33 +74,21 @@ app.use(
 // Create HTTP server instance
 const server = http.createServer(app)
 
-server.listen(9000, '0.0.0.0', async () => {
-	try {
-		if (!process.env.MONGO_URI) {
-			console.error('MONGO_URI is not set')
+server.listen(
+	parseInt(process.env.PORT || '9000'),
+	process.env.HOST || '0.0.0.0',
+	async () => {
+		try {
+			if (!process.env.MONGO_URI) {
+				console.error('MONGO_URI is not set')
 			process.exit(1)
 		}
 
 		await mongoose.connect(process.env.MONGO_URI)
 
 		console.clear()
-		console.log('Server is running on port 9000')
+		console.log(`Server is running on port ${process.env.PORT} ${process.env.HOST}`)
 		console.log('MongoDB connected')
-
-		// const bsky = new BskyService()
-		// await bsky.login()
-		// const { profile, posts, error, cache_key } = await bsky.getProfile({
-		// 	username: 'choco.rip',
-		// 	limit: 20,
-		// })
-
-		// if (error) {
-		// 	console.error('Bluesky Error:', error)
-		// } else {
-		// 	console.log('Profile:', JSON.stringify(profile, null, 2))
-		// 	console.log('Posts:', JSON.stringify(posts, null, 2))
-		// 	console.log('Cache Key:', cache_key)
-		// }
 	} catch (error) {
 		console.error('Startup error:', error)
 		process.exit(1)
