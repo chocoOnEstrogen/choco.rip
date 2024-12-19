@@ -13,7 +13,8 @@
     "start": "node -r tsconfig-paths/register dist/index.js",
     "tsc": "tsc",
     "analyze-requests": "ts-node src/scripts/analyzeRequests.ts",
-    "edit-config": "ts-node src/scripts/editConfig.ts"
+    "edit-config": "ts-node src/scripts/editConfig.ts",
+    "commit": "node .github/commit.js"
   },
   "repository": {
     "type": "git",
