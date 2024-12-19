@@ -62,11 +62,7 @@ const cleanOldLogs = async () => {
 	}
 }
 
-// Clean logs every hour
-setInterval(cleanOldLogs, 60 * 60 * 1000)
 
-// Clean logs on startup
-cleanOldLogs()
 
 export const requestLogger = (
 	req: Request,
@@ -74,6 +70,11 @@ export const requestLogger = (
 	next: NextFunction,
 ) => {
 	const startTime = Date.now()
+
+	if (req.path.includes('.php')) {
+		// DO NOT LOG PHP REQUESTS as they are not real requests but rather bots
+		return
+	}
 
 	// Capture response data after request is finished
 	res.on('finish', () => {
