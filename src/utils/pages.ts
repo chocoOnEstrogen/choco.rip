@@ -127,6 +127,11 @@ function parseSection(type: string, content: string): string {
 					</div>
 				</div>
 			`
+		case 'modal-button':
+			const [modalId, label] = content.split('|').map(item => item.trim())
+			return `
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#${modalId}">${label}</button>
+			`
 		case 'stats':
 			const stats = content.split('|').map((item) => item.trim())
 			return `
@@ -167,6 +172,7 @@ function parseSection(type: string, content: string): string {
 					</div>
 				</section>
 			`
+		
 		case 'raw':
 			return content
 		default:
