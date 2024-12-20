@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Pull Latest Changes",
+        "command": "git pull"
+    },
+    {
+        "name": "Install Dependencies",
+        "command": "npm install"
+    },
+    {
+        "name": "Build Project",
+        "command": "npm run build"
+    }
+]

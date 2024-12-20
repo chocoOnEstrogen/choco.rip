@@ -6,6 +6,13 @@ import pm2 from 'pm2'
 import { z } from 'zod'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
+import { readFileSync } from 'fs'
+
+const buildSteps = require('../../.github/build-steps.json')
+
+if (!buildSteps) {
+	throw new Error('Build steps not found')
+}
 
 const router = Router()
 const execAsync = promisify(exec)
@@ -101,21 +108,14 @@ const performUpdate = async (payload: WebhookPayload) => {
 	try {
 		// Validate current directory is a git repository
 		await execAsync('git rev-parse --git-dir')
+        let stepCount = 0
 
-		// Pull latest changes
-		logUpdate('Pulling latest changes...')
-		const { stdout: pullOutput } = await execAsync('git pull')
-		logUpdate(`Git pull output: ${pullOutput.trim()}`)
-
-		// Install dependencies
-		logUpdate('Installing dependencies...')
-		const { stdout: npmOutput } = await execAsync('npm install')
-		logUpdate(`npm install output: ${npmOutput.trim()}`)
-
-		// Build project
-		logUpdate('Building project...')
-		const { stdout: buildOutput } = await execAsync('npm run build')
-		logUpdate(`Build output: ${buildOutput.trim()}`)
+		for (const step of buildSteps) {
+			logUpdate(`Running step: ${step.name} (${stepCount + 1}/${buildSteps.length})`)
+			const { stdout: stepOutput } = await execAsync(step.command)
+			logUpdate(`${step.name} output: ${stepOutput.trim()}`)
+            stepCount++
+		}
 
 		// Get and verify PM2 app info
 		const appInfo = await getPM2AppInfo()
