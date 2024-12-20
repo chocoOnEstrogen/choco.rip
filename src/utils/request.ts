@@ -32,19 +32,32 @@ export const render = async (
 ) => {
 	const ogImageData = {
 		title: data.ogImage?.title || data.title || constants.APP_NAME,
-		description: data.ogImage?.description || data.description || constants.DEFAULT_SEO.description,
+		description:
+			data.ogImage?.description ||
+			data.description ||
+			constants.DEFAULT_SEO.description,
 		author: data.ogImage?.author || data.author || constants.DEFAULT_SEO.author,
-		date: data.ogImage?.date || (data.publishedAt ? new Date(data.publishedAt).toISOString() : undefined),
-		tags: data.ogImage?.tags || (data.tags ? Array.isArray(data.tags) ? data.tags : [data.tags] : []),
+		date:
+			data.ogImage?.date ||
+			(data.publishedAt ? new Date(data.publishedAt).toISOString() : undefined),
+		tags:
+			data.ogImage?.tags ||
+			(data.tags ?
+				Array.isArray(data.tags) ?
+					data.tags
+				:	[data.tags]
+			:	[]),
 		imageUrl: data.ogImage?.imageUrl || data.coverImage || data.image,
 	}
 
 	const ogImageUrl = new URL(`${req.protocol}://${req.get('host')}/og-image`)
-	
+
 	Object.entries(ogImageData).forEach(([key, value]) => {
 		if (value !== undefined) {
 			if (Array.isArray(value)) {
-				value.forEach(item => ogImageUrl.searchParams.append(`${key}[]`, item))
+				value.forEach((item) =>
+					ogImageUrl.searchParams.append(`${key}[]`, item),
+				)
 			} else {
 				ogImageUrl.searchParams.set(key, value.toString())
 			}
@@ -58,7 +71,8 @@ export const render = async (
 		keywords: data.keywords || constants.DEFAULT_SEO.keywords,
 		author: data.author || constants.DEFAULT_SEO.author,
 		type: data.type || constants.DEFAULT_SEO.type,
-		fullTitle: data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
+		fullTitle:
+			data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
 		canonicalUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
 	}
 
@@ -77,7 +91,8 @@ export const render = async (
 	const renderOptions = {
 		...data,
 		constants,
-		title: data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
+		title:
+			data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
 		links,
 		cfg: config,
 		seo: seoData,

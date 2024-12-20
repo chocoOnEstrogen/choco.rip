@@ -10,8 +10,48 @@ import sanitizeHtml from 'sanitize-html'
 import { uploadImage, validateImage } from '@/utils/upload'
 import config from '@/cfg'
 import * as constants from '@/constants'
+import multer from 'multer'
+import path from 'path'
+import { ensureDirs, UPLOADS_DIR } from '@/paths'
+import fs from 'fs'
 
 const router = Router()
+
+// Configure multer storage
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		const uploadDir = path.join(process.cwd(), 'public', 'uploads')
+		// Ensure upload directory exists
+		ensureDirs()
+		cb(null, uploadDir)
+	},
+	filename: function (req, file, cb) {
+		// Create unique filename with original extension
+		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+		cb(null, uniqueSuffix + path.extname(file.originalname))
+	},
+})
+
+// Configure multer upload
+const upload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 5 * 1024 * 1024, // 5MB limit
+	},
+	fileFilter: (req, file, cb) => {
+		// Allow only images
+		const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+		if (allowedTypes.includes(file.mimetype)) {
+			cb(null, true)
+		} else {
+			cb(
+				new Error(
+					'Invalid file type. Only JPEG, PNG, GIF and WEBP are allowed.',
+				),
+			)
+		}
+	},
+})
 
 router.get('/', (req: Request, res: Response) => {
 	res.redirect('/admin/dashboard')
@@ -222,5 +262,123 @@ router.post('/blocklist', requireAuth, async (req: Request, res: Response) => {
 		)
 	}
 })
+
+//@ts-ignore
+router.post(
+	'/upload',
+	requireAuth,
+	upload.single('image'),
+	(req: Request, res: Response) => {
+		try {
+			if (!req.file) {
+				return res.status(400).json({
+					success: false,
+					message: 'No file uploaded',
+				})
+			}
+
+			// Return the file path
+			res.json({
+				success: true,
+				file: {
+					filename: req.file.filename,
+					path: `/uploads/${req.file.filename}`,
+					size: req.file.size,
+					mimetype: req.file.mimetype,
+				},
+			})
+		} catch (err) {
+			console.error('Error uploading file:', err)
+			res.status(500).json({
+				success: false,
+				message: 'Error uploading file',
+			})
+		}
+	},
+)
+
+// Add error handler for multer errors
+//@ts-ignore
+router.use((err: any, req: Request, res: Response, next: Function) => {
+	if (err instanceof multer.MulterError) {
+		// Multer error occurred
+		return res.status(400).json({
+			success: false,
+			message: err.message,
+		})
+	} else if (err) {
+		// Other error occurred
+		return res.status(500).json({
+			success: false,
+			message: err.message,
+		})
+	}
+	next()
+})
+
+// Add image routes
+router.get('/images', requireAuth, async (req: Request, res: Response) => {
+	try {
+		// Read the uploads directory
+		const files = fs.readdirSync(UPLOADS_DIR)
+		const images = files
+			.map((filename) => {
+				const stats = fs.statSync(path.join(UPLOADS_DIR, filename))
+				return {
+					filename,
+					originalname: filename,
+					size: stats.size,
+					created: stats.birthtime,
+				}
+			})
+			.sort((a, b) => b.created.getTime() - a.created.getTime())
+
+		render(req, res, 'admin/images', { images })
+	} catch (err) {
+		console.error('Error reading images:', err)
+		error(req, res, 'Error reading images')
+	}
+})
+
+router.post(
+	'/images/upload',
+	requireAuth,
+	upload.single('image'),
+	async (req: Request, res: Response) => {
+		if (!req.file) {
+			return error(req, res, 'No image uploaded')
+		}
+
+		res.redirect(
+			'/admin/images?alert=success&message=Image uploaded successfully',
+		)
+	},
+)
+
+router.post(
+	'/images/delete',
+	requireAuth,
+	async (req: Request, res: Response) => {
+		const { filename } = req.body
+		if (!filename) {
+			return error(req, res, 'No filename provided')
+		}
+
+		try {
+			const filepath = path.join(UPLOADS_DIR, filename)
+			if (fs.existsSync(filepath)) {
+				fs.unlinkSync(filepath)
+				res.redirect(
+					'/admin/images?alert=success&message=Image deleted successfully',
+				)
+			} else {
+				error(req, res, 'Image not found')
+			}
+		} catch (err) {
+			console.error('Error deleting image:', err)
+			error(req, res, 'Error deleting image')
+		}
+	},
+)
 
 export default router

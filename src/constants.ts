@@ -1,4 +1,3 @@
-
 import config from '@/cfg'
 
 export const APP_NAME = config.app.name

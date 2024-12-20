@@ -53,3 +53,6 @@ coverage/
 
 # Ignore data
 .github/app-data.txt
+
+# Ignore public/uploads
+public/uploads/

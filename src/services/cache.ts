@@ -50,13 +50,13 @@ export class CacheService {
 	private readonly compression: boolean
 	public readonly allowedExtensions: Set<string>
 	private stats: CacheStats
-	
+
 	private readonly contentTypes: Record<CacheType, string> = {
 		image: 'image/',
 		json: 'application/json',
 		text: 'text/plain',
 		buffer: 'application/octet-stream',
-		html: 'text/html'
+		html: 'text/html',
 	}
 
 	private readonly fileExtensions: Record<CacheType, string> = {
@@ -64,7 +64,7 @@ export class CacheService {
 		json: '.json',
 		text: '.txt',
 		buffer: '.bin',
-		html: '.html'
+		html: '.html',
 	}
 
 	constructor(options: BaseCacheOptions = {}) {
@@ -74,16 +74,23 @@ export class CacheService {
 		this.compression = options.compression ?? true
 
 		this.allowedExtensions = new Set([
-			'.img', '.json', '.txt', '.bin', '.html',  // Cache types
-			'.png', '.jpg', '.jpeg', '.gif', '.webp'   // Image types
+			'.img',
+			'.json',
+			'.txt',
+			'.bin',
+			'.html', // Cache types
+			'.png',
+			'.jpg',
+			'.jpeg',
+			'.gif',
+			'.webp', // Image types
 		])
 
 		this.memCache = new NodeCache({
 			stdTTL: options.ttl || 3600,
 			checkperiod: options.checkPeriod || 600,
-			useClones: false
+			useClones: false,
 		})
-		
 
 		this.stats = {
 			hits: 0,
@@ -96,8 +103,8 @@ export class CacheService {
 				json: 0,
 				text: 0,
 				buffer: 0,
-				html: 0
-			}
+				html: 0,
+			},
 		}
 
 		this.initializeCache()
@@ -109,9 +116,11 @@ export class CacheService {
 		key: string,
 		data: T,
 		type: CacheType,
-		options: ImageOptions & { metadata?: Record<string, any> } = {}
+		options: ImageOptions & { metadata?: Record<string, any> } = {},
 	): Promise<string> {
-		const hash = this.generateHash(JSON.stringify({ key, timestamp: Date.now() }))
+		const hash = this.generateHash(
+			JSON.stringify({ key, timestamp: Date.now() }),
+		)
 		const fileName = `${key}-${hash}${this.fileExtensions[type]}`
 		const filePath = join(this.cacheDir, fileName)
 
@@ -119,8 +128,9 @@ export class CacheService {
 			let fileData: Buffer
 
 			// Handle different data types
-			const isImage = type === 'image' || 
-						  (options.format && ['png', 'jpeg', 'webp'].includes(options.format));
+			const isImage =
+				type === 'image' ||
+				(options.format && ['png', 'jpeg', 'webp'].includes(options.format))
 
 			if (isImage) {
 				if (!(data instanceof Buffer)) {
@@ -155,7 +165,7 @@ export class CacheService {
 				data,
 				type,
 				createdAt: Date.now(),
-				metadata: options.metadata
+				metadata: options.metadata,
 			}
 			this.memCache.set(fileName, cacheItem)
 
@@ -188,7 +198,7 @@ export class CacheService {
 				contentType: this.getContentType(memCached.type),
 				size: 0,
 				metadata: memCached.metadata,
-				path: join(this.cacheDir, fileName)
+				path: join(this.cacheDir, fileName),
 			}
 		}
 
@@ -205,15 +215,15 @@ export class CacheService {
 				exists: false,
 				contentType: 'application/octet-stream',
 				size: 0,
-				path: filePath
+				path: filePath,
 			}
 		}
 
 		try {
 			let fileData = await readFile(filePath)
 			const type = this.getTypeFromFileName(fileName)
-			const isImage = type === 'image' || 
-						  fileName.match(/\.(png|jpg|jpeg|gif|webp)$/i);
+			const isImage =
+				type === 'image' || fileName.match(/\.(png|jpg|jpeg|gif|webp)$/i)
 
 			// Only decompress if it's not an image and compression is enabled
 			if (this.compression && !isImage) {
@@ -251,7 +261,7 @@ export class CacheService {
 				exists: true,
 				contentType: this.getContentType(type),
 				size: stats.size,
-				path: filePath
+				path: filePath,
 			}
 		} catch (error) {
 			console.error('Error reading from cache:', error)
@@ -264,28 +274,40 @@ export class CacheService {
 		return this.set(key, data, 'image', options)
 	}
 
-	public async setJSON<T>(key: string, data: T, metadata?: Record<string, any>) {
+	public async setJSON<T>(
+		key: string,
+		data: T,
+		metadata?: Record<string, any>,
+	) {
 		return this.set(key, data, 'json', { metadata })
 	}
 
-	public async setText(key: string, data: string, metadata?: Record<string, any>) {
+	public async setText(
+		key: string,
+		data: string,
+		metadata?: Record<string, any>,
+	) {
 		return this.set(key, data, 'text', { metadata })
 	}
 
-	public async setHTML(key: string, data: string, metadata?: Record<string, any>) {
+	public async setHTML(
+		key: string,
+		data: string,
+		metadata?: Record<string, any>,
+	) {
 		return this.set(key, data, 'html', { metadata })
 	}
 
 	public async saveFile(
-		key: string, 
-		data: Buffer, 
+		key: string,
+		data: Buffer,
 		options: {
 			format?: 'png' | 'jpeg' | 'webp'
 			quality?: number
 			width?: number
 			height?: number
 			metadata?: Record<string, any>
-		} = {}
+		} = {},
 	): Promise<string> {
 		const hash = this.generateHash(data)
 		const ext = options.format ? `.${options.format}` : '.png'
@@ -295,7 +317,12 @@ export class CacheService {
 		try {
 			// Process image if needed
 			let processedData = data
-			if (options.format || options.quality || options.width || options.height) {
+			if (
+				options.format ||
+				options.quality ||
+				options.width ||
+				options.height
+			) {
 				processedData = await this.processImage(data, options)
 			}
 
@@ -307,12 +334,11 @@ export class CacheService {
 				data: processedData,
 				type: 'image',
 				createdAt: Date.now(),
-				metadata: options.metadata
+				metadata: options.metadata,
 			})
 
 			await this.updateStats()
 			return fileName
-
 		} catch (error) {
 			console.error('Error saving file to cache:', error)
 			throw error
@@ -332,11 +358,14 @@ export class CacheService {
 
 	private startCleanupInterval(): void {
 		// Clean up every hour
-		setInterval(() => {
-			this.cleanupCache()
-				.then(() => this.updateStats())
-				.catch(error => console.error('Cache cleanup failed:', error))
-		}, 60 * 60 * 1000)
+		setInterval(
+			() => {
+				this.cleanupCache()
+					.then(() => this.updateStats())
+					.catch((error) => console.error('Cache cleanup failed:', error))
+			},
+			60 * 60 * 1000,
+		)
 	}
 
 	private async cleanupCache(): Promise<void> {
@@ -351,7 +380,10 @@ export class CacheService {
 				totalSize += stats.size
 
 				// Remove if expired or if total size exceeds max
-				if (now - stats.mtimeMs > this.maxAge * 1000 || totalSize > this.maxSize) {
+				if (
+					now - stats.mtimeMs > this.maxAge * 1000 ||
+					totalSize > this.maxSize
+				) {
 					await this.removeFile(file)
 				}
 			}
@@ -363,8 +395,8 @@ export class CacheService {
 	private async listCacheFiles(): Promise<string[]> {
 		try {
 			const files = await readdir(this.cacheDir)
-			return files.filter(file => 
-				this.allowedExtensions.has(path.extname(file).toLowerCase())
+			return files.filter((file) =>
+				this.allowedExtensions.has(path.extname(file).toLowerCase()),
 			)
 		} catch (error) {
 			console.error('Error listing cache files:', error)
@@ -427,13 +459,16 @@ export class CacheService {
 		return this.contentTypes[type] || 'application/octet-stream'
 	}
 
-	private async processImage(buffer: Buffer, options: ImageOptions): Promise<Buffer> {
+	private async processImage(
+		buffer: Buffer,
+		options: ImageOptions,
+	): Promise<Buffer> {
 		let image = sharp(buffer)
 
 		if (options.width || options.height) {
 			image = image.resize(options.width, options.height, {
 				fit: 'inside',
-				withoutEnlargement: true
+				withoutEnlargement: true,
 			})
 		}
 
@@ -449,7 +484,9 @@ export class CacheService {
 
 	private getTypeFromFileName(fileName: string): CacheType {
 		const ext = path.extname(fileName)
-		const entry = Object.entries(this.fileExtensions).find(([_, value]) => value === ext)
+		const entry = Object.entries(this.fileExtensions).find(
+			([_, value]) => value === ext,
+		)
 		return (entry?.[0] as CacheType) || 'buffer'
 	}
 }

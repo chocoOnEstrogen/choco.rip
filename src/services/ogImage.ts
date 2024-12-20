@@ -25,40 +25,45 @@ interface OGImageOptions {
 }
 
 function calculateFontSize(text: string, maxWidth: number, ctx: any): number {
-	let fontSize = 72; // Start with large font
-	ctx.font = `bold ${fontSize}px sans-serif`;
-	let metrics = ctx.measureText(text);
-	
+	let fontSize = 72 // Start with large font
+	ctx.font = `bold ${fontSize}px sans-serif`
+	let metrics = ctx.measureText(text)
+
 	// Reduce font size until text fits
 	while (metrics.width > maxWidth && fontSize > 24) {
-		fontSize -= 2;
-		ctx.font = `bold ${fontSize}px sans-serif`;
-		metrics = ctx.measureText(text);
+		fontSize -= 2
+		ctx.font = `bold ${fontSize}px sans-serif`
+		metrics = ctx.measureText(text)
 	}
-	
-	return fontSize;
+
+	return fontSize
 }
 
-function calculateTextHeight(text: string, maxWidth: number, fontSize: number, ctx: any): number {
-	const words = text.split(' ');
-	let lines = 1;
-	let currentLine = '';
-	
-	ctx.font = `${fontSize}px sans-serif`;
-	
+function calculateTextHeight(
+	text: string,
+	maxWidth: number,
+	fontSize: number,
+	ctx: any,
+): number {
+	const words = text.split(' ')
+	let lines = 1
+	let currentLine = ''
+
+	ctx.font = `${fontSize}px sans-serif`
+
 	for (const word of words) {
-		const testLine = currentLine + word + ' ';
-		const metrics = ctx.measureText(testLine);
-		
+		const testLine = currentLine + word + ' '
+		const metrics = ctx.measureText(testLine)
+
 		if (metrics.width > maxWidth) {
-			currentLine = word + ' ';
-			lines++;
+			currentLine = word + ' '
+			lines++
 		} else {
-			currentLine = testLine;
+			currentLine = testLine
 		}
 	}
-	
-	return lines * (fontSize * 1.2); // 1.2 is line height
+
+	return lines * (fontSize * 1.2) // 1.2 is line height
 }
 
 export async function generateOGImage(options: OGImageOptions) {
@@ -126,32 +131,39 @@ export async function generateOGImage(options: OGImageOptions) {
 	// Calculate layout dimensions
 	const padding = {
 		x: 80,
-		y: 60
-	};
+		y: 60,
+	}
 
 	// Calculate content area based on image presence
-	const hasImage = !!options.imageUrl;
+	const hasImage = !!options.imageUrl
 	const contentArea = {
-		width: hasImage ? width - 500 : width - (padding.x * 2),
-		x: padding.x
-	};
+		width: hasImage ? width - 500 : width - padding.x * 2,
+		x: padding.x,
+	}
 
 	// Title
-	const titleFontSize = calculateFontSize(options.title, contentArea.width, ctx);
-	ctx.font = `bold ${titleFontSize}px sans-serif`;
-	ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-	
-	const titleY = padding.y + titleFontSize;
-	wrapText(ctx, options.title, contentArea.x, titleY, contentArea.width, titleFontSize * 1.2);
+	const titleFontSize = calculateFontSize(options.title, contentArea.width, ctx)
+	ctx.font = `bold ${titleFontSize}px sans-serif`
+	ctx.fillStyle = isDark ? '#ffffff' : '#000000'
+
+	const titleY = padding.y + titleFontSize
+	wrapText(
+		ctx,
+		options.title,
+		contentArea.x,
+		titleY,
+		contentArea.width,
+		titleFontSize * 1.2,
+	)
 
 	// Description
-	let descriptionBottom = titleY;
+	let descriptionBottom = titleY
 	if (options.description) {
-		const descriptionY = titleY + 60;
-		const descriptionFontSize = Math.min(28, titleFontSize * 0.5);
-		ctx.font = `${descriptionFontSize}px sans-serif`;
-		ctx.fillStyle = isDark ? '#8b949e' : '#64748b';
-		
+		const descriptionY = titleY + 60
+		const descriptionFontSize = Math.min(28, titleFontSize * 0.5)
+		ctx.font = `${descriptionFontSize}px sans-serif`
+		ctx.fillStyle = isDark ? '#8b949e' : '#64748b'
+
 		const descriptionHeight = wrapText(
 			ctx,
 			options.description,
@@ -159,9 +171,9 @@ export async function generateOGImage(options: OGImageOptions) {
 			descriptionY,
 			contentArea.width,
 			descriptionFontSize * 1.4,
-			3
-		);
-		descriptionBottom = descriptionY + descriptionHeight;
+			3,
+		)
+		descriptionBottom = descriptionY + descriptionHeight
 	}
 
 	// Handle external image
@@ -170,63 +182,65 @@ export async function generateOGImage(options: OGImageOptions) {
 			const response = await axios.get(options.imageUrl, {
 				responseType: 'arraybuffer',
 				timeout: 5000,
-			});
+			})
 
-			const image = await loadImage(Buffer.from(response.data));
+			const image = await loadImage(Buffer.from(response.data))
 
 			// Calculate image dimensions to make a perfect circle
-			const diameter = Math.min(400, height - (padding.y * 2));
-			const imgSize = diameter;
+			const diameter = Math.min(400, height - padding.y * 2)
+			const imgSize = diameter
 
 			// Position image on the right
-			const imgX = width - imgSize - padding.x;
-			const imgY = (height - imgSize) / 2; // Center vertically
+			const imgX = width - imgSize - padding.x
+			const imgY = (height - imgSize) / 2 // Center vertically
 
 			// Draw circular image
-			ctx.save();
-			ctx.beginPath();
-			ctx.arc(imgX + imgSize/2, imgY + imgSize/2, imgSize/2, 0, Math.PI * 2);
-			ctx.clip();
-			ctx.drawImage(image, imgX, imgY, imgSize, imgSize);
-			ctx.restore();
-
+			ctx.save()
+			ctx.beginPath()
+			ctx.arc(
+				imgX + imgSize / 2,
+				imgY + imgSize / 2,
+				imgSize / 2,
+				0,
+				Math.PI * 2,
+			)
+			ctx.clip()
+			ctx.drawImage(image, imgX, imgY, imgSize, imgSize)
+			ctx.restore()
 		} catch (error) {
-			console.warn('Failed to load image:', error);
+			console.warn('Failed to load image:', error)
 		}
 	}
 
 	// Tags
 	if (options.tags && options.tags.length > 0) {
-		const tagStartY = height - 140; // Fixed position from bottom
-		let tagX = contentArea.x;
-		
-		ctx.font = 'bold 20px sans-serif';
+		const tagStartY = height - 140 // Fixed position from bottom
+		let tagX = contentArea.x
+
+		ctx.font = 'bold 20px sans-serif'
 		options.tags.slice(0, 4).forEach((tag) => {
-			const tagWidth = ctx.measureText(tag).width + 24;
-			const tagHeight = 36;
+			const tagWidth = ctx.measureText(tag).width + 24
+			const tagHeight = 36
 
 			// Tag background
-			ctx.fillStyle = isDark 
-				? 'rgba(56, 139, 253, 0.15)'
-				: 'rgba(56, 139, 253, 0.1)';
-			ctx.beginPath();
-			ctx.roundRect(tagX, tagStartY, tagWidth, tagHeight, 18);
-			ctx.fill();
+			ctx.fillStyle =
+				isDark ? 'rgba(56, 139, 253, 0.15)' : 'rgba(56, 139, 253, 0.1)'
+			ctx.beginPath()
+			ctx.roundRect(tagX, tagStartY, tagWidth, tagHeight, 18)
+			ctx.fill()
 
 			// Tag text
-			ctx.fillStyle = isDark 
-				? '#58a6ff'
-				: '#0969da';
-			ctx.fillText(tag, tagX + 12, tagStartY + 24);
+			ctx.fillStyle = isDark ? '#58a6ff' : '#0969da'
+			ctx.fillText(tag, tagX + 12, tagStartY + 24)
 
-			tagX += tagWidth + 12;
-		});
+			tagX += tagWidth + 12
+		})
 	}
 
 	// Author and date
 	if (options.author || options.date) {
-		ctx.font = '20px sans-serif';
-		ctx.fillStyle = isDark ? '#8b949e' : '#64748b';
+		ctx.font = '20px sans-serif'
+		ctx.fillStyle = isDark ? '#8b949e' : '#64748b'
 
 		const bottomText = [
 			options.author && `By ${options.author}`,
@@ -238,9 +252,9 @@ export async function generateOGImage(options: OGImageOptions) {
 				}),
 		]
 			.filter(Boolean)
-			.join(' • ');
+			.join(' • ')
 
-		ctx.fillText(bottomText, contentArea.x, height - padding.y);
+		ctx.fillText(bottomText, contentArea.x, height - padding.y)
 	}
 
 	// Optimize and cache the image
@@ -267,38 +281,38 @@ function wrapText(
 	y: number,
 	maxWidth: number,
 	lineHeight: number,
-	maxLines: number = 2
+	maxLines: number = 2,
 ) {
-	const words = text.split(' ');
-	let line = '';
-	let currentY = y;
-	let lineCount = 0;
+	const words = text.split(' ')
+	let line = ''
+	let currentY = y
+	let lineCount = 0
 
 	for (const word of words) {
-		const testLine = line + word + ' ';
-		const metrics = ctx.measureText(testLine);
+		const testLine = line + word + ' '
+		const metrics = ctx.measureText(testLine)
 
 		if (metrics.width > maxWidth && line !== '') {
-			ctx.fillText(line.trim(), x, currentY);
-			line = word + ' ';
-			currentY += lineHeight;
-			lineCount++;
+			ctx.fillText(line.trim(), x, currentY)
+			line = word + ' '
+			currentY += lineHeight
+			lineCount++
 
 			if (lineCount >= maxLines) {
 				if (words.indexOf(word) < words.length - 1) {
 					// Add ellipsis if there's more text
-					line = line.trim() + '...';
+					line = line.trim() + '...'
 				}
-				break;
+				break
 			}
 		} else {
-			line = testLine;
+			line = testLine
 		}
 	}
 
 	if (lineCount < maxLines) {
-		ctx.fillText(line.trim(), x, currentY);
+		ctx.fillText(line.trim(), x, currentY)
 	}
 
-	return currentY - y;
+	return currentY - y
 }

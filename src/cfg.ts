@@ -3,7 +3,6 @@ import yaml from 'js-yaml'
 import { CONFIG_PATH } from '@/paths'
 import { IConfig } from '@/interfaces/IConfig'
 
-
 let config: IConfig
 
 try {

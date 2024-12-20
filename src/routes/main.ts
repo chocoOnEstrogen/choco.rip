@@ -29,7 +29,6 @@ const router = Router()
 // Initialize cache with 5-minute TTL
 const statsCache = new NodeCache({ stdTTL: 300 })
 
-
 router.get('/', async (req: Request, res: Response) => {
 	const stats = await new GitHubService().getStats()
 	const allPosts = await getAllPosts()
@@ -39,12 +38,13 @@ router.get('/', async (req: Request, res: Response) => {
 
 	render(req, res, 'index', {
 		title: 'Home',
-		description: 'Full-stack developer and designer specializing in web development, creative coding, and digital experiences',
+		description:
+			'Full-stack developer and designer specializing in web development, creative coding, and digital experiences',
 		ogImage: {
 			title: constants.APP_NAME,
 			description: 'Full-stack Developer & Designer',
 			author: 'Stella',
-			tags: ['Web Development', 'Design', 'Creative Coding']
+			tags: ['Web Development', 'Design', 'Creative Coding'],
 		},
 		stats,
 		recentPosts,
@@ -107,12 +107,14 @@ router.get('/about', async (req: Request, res: Response) => {
 		const about = await content.parse('about.md')
 		render(req, res, 'about', {
 			title: 'About Me',
-			description: about.excerpt || 'Learn more about my journey, skills, and experiences in web development and design',
+			description:
+				about.excerpt ||
+				'Learn more about my journey, skills, and experiences in web development and design',
 			ogImage: {
 				title: 'About Stella',
 				description: 'Full-stack Developer & Designer',
 				author: 'Stella',
-				imageUrl: await new GitHubService().getProfileImage()
+				imageUrl: await new GitHubService().getProfileImage(),
 			},
 			about,
 		})
@@ -150,13 +152,15 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 		render(req, res, 'docs/page', {
 			layout: 'layouts/docs',
 			title: doc.frontmatter.title || 'Documentation',
-			description: doc.frontmatter.description || `Technical documentation and guides for ${category || 'all topics'}`,
+			description:
+				doc.frontmatter.description ||
+				`Technical documentation and guides for ${category || 'all topics'}`,
 			ogImage: {
 				title: doc.frontmatter.title || 'Documentation',
 				description: doc.frontmatter.description,
 				author: 'Stella',
 				tags: ['Documentation', category, 'Technical Guides'].filter(Boolean),
-				date: doc.frontmatter.lastUpdated
+				date: doc.frontmatter.lastUpdated,
 			},
 			doc,
 			structure,
@@ -166,9 +170,9 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 			category,
 			page,
 			path: req.path,
-				lastUpdated: doc.frontmatter.lastUpdated || new Date().toISOString(),
-				editUrl: `https://github.com/chocoOnEstrogen/choco.rip/edit/main/content/docs/${docPath}.md`,
-				type: 'article'
+			lastUpdated: doc.frontmatter.lastUpdated || new Date().toISOString(),
+			editUrl: `https://github.com/chocoOnEstrogen/choco.rip/edit/main/content/docs/${docPath}.md`,
+			type: 'article',
 		})
 	} catch (error) {
 		console.error('Error loading documentation:', error)
@@ -178,15 +182,13 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		let requestPath = req.path.endsWith('/') ? 
-			req.path + 'index' : 
-			req.path
+		let requestPath = req.path.endsWith('/') ? req.path + 'index' : req.path
 
 		requestPath = requestPath.replace(/^\//, '')
-	
+
 		const possiblePaths = [
 			path.join(PAGES_DIR, requestPath + '.page'),
-			path.join(PAGES_DIR, requestPath, 'index.page')
+			path.join(PAGES_DIR, requestPath, 'index.page'),
 		]
 
 		let filePath: string | null = null
@@ -215,11 +217,11 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 
 		render(req, res, 'dynamic-page', {
 			title: config.seo?.title || path.basename(requestPath),
-				description: config.seo?.description,
-				content: cleanContent,
-				css: config.css || [],
-				js: config.js || [],
-				...config
+			description: config.seo?.description,
+			content: cleanContent,
+			css: config.css || [],
+			js: config.js || [],
+			...config,
 		})
 	} catch (error) {
 		console.error('Error loading dynamic page:', error)

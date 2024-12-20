@@ -10,24 +10,28 @@ const cache = new CacheService()
 // Rate limiting middleware
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
-	max: 100
+	max: 100,
 })
 
 // Apply rate limiting to all cache routes
 router.use('/', limiter)
 
 // Updated security middleware
-const securityMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+const securityMiddleware = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const fileName = req.params[0] || ''
 	const ext = path.extname(fileName).toLowerCase()
-	
+
 	// Check file extension
 	if (!cache['allowedExtensions'].has(ext)) {
-		console.log("cacheExt", cache['allowedExtensions'])
-		console.log("ext", ext)
-		return res.status(403).json({ 
+		console.log('cacheExt', cache['allowedExtensions'])
+		console.log('ext', ext)
+		return res.status(403).json({
 			error: 'Invalid file type',
-			allowedTypes: Array.from(cache['allowedExtensions'])
+			allowedTypes: Array.from(cache['allowedExtensions']),
 		})
 	}
 
@@ -46,8 +50,6 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
 
 	next()
 }
-
-
 
 // Get cache stats
 router.get('/stats', async (_req: Request, res: Response) => {
@@ -82,7 +84,7 @@ router.get('/*', securityMiddleware, async (req: Request, res: Response) => {
 			'Content-Length': file.size,
 			'X-Content-Type-Options': 'nosniff',
 			'X-Frame-Options': 'DENY',
-			'X-XSS-Protection': '1; mode=block'
+			'X-XSS-Protection': '1; mode=block',
 		})
 
 		// Handle different response types
@@ -98,14 +100,13 @@ router.get('/*', securityMiddleware, async (req: Request, res: Response) => {
 		} else if (file.contentType === 'application/json') {
 			res.json(file.data)
 		} else if (
-			file.contentType === 'text/plain' || 
+			file.contentType === 'text/plain' ||
 			file.contentType === 'text/html'
 		) {
 			res.send(file.data)
 		} else {
 			res.send(file.data)
 		}
-
 	} catch (error) {
 		console.error('Error serving cached file:', error)
 		if (error instanceof Error) {

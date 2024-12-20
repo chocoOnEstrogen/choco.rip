@@ -21,14 +21,15 @@ const ogImageSchema = z.object({
 router.get('/', async (req: Request, res: Response) => {
 	try {
 		const params = ogImageSchema.parse({
-			title: req.query.title || constants.APP_NAME, 
+			title: req.query.title || constants.APP_NAME,
 			description: req.query.description || constants.DEFAULT_SEO.description,
 			theme: req.query.theme || 'dark',
 			template: req.query.template || 'default',
 			author: req.query.author || constants.DEFAULT_SEO.author,
 			date: req.query.date || new Date().toISOString(),
 			tags: req.query.tags,
-			imageUrl: req.query.imageUrl || `${req.protocol}://${req.get('host')}/me.jpg`,
+			imageUrl:
+				req.query.imageUrl || `${req.protocol}://${req.get('host')}/me.jpg`,
 		})
 
 		const imagePath = await generateOGImage({

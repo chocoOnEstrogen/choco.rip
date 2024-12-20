@@ -108,13 +108,15 @@ const performUpdate = async (payload: WebhookPayload) => {
 	try {
 		// Validate current directory is a git repository
 		await execAsync('git rev-parse --git-dir')
-        let stepCount = 0
+		let stepCount = 0
 
 		for (const step of buildSteps) {
-			logUpdate(`Running step: ${step.name} (${stepCount + 1}/${buildSteps.length})`)
+			logUpdate(
+				`Running step: ${step.name} (${stepCount + 1}/${buildSteps.length})`,
+			)
 			const { stdout: stepOutput } = await execAsync(step.command)
 			logUpdate(`${step.name} output: ${stepOutput.trim()}`)
-            stepCount++
+			stepCount++
 		}
 
 		// Get and verify PM2 app info
