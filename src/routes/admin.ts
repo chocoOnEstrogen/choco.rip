@@ -32,11 +32,13 @@ const storage = multer.diskStorage({
 	},
 })
 
+const MAX_FILE_SIZE = 500 * 1024 * 1024 // 500MB
+
 // Configure multer upload
 const upload = multer({
 	storage: storage,
 	limits: {
-		fileSize: 500 * 1024 * 1024, // 500MB limit
+		fileSize: MAX_FILE_SIZE,
 	},
 	fileFilter: (req, file, cb) => {
 		// Allow only images
@@ -334,7 +336,11 @@ router.get('/images', requireAuth, async (req: Request, res: Response) => {
 			})
 			.sort((a, b) => b.created.getTime() - a.created.getTime())
 
-		render(req, res, 'admin/images', { images })
+		const sizeToHuman = (size: number) => {
+			return size / (1024 * 1024) + 'MB'
+		}
+
+		render(req, res, 'admin/images', { images, fileSize: sizeToHuman(MAX_FILE_SIZE) })
 	} catch (err) {
 		console.error('Error reading images:', err)
 		error(req, res, 'Error reading images')

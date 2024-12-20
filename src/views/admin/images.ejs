@@ -68,7 +68,7 @@
                     <div class="mb-3">
                         <label class="form-label">Select Images</label>
                         <input type="file" class="form-control" name="images" accept="image/*" required multiple>
-                        <small class="text-muted">Max size: 5MB per image. Up to 10 images. Supported formats: JPG, PNG, GIF, WEBP</small>
+                        <small class="text-muted">Max size: <%= fileSize %> per image. Up to 10 images. Supported formats: JPG, PNG, GIF, WEBP</small>
                     </div>
                     <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
                 </div>
