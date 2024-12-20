@@ -17,6 +17,7 @@ import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
 import updaterRouter from '@/routes/updater'
 import { CronService } from '@/services/cron'
+import { APP_NAME, PAGES_DIR } from '@/constants'
 
 dotenv.config()
 
@@ -24,6 +25,10 @@ fs.mkdirSync('logs', { recursive: true })
 
 if (!fs.existsSync('logs/requests.log')) {
 	fs.writeFileSync('logs/requests.log', '')
+}
+
+if (!fs.existsSync(PAGES_DIR)) {
+	fs.mkdirSync(PAGES_DIR, { recursive: true })
 }
 
 const app = express()

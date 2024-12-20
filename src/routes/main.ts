@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import { render } from '@/utils/request'
 import * as constants from '@/constants'
 import linksSchema from '@/schemas/links.schema'
@@ -11,6 +11,11 @@ import BskyService from '@/services/bsky'
 import { getAllPosts } from '@/utils/blog'
 import { generateBreadcrumbs, getAdjacentPages } from '@/utils/docs'
 import { getDocsStructure } from '@/utils/docs'
+import * as fs from 'fs'
+import path from 'path'
+import yaml from 'js-yaml'
+import { parsePageFile } from '@/utils/pages'
+import { PAGES_DIR } from '@/constants'
 
 const content = createContent('content', {
 	markdown: {
@@ -24,6 +29,7 @@ const router = Router()
 
 // Initialize cache with 5-minute TTL
 const statsCache = new NodeCache({ stdTTL: 300 })
+
 
 router.get('/', async (req: Request, res: Response) => {
 	const stats = await new GitHubService().getStats()
@@ -216,6 +222,57 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error('Error loading documentation:', error)
 		res.redirect('/docs')
+	}
+})
+
+router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		let requestPath = req.path.endsWith('/') ? 
+			req.path + 'index' : 
+			req.path
+
+		requestPath = requestPath.replace(/^\//, '')
+	
+		const possiblePaths = [
+			path.join(PAGES_DIR, requestPath + '.page'),
+			path.join(PAGES_DIR, requestPath, 'index.page')
+		]
+
+		let filePath: string | null = null
+		for (const p of possiblePaths) {
+			if (fs.existsSync(p)) {
+				filePath = p
+				break
+			}
+		}
+
+		if (!filePath) {
+			return next()
+		}
+
+		const content = fs.readFileSync(filePath, 'utf-8')
+		let config: any = {}
+		let cleanContent: string = ''
+
+		if (filePath.endsWith('.page')) {
+			const parsed = await parsePageFile(content)
+			config = parsed.config
+			cleanContent = parsed.html
+		} else {
+			throw new Error('Unsupported file type')
+		}
+
+		render(req, res, 'dynamic-page', {
+			title: config.seo?.title || path.basename(requestPath),
+				description: config.seo?.description,
+				content: cleanContent,
+				css: config.css || [],
+				js: config.js || [],
+				...config
+		})
+	} catch (error) {
+		console.error('Error loading dynamic page:', error)
+		next(error)
 	}
 })
 

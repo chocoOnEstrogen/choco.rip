@@ -1037,3 +1037,119 @@ body {
         rgba(var(--primary-rgb), 0.15)
     );
 }
+
+/* Modern Accordion Styles */
+.accordion {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.accordion-item {
+    border: none;
+    background: transparent;
+}
+
+.accordion-item:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-header {
+    margin: 0;
+}
+
+.accordion-button {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--card-bg);
+    border: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    color: var(--primary-color);
+    background: linear-gradient(
+        to right,
+        rgba(var(--primary-rgb), 0.1),
+        transparent
+    );
+    box-shadow: none;
+}
+
+/* Custom Accordion Icon */
+.accordion-button::after {
+    width: 24px;
+    height: 24px;
+    background-image: none !important;
+    background: var(--gradient-1);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.accordion-button::after {
+    content: '+';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.accordion-button:not(.collapsed)::after {
+    content: '−';
+    transform: rotate(0deg);
+    background: var(--gradient-2);
+}
+
+/* Accordion Content */
+.accordion-body {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--text-color);
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Hover Effects */
+.accordion-button:hover {
+    background: rgba(var(--primary-rgb), 0.05);
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .accordion {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .accordion-button {
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .accordion-button:not(.collapsed) {
+    background: linear-gradient(
+        to right,
+        rgba(var(--primary-rgb), 0.15),
+        transparent
+    );
+}
+
+/* Animation */
+.accordion-collapse {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-collapse.collapsing {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.accordion-collapse.show {
+    opacity: 1;
+    transform: translateY(0);
+}

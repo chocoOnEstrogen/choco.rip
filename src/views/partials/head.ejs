@@ -40,6 +40,12 @@
     <link rel="stylesheet" href="/css/markdown.css">
     <link rel="stylesheet" href="/css/scrollbar.css">
 
+    <% if (locals.css && css.length > 0) { %>
+        <% css.forEach(function(href) { %>
+            <link rel="stylesheet" href="<%= href %>">
+        <% }); %>
+    <% } %> 
+
     <% if (path.includes('docs')) { %>
       <link rel="stylesheet" href="/css/docs.css">
     <% } %>
@@ -52,4 +58,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+
+    <% if (locals.js && js.length > 0) { %>
+      <% js.forEach(function(src) { %>
+          <script src="<%= src %>"></script>
+      <% }); %>
+  <% } %>
 </head> 
