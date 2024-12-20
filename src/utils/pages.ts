@@ -4,9 +4,11 @@ function parseSection(type: string, content: string): string {
 	switch (type) {
 		case 'hero':
 			return `
-				<section class="hero-section text-center py-5">
+				<section class="hero-section text-center py-5 position-relative">
 					<div class="container">
-						${content}
+						<div class="hero-content">
+							${content}
+						</div>
 					</div>
 				</section>
 			`
