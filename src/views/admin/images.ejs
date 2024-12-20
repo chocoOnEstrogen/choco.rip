@@ -66,10 +66,11 @@
             <form action="/admin/images/upload" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Select Image</label>
-                        <input type="file" class="form-control" name="image" accept="image/*" required>
-                        <small class="text-muted">Max size: 5MB. Supported formats: JPG, PNG, GIF, WEBP</small>
+                        <label class="form-label">Select Images</label>
+                        <input type="file" class="form-control" name="images" accept="image/*" required multiple>
+                        <small class="text-muted">Max size: 5MB per image. Up to 10 images. Supported formats: JPG, PNG, GIF, WEBP</small>
                     </div>
+                    <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -136,6 +137,16 @@
 .btn-link:hover {
     color: var(--primary-color);
 }
+
+.preview-thumbnail {
+    position: relative;
+    display: inline-block;
+}
+
+#imagePreviewContainer {
+    max-height: 200px;
+    overflow-y: auto;
+}
 </style>
 
 <script>
@@ -151,4 +162,23 @@ function copyImagePath(path) {
         alert('Image path copied to clipboard!');
     });
 }
+
+document.querySelector('input[name="images"]').addEventListener('change', function(e) {
+    const container = document.getElementById('imagePreviewContainer');
+    container.innerHTML = ''; // Clear previous previews
+    
+    const files = e.target.files;
+    for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.createElement('div');
+            preview.className = 'preview-thumbnail';
+            preview.innerHTML = `
+                <img src="${e.target.result}" alt="Preview" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+            `;
+            container.appendChild(preview);
+        }
+        reader.readAsDataURL(file);
+    }
+});
 </script> 

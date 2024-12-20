@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 const upload = multer({
 	storage: storage,
 	limits: {
-		fileSize: 5 * 1024 * 1024, // 5MB limit
+		fileSize: 500 * 1024 * 1024, // 500MB limit
 	},
 	fileFilter: (req, file, cb) => {
 		// Allow only images
@@ -344,14 +344,14 @@ router.get('/images', requireAuth, async (req: Request, res: Response) => {
 router.post(
 	'/images/upload',
 	requireAuth,
-	upload.single('image'),
+	upload.array('images', 10),
 	async (req: Request, res: Response) => {
-		if (!req.file) {
-			return error(req, res, 'No image uploaded')
+		if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
+			return error(req, res, 'No images uploaded')
 		}
 
 		res.redirect(
-			'/admin/images?alert=success&message=Image uploaded successfully',
+			'/admin/images?alert=success&message=Images uploaded successfully',
 		)
 	},
 )
