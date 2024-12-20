@@ -95,6 +95,7 @@ export const render = async (
 			data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
 		links,
 		cfg: config,
+		config: config,
 		seo: seoData,
 		path: req.path,
 		query: req.query,
