@@ -268,6 +268,7 @@ router.post(
 	'/upload',
 	requireAuth,
 	upload.single('image'),
+	//@ts-ignore
 	(req: Request, res: Response) => {
 		try {
 			if (!req.file) {
