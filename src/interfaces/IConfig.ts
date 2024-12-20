@@ -24,6 +24,13 @@ export interface IConfig {
 		author: string
 		type: string
 	}
+	analytics?: {
+		google_analytics?: string
+		google_ads?: string
+		google_tag_manager?: string
+		microsoft_clarity?: string
+		facebook_pixel?: string
+	}
 	contact?: {
 		email?: string
 		discord?: {

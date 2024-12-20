@@ -21,6 +21,13 @@ interface Config {
 		author: string
 		type: string
 	}
+	analytics?: {
+		google_analytics?: string
+		google_ads?: string
+		google_tag_manager?: string
+		microsoft_clarity?: string
+		facebook_pixel?: string
+	}
 	contact?: {
 		email?: string
 		discord?: {
@@ -179,6 +186,29 @@ async function setupConfig() {
 	if (setupBsky.toLowerCase() === 'y') {
 		const username = await question(rl, 'Enter Bluesky username')
 		config.bsky = { username }
+	}
+
+	// Analytics Setup
+	console.log(chalk.yellow('\nAnalytics Setup:'))
+	const setupAnalytics = await question(rl, 'Do you want to set up analytics? (y/N)')
+	
+	if (setupAnalytics.toLowerCase() === 'y') {
+		config.analytics = {}
+		
+		const ga4Id = await question(rl, 'Google Analytics 4 Measurement ID (G-XXXXXXXX)')
+		if (ga4Id) config.analytics.google_analytics = ga4Id
+		
+		const gAdsId = await question(rl, 'Google Ads ID (AW-XXXXXXXXX)')
+		if (gAdsId) config.analytics.google_ads = gAdsId
+		
+		const gtmId = await question(rl, 'Google Tag Manager ID (GTM-XXXXXX)')
+		if (gtmId) config.analytics.google_tag_manager = gtmId
+		
+		const clarityId = await question(rl, 'Microsoft Clarity ID')
+		if (clarityId) config.analytics.microsoft_clarity = clarityId
+		
+		const fbPixelId = await question(rl, 'Facebook Pixel ID')
+		if (fbPixelId) config.analytics.facebook_pixel = fbPixelId
 	}
 
 	rl.close()
