@@ -28,14 +28,19 @@ const statsCache = new NodeCache({ stdTTL: 300 })
 router.get('/', async (req: Request, res: Response) => {
 	const stats = await new GitHubService().getStats()
 	const allPosts = await getAllPosts()
-
-	// Get the 3 most recent posts
 	const recentPosts = allPosts
 		.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
 		.slice(0, 3)
 
 	render(req, res, 'index', {
 		title: 'Home',
+		description: 'Full-stack developer and designer specializing in web development, creative coding, and digital experiences',
+		ogImage: {
+			title: constants.APP_NAME,
+			description: 'Full-stack Developer & Designer',
+			author: 'Stella',
+			tags: ['Web Development', 'Design', 'Creative Coding']
+		},
 		stats,
 		recentPosts,
 		formatDistance,
@@ -145,7 +150,13 @@ router.get('/about', async (req: Request, res: Response) => {
 		const about = await content.parse('about.md')
 		render(req, res, 'about', {
 			title: 'About Me',
-			description: 'Learn more about me and my work',
+			description: about.excerpt || 'Learn more about my journey, skills, and experiences in web development and design',
+			ogImage: {
+				title: 'About Stella',
+				description: 'Full-stack Developer & Designer',
+				author: 'Stella',
+				imageUrl: await new GitHubService().getProfileImage()
+			},
 			about,
 		})
 	} catch (error) {
@@ -182,7 +193,14 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 		render(req, res, 'docs/page', {
 			layout: 'layouts/docs',
 			title: doc.frontmatter.title || 'Documentation',
-			description: doc.frontmatter.description || 'Documentation page',
+			description: doc.frontmatter.description || `Technical documentation and guides for ${category || 'all topics'}`,
+			ogImage: {
+				title: doc.frontmatter.title || 'Documentation',
+				description: doc.frontmatter.description,
+				author: 'Stella',
+				tags: ['Documentation', category, 'Technical Guides'].filter(Boolean),
+				date: doc.frontmatter.lastUpdated
+			},
 			doc,
 			structure,
 			breadcrumbs,
@@ -191,8 +209,9 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 			category,
 			page,
 			path: req.path,
-			lastUpdated: doc.frontmatter.lastUpdated || new Date().toISOString(),
-			editUrl: `https://github.com/chocoOnEstrogen/choco.rip/edit/main/content/docs/${docPath}.md`,
+				lastUpdated: doc.frontmatter.lastUpdated || new Date().toISOString(),
+				editUrl: `https://github.com/chocoOnEstrogen/choco.rip/edit/main/content/docs/${docPath}.md`,
+				type: 'article'
 		})
 	} catch (error) {
 		console.error('Error loading documentation:', error)

@@ -65,7 +65,7 @@ app.use('/updater', updaterRouter)
 
 app.use((req: Request, res: Response) => {
 	if (req.path.includes('.php')) {
-		res.status(403).send('Forbidden')	
+		res.status(403).send('Forbidden')
 	} else {
 		error(req, res, new Error('Page not found'), 404)
 	}
@@ -73,7 +73,7 @@ app.use((req: Request, res: Response) => {
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 	if (req.path.includes('.php')) {
-		res.status(403).send('Forbidden')	
+		res.status(403).send('Forbidden')
 	} else {
 		error(req, res, err, 500)
 	}
@@ -95,34 +95,37 @@ server.listen(
 		try {
 			if (!process.env.MONGO_URI) {
 				console.error('MONGO_URI is not set')
+				process.exit(1)
+			}
+
+			await mongoose.connect(process.env.MONGO_URI)
+
+			console.clear()
+			console.log(
+				`Server is running on port ${process.env.PORT} ${process.env.HOST}`,
+			)
+			console.log('MongoDB connected')
+
+			cronService.registerJob({
+				name: 'clear-cache',
+				schedule: '0 0 * * *',
+				task: () => {
+					fs.rmSync('cache', { recursive: true, force: true })
+				},
+			})
+
+			cronService.registerJob({
+				name: 'clear-logs',
+				schedule: '0 0 * * *',
+				task: () => {
+					fs.writeFileSync('logs/requests.log', '')
+				},
+			})
+		} catch (error) {
+			console.error('Startup error:', error)
 			process.exit(1)
 		}
-
-		await mongoose.connect(process.env.MONGO_URI)
-
-		console.clear()
-		console.log(`Server is running on port ${process.env.PORT} ${process.env.HOST}`)
-		console.log('MongoDB connected')
-
-		cronService.registerJob({
-			name: 'clear-cache',
-			schedule: '0 0 * * *',
-			task: () => {
-				fs.rmSync('cache', { recursive: true, force: true })
-			},
-		})
-		
-		cronService.registerJob({
-			name: 'clear-logs',
-			schedule: '0 0 * * *',
-			task: () => {
-				fs.writeFileSync('logs/requests.log', '')
-			},
-		})
-	} catch (error) {
-		console.error('Startup error:', error)
-		process.exit(1)
-	}
-})
+	},
+)
 
 export { app, server }

@@ -12,12 +12,14 @@ const linksCache = new NodeCache({
 interface RenderData {
 	title?: string
 	description?: string
-	image?: string
-	twitterHandle?: string
-	author?: string
-	date?: string
-	tags?: string[]
-	imageUrl?: string
+	ogImage?: {
+		title?: string
+		description?: string
+		author?: string
+		date?: string
+		tags?: string[]
+		imageUrl?: string
+	}
 	[key: string]: any
 }
 
@@ -28,23 +30,36 @@ export const render = async (
 	data: RenderData = {},
 	statusCode: number = 200,
 ) => {
-	const ogImageParams = new URLSearchParams({
-		title: data.title || constants.APP_NAME,
-		description: data.description || constants.DEFAULT_SEO.description,
-		theme: 'dark',
-	})
-
-	if (data.author) ogImageParams.append('author', data.author)
-	if (data.date) ogImageParams.append('date', data.date)
-	if (data.tags && Array.isArray(data.tags)) {
-		data.tags.forEach((tag) => ogImageParams.append('tags[]', tag))
+	const ogImageData = {
+		title: data.ogImage?.title || data.title || constants.APP_NAME,
+		description: data.ogImage?.description || data.description || constants.DEFAULT_SEO.description,
+		author: data.ogImage?.author || data.author || constants.DEFAULT_SEO.author,
+		date: data.ogImage?.date || (data.publishedAt ? new Date(data.publishedAt).toISOString() : undefined),
+		tags: data.ogImage?.tags || (data.tags ? Array.isArray(data.tags) ? data.tags : [data.tags] : []),
+		imageUrl: data.ogImage?.imageUrl || data.coverImage || data.image,
 	}
-	if (data.imageUrl) ogImageParams.append('imageUrl', data.imageUrl)
+
+	const ogImageUrl = new URL(`${req.protocol}://${req.get('host')}/og-image`)
+	
+	Object.entries(ogImageData).forEach(([key, value]) => {
+		if (value !== undefined) {
+			if (Array.isArray(value)) {
+				value.forEach(item => ogImageUrl.searchParams.append(`${key}[]`, item))
+			} else {
+				ogImageUrl.searchParams.set(key, value.toString())
+			}
+		}
+	})
 
 	const seoData = {
 		description: data.description || constants.DEFAULT_SEO.description,
-		image: `${req.protocol}://${req.get('host')}/og-image?${ogImageParams.toString()}`,
+		image: ogImageUrl.toString(),
 		twitterHandle: data.twitterHandle || constants.DEFAULT_SEO.twitterHandle,
+		keywords: data.keywords || constants.DEFAULT_SEO.keywords,
+		author: data.author || constants.DEFAULT_SEO.author,
+		type: data.type || constants.DEFAULT_SEO.type,
+		fullTitle: data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
+		canonicalUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
 	}
 
 	let links = linksCache.get<ILink[]>('links')
@@ -62,18 +77,10 @@ export const render = async (
 	const renderOptions = {
 		...data,
 		constants,
-		title:
-			data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
+		title: data.title ? `${data.title} - ${constants.APP_NAME}` : constants.APP_NAME,
 		links,
 		cfg: config,
-		seo: {
-			...seoData,
-			fullTitle:
-				data.title ?
-					`${data.title} - ${constants.APP_NAME}`
-				:	constants.APP_NAME,
-			canonicalUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-		},
+		seo: seoData,
 		path: req.path,
 		query: req.query,
 	}

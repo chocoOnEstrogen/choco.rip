@@ -19,7 +19,13 @@ router.get('/', async (req: Request, res: Response) => {
 
 		render(req, res, 'blog/index', {
 			title: 'Blog',
-			description: 'Latest blog posts and articles',
+			description: 'Latest blog posts and articles about web development, creative coding, and software engineering',
+			ogImage: {
+				title: 'Blog Posts',
+				description: 'Explore my latest thoughts and tutorials',
+				tags: ['Blog', 'Web Development', 'Coding'],
+				author: 'Stella'
+			},
 			posts: paginatedPosts,
 			formatDistance,
 			pagination: {
@@ -61,9 +67,18 @@ router.get('/:year/:month/:day/:slug', async (req: Request, res: Response) => {
 		render(req, res, 'blog/post', {
 			title: post.seoTitle || post.title,
 			description: post.seoDescription || post.excerpt,
+			ogImage: {
+				title: post.title,
+				description: post.excerpt,
+				author: post.author,
+				date: post.publishedAt.toISOString(),
+				tags: post.tags,
+				imageUrl: post.coverImage // If you have cover images for posts
+			},
 			post,
 			relatedPosts,
 			formatDistance,
+			type: 'article' // For OpenGraph
 		})
 	} catch (err) {
 		console.error('Error loading blog post:', err)
@@ -100,7 +115,13 @@ router.get('/tag/:tag', async (req: Request, res: Response) => {
 
 		render(req, res, 'blog/tag', {
 			title: `Posts tagged "${tag}"`,
-			description: `Browse all blog posts tagged with "${tag}"`,
+			description: `Browse all blog posts and articles tagged with "${tag}" - tutorials, insights, and technical discussions`,
+			ogImage: {
+				title: `${tag} Posts`,
+				description: `Articles tagged with ${tag}`,
+				tags: [tag, 'Blog', 'Articles'],
+				author: 'Stella'
+			},
 			tag,
 			formatDistance,
 			posts,

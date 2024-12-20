@@ -1,8 +1,13 @@
 export const APP_NAME = "Stella's Website"
 
 export const DEFAULT_SEO = {
-	description: 'Personal website and portfolio of Stella',
+	description:
+		'Full-stack developer and designer specializing in web development, creative coding, and digital experiences. Explore my portfolio, blog, and technical documentation.',
 	twitterHandle: '@chocoOnEstrogen',
+	keywords:
+		'web development, full-stack developer, creative coding, portfolio, technical documentation, software engineering',
+	author: 'Stella',
+	type: 'website',
 }
 
 export const NAVBAR_BRAND = 'Stella'

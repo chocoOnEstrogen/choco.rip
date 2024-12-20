@@ -62,8 +62,6 @@ const cleanOldLogs = async () => {
 	}
 }
 
-
-
 export const requestLogger = (
 	req: Request,
 	res: Response,

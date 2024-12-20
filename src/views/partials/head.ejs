@@ -5,12 +5,27 @@
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="<%= seo.description %>" />
+    <meta name="keywords" content="<%= seo.keywords %>" />
+    <meta name="author" content="<%= seo.author %>" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="<%= seo.type %>" />
+    <meta property="og:site_name" content="<%= constants.APP_NAME %>" />
     <meta property="og:title" content="<%= seo.fullTitle %>" />
     <meta property="og:description" content="<%= seo.description %>" />
-    <meta property="og:image" content="<%= seo.image %>" />
+    <meta property="og:image" content="<%- seo.image %>" />
     <meta property="og:url" content="<%= seo.canonicalUrl %>" />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="<%= seo.twitterHandle %>" />
     <meta name="twitter:creator" content="<%= seo.twitterHandle %>" />
+    <meta name="twitter:title" content="<%= seo.fullTitle %>" />
+    <meta name="twitter:description" content="<%= seo.description %>" />
+    <meta property="twitter:image" content="<%- seo.image %>" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= seo.canonicalUrl %>" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/jpg" href="/me.jpg" />
