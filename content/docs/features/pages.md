@@ -1,6 +1,6 @@
 ---
 title: Pages System
-description: Learn how to create and manage dynamic pages using the .page file format
+description: Learn how to create and manage dynamic pages using both .page and .md file formats
 category: features
 order: 4
 icon: fa-solid fa-file-code
@@ -8,9 +8,42 @@ icon: fa-solid fa-file-code
 
 ## Overview
 
-The Pages system allows you to create dynamic pages using a simple file format with YAML frontmatter and section-based content structure. Pages are stored in the application's data directory and are automatically rendered using predefined section templates.
+The Pages system allows you to create dynamic pages using either:
+1. `.page` files with section-based content structure
+2. `.md` files with standard Markdown syntax
 
-## File Format
+Both formats support YAML frontmatter for configuration. Pages are stored in the application's data directory and are automatically rendered using their respective templates.
+
+## File Formats
+
+### 1. Markdown Format (.md)
+
+Markdown files use standard GitHub Flavored Markdown syntax with additional features:
+- Automatic heading IDs and anchor links
+- Syntax highlighting for code blocks
+- Tables, task lists, and other GFM features
+- Sanitized HTML output for security
+
+Example:
+```markdown
+---
+title: About Us
+description: Learn about our company
+---
+
+# Welcome to Our Company
+
+## Our Mission 🚀
+We strive to create amazing software that makes a difference.
+
+### Technologies We Use
+- Node.js
+- TypeScript
+- Express
+
+```
+
+### 2. Page Format (.page)
 
 A `.page` file consists of two main parts:
 1. YAML frontmatter (configuration)
@@ -70,6 +103,82 @@ Uses a grid layout with `|` separator between features:
     <p>Description</p>
 </div>
 ```
+
+### Modal Section
+Modals require three parts: ID, title, and content, separated by `|`:
+```html
+::modal
+modal-id | Modal Title | <p>This is the modal content</p>
+```
+
+To trigger the modal, use a modal-button section:
+```html
+::modal-button
+modal-id | Open Modal
+```
+
+Example with multiple modals:
+```html
+::modal
+terms-modal | Terms of Service | 
+<h3>Terms of Service</h3>
+<p>Please read our terms carefully...</p>
+|
+::modal
+privacy-modal | Privacy Policy | 
+<h3>Privacy Policy</h3>
+<p>Your privacy is important to us...</p>
+
+::modal-button
+terms-modal | Read Terms
+|
+::modal-button
+privacy-modal | Read Privacy Policy
+```
+
+For Markdown files, you can use HTML directly:
+```html
+<div class="modal fade" id="my-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-glass">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Modal content goes here...
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#my-modal">
+    Open Modal
+</button>
+```
+
+### Modal Styling
+Modals use Bootstrap's modal system with additional glass-morphism styling:
+```css
+.modal-content.bg-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+```
+
+### Modal Best Practices
+1. Use unique IDs for each modal
+2. Keep modal content concise and focused
+3. Include a clear close button
+4. Consider using modals for:
+   - Terms of service
+   - Privacy policies
+   - Image lightboxes
+   - Quick forms
+   - Additional information
+5. Avoid nesting modals
+6. Ensure modals are accessible with keyboard navigation
 
 ### Gallery Section
 Grid of images separated by `|`:
@@ -162,23 +271,38 @@ js:
 
 ## File Location
 
-Pages should be stored in the application's pages directory, which is automatically created at:
-- Windows: `%APPDATA%\{APP_NAME}\pages`
-- macOS: `~/Library/Application Support/{APP_NAME}/pages`
-- Linux: `~/.config/{APP_NAME}/pages`
-
-## URL Routing
-
-Pages are automatically routed based on their file location:
+Pages can be created with either extension in the application's pages directory:
+- `pages/about.md` → `/about`
 - `pages/about.page` → `/about`
-- `pages/products/index.page` → `/products`
+- `pages/products/index.md` → `/products`
 - `pages/products/item.page` → `/products/item`
+
+## Choosing Between Formats
+
+Use `.md` when:
+- Writing content-heavy pages
+- Creating documentation
+- Need standard Markdown features
+- Want automatic table of contents
+- Prefer writing in Markdown
+
+Use `.page` when:
+- Building landing pages
+- Need complex layouts
+- Using custom sections (hero, features, etc.)
+- Want more control over HTML structure
 
 ## Best Practices
 
-1. Use semantic HTML within sections
-2. Leverage Bootstrap classes for responsive layouts
-3. Keep sections focused and concise
-4. Use appropriate section types for content
-5. Include proper SEO metadata in the frontmatter
-6. Organize pages in logical directory structures 
+1. Choose the appropriate format for your content type
+2. Use consistent formatting within each file type
+3. Include proper SEO metadata in the frontmatter
+4. For Markdown files:
+   - Use headings hierarchically (h1 → h2 → h3)
+   - Take advantage of automatic anchor links
+   - Include code language for syntax highlighting
+5. For Page files:
+   - Use semantic HTML within sections
+   - Leverage Bootstrap classes for layouts
+   - Keep sections focused and concise
+6. Organize files in logical directory structures

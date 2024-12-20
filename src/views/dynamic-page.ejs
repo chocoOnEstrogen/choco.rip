@@ -1,3 +1,163 @@
 <%- contentFor('body') %>
 
+<% if (isMarkdown) { %>
+<section class="markdown-section">
+  <div class="container py-5">
+    <div class="markdown-body markdown-body-dynamic" data-aos="fade-up">
+      <%- content %>
+    </div>
+  </div>
+</section>
+<% } else { %>
 <%- content %>
+<% } %>
+
+<% if (isMarkdown) { %>
+<style>
+  .markdown-body-dynamic {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - var(--navbar-height));
+    margin-top: var(--navbar-height);
+  }
+
+  /* Typography styles */
+  .markdown-body-dynamic h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .markdown-body-dynamic h2 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .markdown-body-dynamic h3 {
+    font-size: 1.4rem;
+    color: var(--text-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .markdown-body-dynamic p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  /* List styles */
+  .markdown-body-dynamic ul {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-body-dynamic ul li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  .markdown-body-dynamic ul li::before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: -1.5rem;
+  }
+
+  /* Code block styles */
+  .markdown-body-dynamic code {
+    background: var(--bg-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--primary-color);
+  }
+
+  .markdown-body-dynamic pre code {
+    display: block;
+    padding: 1rem;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+
+  /* Link styles */
+  .markdown-body-dynamic a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .markdown-body-dynamic a:hover {
+    color: var(--primary-color-hover);
+    text-decoration: underline;
+  }
+
+  /* Table styles */
+  .markdown-body-dynamic table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+  }
+
+  .markdown-body-dynamic th,
+  .markdown-body-dynamic td {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .markdown-body-dynamic th {
+    background: var(--bg-color);
+    font-weight: 600;
+  }
+
+  /* Dark mode adjustments */
+  [data-theme="dark"] .markdown-body-dynamic {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Anchor link styles */
+  .markdown-body-dynamic .anchor-link {
+    opacity: 0;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .markdown-body-dynamic h2:hover .anchor-link,
+  .markdown-body-dynamic h3:hover .anchor-link {
+    opacity: 1;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .markdown-body-dynamic {
+      padding: 1.5rem;
+      margin-top: calc(var(--navbar-height) + 1rem);
+    }
+
+    .markdown-body-dynamic h1 {
+      font-size: 2rem;
+    }
+
+    .markdown-body-dynamic h2 {
+      font-size: 1.5rem;
+    }
+
+    .markdown-body-dynamic h3 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+<% } %>

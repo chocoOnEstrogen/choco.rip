@@ -13,7 +13,7 @@ import { getDocsStructure } from '@/utils/docs'
 import * as fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
-import { parsePageFile } from '@/utils/pages'
+import { parseMarkdownFile, parsePageFile } from '@/utils/pages'
 import { PAGES_DIR } from '@/paths'
 
 const content = createContent('content', {
@@ -183,12 +183,13 @@ router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		let requestPath = req.path.endsWith('/') ? req.path + 'index' : req.path
-
 		requestPath = requestPath.replace(/^\//, '')
 
 		const possiblePaths = [
 			path.join(PAGES_DIR, requestPath + '.page'),
+			path.join(PAGES_DIR, requestPath + '.md'),
 			path.join(PAGES_DIR, requestPath, 'index.page'),
+			path.join(PAGES_DIR, requestPath, 'index.md')
 		]
 
 		let filePath: string | null = null
@@ -211,16 +212,21 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 			const parsed = await parsePageFile(content)
 			config = parsed.config
 			cleanContent = parsed.html
+		} else if (filePath.endsWith('.md')) {
+			const parsed = await parseMarkdownFile(content)
+			config = parsed.frontmatter
+			cleanContent = parsed.body
 		} else {
 			throw new Error('Unsupported file type')
 		}
 
 		render(req, res, 'dynamic-page', {
-			title: config.seo?.title || path.basename(requestPath),
-			description: config.seo?.description,
+			title: config.title || config.seo?.title || path.basename(requestPath),
+			description: config.description || config.seo?.description,
 			content: cleanContent,
 			css: config.css || [],
 			js: config.js || [],
+			isMarkdown: filePath.endsWith('.md'),
 			...config,
 		})
 	} catch (error) {

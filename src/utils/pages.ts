@@ -1,4 +1,23 @@
 import yaml from 'js-yaml'
+import { marked } from 'marked'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
+import matter from 'gray-matter'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkMdx from 'remark-mdx'
+import remarkGfm from 'remark-gfm'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+import rehypeHighlight from 'rehype-highlight'
+import ini from 'ini'
+import toml from 'toml'
+import fs from 'fs/promises'
+import hljs from 'highlight.js'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSanitize from 'rehype-sanitize'
 
 function parseSection(type: string, content: string): string {
 	switch (type) {
@@ -210,5 +229,46 @@ async function parsePageFile(content: string) {
 	return { config, html }
 }
 
+async function parseMarkdownFile(content: string) {
+	const { data: frontmatter, content: markdownBody } = matter(content)
 
-export { parsePageFile, parseSection }
+	const processor = unified()
+		.use(remarkParse)
+		.use(remarkGfm)
+		.use(remarkRehype, { allowDangerousHtml: true })
+		.use(rehypeSanitize)
+		.use(rehypeSlug)
+		.use(rehypeAutolinkHeadings, {
+			behavior: 'append',
+			content: {
+				type: 'element',
+				tagName: 'span',
+				properties: { className: ['anchor-link'] },
+				children: [{ type: 'text', value: ' #' }]
+			}
+		})
+		//@ts-ignore
+		.use(rehypeHighlight, {
+			detect: true,
+			ignoreMissing: true,
+		})
+		.use(rehypeStringify)
+
+	const result = await processor.process(markdownBody)
+	const body = String(result)
+
+	const excerpt = markdownBody
+		.split('\n\n')[0]
+		.replace(/^#.*\n/, '')
+		.trim()
+
+	return {
+		frontmatter: {
+			...frontmatter,
+			excerpt: frontmatter.excerpt || excerpt
+		},
+		body
+	}
+}
+
+export { parsePageFile, parseSection, parseMarkdownFile }
