@@ -22,8 +22,7 @@
     "pm2:logs": "pm2 logs",
     "pm2:monitor": "pm2 monit",
     "setup-config": "ts-node src/scripts/setupConfig.ts",
-    "setup-data": "ts-node src/scripts/setupData.ts",
-    "postinstall": "npm run setup-config && npm run setup-data -- --first-time"
+    "setup-data": "ts-node src/scripts/setupData.ts"
   },
   "repository": {
     "type": "git",
