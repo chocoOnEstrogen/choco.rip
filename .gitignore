@@ -50,3 +50,6 @@ coverage/
 
 # Ignore cache
 .cache/
+
+# Ignore data
+.github/app-data.txt

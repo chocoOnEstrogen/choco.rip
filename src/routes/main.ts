@@ -2,7 +2,6 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { render } from '@/utils/request'
 import * as constants from '@/constants'
 import linksSchema from '@/schemas/links.schema'
-import { analyzeLogFile } from '@/scripts/analyzeRequests'
 import { formatDistance, subDays } from 'date-fns'
 import NodeCache from 'node-cache'
 import { createContent } from '@/utils/content'
@@ -15,7 +14,7 @@ import * as fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
 import { parsePageFile } from '@/utils/pages'
-import { PAGES_DIR } from '@/constants'
+import { PAGES_DIR } from '@/paths'
 
 const content = createContent('content', {
 	markdown: {
@@ -100,54 +99,6 @@ router.get('/links/:slug', async (req: Request, res: Response) => {
 	} catch (err) {
 		console.error('Error fetching link:', err)
 		res.redirect('/links')
-	}
-})
-
-router.get('/stats', async (req: Request, res: Response) => {
-	try {
-		const timeframes = {
-			'1h': 1 / 24,
-			'24h': 1,
-		}
-
-		const selectedTimeframe = (req.query.timeframe as string) || '24h'
-		const days = timeframes[selectedTimeframe as keyof typeof timeframes] || 1
-
-		// Try to get cached data
-		const cacheKey = `stats-${selectedTimeframe}`
-		let analytics: any = statsCache.get(cacheKey)
-
-		if (!analytics) {
-			analytics = await analyzeLogFile('logs/requests.log', {
-				days,
-				minTime: 1000, // Track requests slower than 1 second
-			})
-			statsCache.set(cacheKey, analytics)
-		}
-
-		// Calculate additional metrics
-		const successRate =
-			((analytics.statusCodes[200] || 0) / analytics.totalRequests) * 100
-		const errorRate =
-			(Object.entries(analytics.statusCodes)
-				.filter(([code]) => code.startsWith('5'))
-				.reduce((acc, [, count]) => acc + (count as number), 0) /
-				analytics.totalRequests) *
-			100
-
-		render(req, res, 'stats', {
-			title: 'Site Statistics',
-			description: 'Real-time analytics and statistics',
-			analytics,
-			timeframes,
-			selectedTimeframe,
-			successRate,
-			errorRate,
-			formatDistance,
-		})
-	} catch (error) {
-		console.error('Error generating stats:', error)
-		res.redirect('/')
 	}
 })
 

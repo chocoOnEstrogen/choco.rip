@@ -12,24 +12,15 @@ import cookieParser from 'cookie-parser'
 import adminRouter from '@/routes/admin'
 import * as fs from 'fs'
 import { checkBlocklist } from '@/middleware/blockList'
-import { requestLogger } from '@/middleware/requestLogger'
 import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
 import updaterRouter from '@/routes/updater'
 import { CronService } from '@/services/cron'
-import { APP_NAME, PAGES_DIR } from '@/constants'
+import { ensureDirs } from '@/paths'
 
 dotenv.config()
 
-fs.mkdirSync('logs', { recursive: true })
-
-if (!fs.existsSync('logs/requests.log')) {
-	fs.writeFileSync('logs/requests.log', '')
-}
-
-if (!fs.existsSync(PAGES_DIR)) {
-	fs.mkdirSync(PAGES_DIR, { recursive: true })
-}
+ensureDirs()
 
 const app = express()
 
@@ -58,7 +49,6 @@ app.use(express.static(path.join(__dirname, '../public')))
 app.use(cookieParser())
 app.use(checkBlocklist)
 app.set('trust proxy', true)
-app.use(requestLogger)
 
 // Routes
 app.use('/', mainRouter)
@@ -115,15 +105,7 @@ server.listen(
 				name: 'clear-cache',
 				schedule: '0 0 * * *',
 				task: () => {
-					fs.rmSync('cache', { recursive: true, force: true })
-				},
-			})
-
-			cronService.registerJob({
-				name: 'clear-logs',
-				schedule: '0 0 * * *',
-				task: () => {
-					fs.writeFileSync('logs/requests.log', '')
+					fs.rmSync('.cache', { recursive: true, force: true })
 				},
 			})
 		} catch (error) {

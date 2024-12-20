@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "choco.rip",
   "main": "dist/index.js",
   "directories": {
@@ -12,7 +12,6 @@
     "dev": "ts-node src/index.ts",
     "start": "node -r tsconfig-paths/register dist/index.js",
     "tsc": "tsc",
-    "analyze-requests": "ts-node src/scripts/analyzeRequests.ts",
     "edit-config": "ts-node src/scripts/editConfig.ts",
     "commit": "node .github/commit.js",
     "copy": "node scripts/copy.js",
@@ -21,7 +20,10 @@
     "pm2:restart": "pm2 restart ecosystem.config.js",
     "pm2:delete": "pm2 delete ecosystem.config.js",
     "pm2:logs": "pm2 logs",
-    "pm2:monitor": "pm2 monit"
+    "pm2:monitor": "pm2 monit",
+    "setup-config": "ts-node src/scripts/setupConfig.ts",
+    "setup-data": "ts-node src/scripts/setupData.ts",
+    "postinstall": "npm run setup-config && npm run setup-data -- --first-time"
   },
   "repository": {
     "type": "git",

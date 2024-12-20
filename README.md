@@ -73,8 +73,19 @@ Visit `http://localhost:9000` to see your application running.
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run format` - Format code with Prettier
-- `npm run analyze-requests` - Analyze API requests
 - `npm run edit-config` - Edit configuration
+- `npm run tsc` - Run TypeScript compiler
+- `npm run commit` - Run commit helper script
+- `npm run copy` - Copy static assets
+- `npm run pm2:start` - Start application with PM2
+- `npm run pm2:stop` - Stop PM2 processes
+- `npm run pm2:restart` - Restart PM2 processes
+- `npm run pm2:delete` - Delete PM2 processes
+- `npm run pm2:logs` - View PM2 logs
+- `npm run pm2:monitor` - Monitor PM2 processes
+- `npm run setup-config` - Set up initial configuration
+- `npm run setup-data` - Set up initial data
+- `npm run postinstall` - Run post-installation setup
 
 ### Content Management
 

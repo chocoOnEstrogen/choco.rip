@@ -1,79 +1,21 @@
-interface NavigationLink {
-	title: string
-	url?: string
-	icon?: string
-	children?: NavigationLink[]
-}
+import fs from 'fs'
+import yaml from 'js-yaml'
+import { CONFIG_PATH } from '@/paths'
+import { IConfig } from '@/interfaces/IConfig'
 
-interface Navigation {
-	main_links: NavigationLink[]
-	footer_links?: NavigationLink[]
-}
 
-interface Config {
-	contact?: {
-		email?: string
-		discord?: {
-			invite: string
-			name: string
-		}
+let config: IConfig
+
+try {
+	if (!fs.existsSync(CONFIG_PATH)) {
+		throw new Error(`Config file not found at ${CONFIG_PATH}`)
+	} else {
+		const fileContents = fs.readFileSync(CONFIG_PATH, 'utf8')
+		config = yaml.load(fileContents) as IConfig
 	}
-	navigation: Navigation
-	bsky?: {
-		username: string
-	}
-}
-
-const config: Config = {
-	contact: {
-		email: 'choco@choco.rip',
-		discord: {
-			invite: 'https://discord.gg/x8A89TVJUv',
-			name: "Choco's Hub",
-		},
-	},
-	navigation: {
-		main_links: [
-			{
-				title: 'Home',
-				url: '/',
-				icon: 'fa-solid fa-house',
-			},
-			{
-				title: 'About',
-				url: '/about',
-				icon: 'fa-solid fa-user',
-			},
-			{
-				title: 'Blog',
-				url: '/blog',
-				icon: 'fa-solid fa-blog',
-			},
-			{
-				title: 'Docs',
-				url: '/docs',
-				icon: 'fa-solid fa-file-alt',
-			},
-			{
-				title: 'Source Code',
-				url: 'https://github.com/chocoOnEstrogen/choco.rip',
-				icon: 'fa-solid fa-code',
-			},
-		],
-		footer_links: [
-			{
-				title: 'Blog',
-				url: '/blog',
-			},
-			{
-				title: 'About',
-				url: '/about',
-			},
-		],
-	},
-	bsky: {
-		username: 'choco.rip',
-	},
+} catch (error) {
+	console.error('Error loading config:', error)
+	throw error
 }
 
 export default config
