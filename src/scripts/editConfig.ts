@@ -2,16 +2,21 @@ import { spawn } from 'child_process'
 import os from 'os'
 import { existsSync } from 'fs'
 import readline from 'readline'
+import { CONFIG_PATH } from '@/paths'
 
 // Map of editor choices for Windows
 const WINDOWS_EDITORS = {
 	'1': 'notepad',
 	'2': 'code',
 	'3': 'nano',
+	'4': 'vim',
+	'5': 'emacs',
+	'6': 'sublime',
+	'7': 'nvim',
 } as const
 
 async function editConfig() {
-	const configPath = 'src/cfg.ts'
+	const configPath = CONFIG_PATH
 
 	// Check if config file exists
 	if (!existsSync(configPath)) {
