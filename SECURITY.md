@@ -6,8 +6,8 @@ The following table shows which versions of this project are currently receiving
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:               |
+| 2.0.x   | :white_check_mark: |
+| < 2.0   | :x:               |
 
 ## Reporting a Vulnerability
 
