@@ -118,7 +118,7 @@ export const error = async (
 		'error',
 		{
 			title: 'Error',
-			error: process.env.NODE_ENV === 'development' ? error : {},
+			details: process.env.NODE_ENV === 'development' ? error : {},
 			status: error.status || 500,
 			message: error.message || 'Internal Server Error',
 		},

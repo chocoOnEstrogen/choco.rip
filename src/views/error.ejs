@@ -10,12 +10,12 @@
                     </div>
                     
                     <h1 class="error-title mb-4">
-                        <%= error.message || 'An error occurred' %>
+                        <%= message || 'An error occurred' %>
                     </h1>
                     
-                    <% if (error.details && process.env.NODE_ENV === 'development') { %>
+                    <% if (details && process.env.NODE_ENV === 'development') { %>
                         <div class="error-details mb-4">
-                            <pre class="text-start"><code><%= error.details %></code></pre>
+                            <pre class="text-start"><code><%= details %></code></pre>
                         </div>
                     <% } %>
                     
