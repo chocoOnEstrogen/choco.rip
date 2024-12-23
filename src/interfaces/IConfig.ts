@@ -42,4 +42,7 @@ export interface IConfig {
 	bsky?: {
 		username: string
 	}
+	profile: {
+		image: string
+	}
 }

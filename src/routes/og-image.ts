@@ -29,7 +29,7 @@ router.get('/', async (req: Request, res: Response) => {
 			date: req.query.date || new Date().toISOString(),
 			tags: req.query.tags,
 			imageUrl:
-				req.query.imageUrl || `${req.protocol}://${req.get('host')}/me.jpg`,
+				req.query.imageUrl || `${req.protocol}://${req.get('host')}/profile-image`,
 		})
 
 		const imagePath = await generateOGImage({

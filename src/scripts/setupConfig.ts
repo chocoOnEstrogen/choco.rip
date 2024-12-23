@@ -4,52 +4,10 @@ import yaml from 'js-yaml'
 import readline from 'readline'
 import chalk from 'chalk'
 import os from 'os'
+import { IConfig } from '@/interfaces/IConfig'
 
 const username = os.userInfo().username
 
-interface Config {
-	app: {
-		name: string
-		navbar_brand: string
-		username: string
-		user_description: string
-	}
-	seo: {
-		description: string
-		twitter_handle?: string
-		keywords: string
-		author: string
-		type: string
-	}
-	analytics?: {
-		google_analytics?: string
-		google_ads?: string
-		google_tag_manager?: string
-		microsoft_clarity?: string
-		facebook_pixel?: string
-	}
-	contact?: {
-		email?: string
-		discord?: {
-			invite: string
-			name: string
-		}
-	}
-	navigation: {
-		main_links: Array<{
-			title: string
-			url: string
-			icon?: string
-		}>
-		footer_links?: Array<{
-			title: string
-			url: string
-		}>
-	}
-	bsky?: {
-		username: string
-	}
-}
 
 async function question(
 	rl: readline.Interface,
@@ -71,7 +29,7 @@ async function setupConfig() {
 
 	console.log(chalk.blue('\n=== Website Configuration Setup ===\n'))
 
-	const config: Config = {
+	const config: IConfig = {
 		app: {
 			name: '',
 			navbar_brand: '',
@@ -87,6 +45,9 @@ async function setupConfig() {
 		navigation: {
 			main_links: [],
 			footer_links: [],
+		},
+		profile: {
+			image: '',
 		},
 	}
 
@@ -104,6 +65,8 @@ async function setupConfig() {
 		'User description',
 		`${username} is a creative person who loves to code and design.`,
 	)
+
+	config.profile.image = await question(rl, 'Profile image (optional) [Path]', 'N/A')
 
 	// SEO Information
 	console.log(chalk.yellow('\nSEO Information:'))

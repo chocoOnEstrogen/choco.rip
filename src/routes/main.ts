@@ -6,15 +6,15 @@ import { formatDistance, subDays } from 'date-fns'
 import NodeCache from 'node-cache'
 import { createContent } from '@/utils/content'
 import { GitHubService } from '@/services/github'
-import BskyService from '@/services/bsky'
 import { getAllPosts } from '@/utils/blog'
 import { generateBreadcrumbs, getAdjacentPages } from '@/utils/docs'
 import { getDocsStructure } from '@/utils/docs'
 import * as fs from 'fs'
 import path from 'path'
-import yaml from 'js-yaml'
 import { parseMarkdownFile, parsePageFile } from '@/utils/pages'
 import { PAGES_DIR } from '@/paths'
+import { IConfig } from '@/interfaces/IConfig'
+import config from '@/cfg'
 
 const content = createContent('content', {
 	markdown: {
@@ -124,10 +124,20 @@ router.get('/about', async (req: Request, res: Response) => {
 	}
 })
 
-router.get('/me.jpg', async (req: Request, res: Response) => {
-	// This returns a buffer
-	const image = await new GitHubService().getProfileImage()
-	res.redirect(image)
+router.get('/profile-image', async (req: Request, res: Response) => {
+	const profileImage = config?.profile?.image
+	if (profileImage && profileImage !== 'N/A') {
+		const imageData = fs.readFileSync(profileImage)
+		res.setHeader('Content-Type', `image/${profileImage.split('.').pop()}`)
+		res.setHeader('Content-Length', imageData.length)
+		res.send(imageData)
+	} else {
+		const defaultImagePath = path.join(__dirname, '..', '..', 'public', 'images', 'profile.png')
+		const defaultImage = fs.readFileSync(defaultImagePath)
+		res.setHeader('Content-Type', 'image/png')
+		res.setHeader('Content-Length', defaultImage.length)
+		res.send(defaultImage)
+	}
 })
 
 router.get('/docs/:category?/:page?', async (req: Request, res: Response) => {
