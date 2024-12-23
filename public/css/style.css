@@ -42,6 +42,10 @@ body {
     color: var(--text-color);
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* Dark Mode Toggle Button */
 .theme-toggle {
     position: fixed;
