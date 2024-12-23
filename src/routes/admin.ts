@@ -343,7 +343,7 @@ router.get('/images', requireAuth, async (req: Request, res: Response) => {
 		render(req, res, 'admin/images', { images, fileSize: sizeToHuman(MAX_FILE_SIZE) })
 	} catch (err) {
 		console.error('Error reading images:', err)
-		error(req, res, 'Error reading images')
+		error(req, res, err, 500)
 	}
 })
 

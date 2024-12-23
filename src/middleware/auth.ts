@@ -20,13 +20,13 @@ export const requireAuth = (
 
 	if (!sessionToken) {
 		console.error('SESSION_TOKEN is not set in environment variables')
-		return error(req, res, new Error('Server configuration error'), 500)
+		return res.redirect('/admin/login')
 	}
 
 	if (token === sessionToken) {
 		req.isAuthenticated = true
 		next()
 	} else {
-		error(req, res, new Error('Unauthorized'), 401)
+		res.redirect('/admin/login')
 	}
 }
