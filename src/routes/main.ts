@@ -211,7 +211,7 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 		}
 
 		if (!filePath) {
-			return next()
+			throw new Error('Page not found')
 		}
 
 		const content = fs.readFileSync(filePath, 'utf-8')

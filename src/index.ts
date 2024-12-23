@@ -58,14 +58,6 @@ app.use('/og-image', ogImageRouter)
 app.use('/blog', blogRouter)
 app.use('/updater', updaterRouter)
 
-app.use((req: Request, res: Response) => {
-	if (req.path.includes('.php')) {
-		res.status(403).send('Forbidden')
-	} else {
-		error(req, res, new Error('Page not found'), 404)
-	}
-})
-
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 	if (req.path.includes('.php')) {
 		res.status(403).send('Forbidden')
