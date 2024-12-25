@@ -16,7 +16,9 @@ import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
 import updaterRouter from '@/routes/updater'
 import { CronService } from '@/services/cron'
-import { ensureDirs } from '@/paths'
+import { ensureDirs, PAGES_DIR } from '@/paths'
+import { parsePageFile } from './utils/pages'
+import { parseMarkdownFile } from './utils/pages'
 
 dotenv.config()
 
@@ -71,6 +73,62 @@ app.use(
 	'/media',
 	express.static(process.env.BLOG_MEDIA || path.join(process.cwd(), 'media')),
 )
+
+
+app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		let requestPath = req.path.endsWith('/') ? req.path + 'index' : req.path
+		requestPath = requestPath.replace(/^\//, '')
+
+		const possiblePaths = [
+			path.join(PAGES_DIR, requestPath + '.page'),
+			path.join(PAGES_DIR, requestPath + '.md'),
+			path.join(PAGES_DIR, requestPath, 'index.page'),
+			path.join(PAGES_DIR, requestPath, 'index.md')
+		]
+
+		let filePath: string | null = null
+		for (const p of possiblePaths) {
+			if (fs.existsSync(p)) {
+				filePath = p
+				break
+			}
+		}
+
+		if (!filePath) {
+			throw new Error('Page not found')
+		}
+
+		const content = fs.readFileSync(filePath, 'utf-8')
+		let config: any = {}
+		let cleanContent: string = ''
+
+		if (filePath.endsWith('.page')) {
+			const parsed = await parsePageFile(content)
+			config = parsed.config
+			cleanContent = parsed.html
+		} else if (filePath.endsWith('.md')) {
+			const parsed = await parseMarkdownFile(content)
+			config = parsed.frontmatter
+			cleanContent = parsed.body
+		} else {
+			throw new Error('Unsupported file type')
+		}
+
+		render(req, res, 'dynamic-page', {
+			title: config.title || config.seo?.title || path.basename(requestPath),
+			description: config.description || config.seo?.description,
+			content: cleanContent,
+			css: config.css || [],
+			js: config.js || [],
+			isMarkdown: filePath.endsWith('.md'),
+			...config,
+		})
+	} catch (error) {
+		console.error('Error loading dynamic page:', error)
+		next(error)
+	}
+})
 
 // Create HTTP server instance
 const server = http.createServer(app)
