@@ -52,21 +52,37 @@ app.use(cookieParser())
 app.use(checkBlocklist)
 app.set('trust proxy', true)
 
-// Routes
-app.use('/', mainRouter)
-app.use('/.cache', cacheRouter)
-app.use('/admin', adminRouter)
-app.use('/og-image', ogImageRouter)
-app.use('/blog', blogRouter)
-app.use('/updater', updaterRouter)
+const routes = [
+	{
+		route: '/',
+		handler: mainRouter,
+	},
+	{
+		route: '/.cache',
+		handler: cacheRouter,
+	},
+	{
+		route: '/admin',
+		handler: adminRouter,
+	},
+	{
+		route: '/og-image',
+		handler: ogImageRouter,
+	},
+	{
+		route: '/blog',
+		handler: blogRouter,
+	},
+	{
+		route: '/updater',
+		handler: updaterRouter,
+	},
+]
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-	if (req.path.includes('.php')) {
-		res.status(403).send('Forbidden')
-	} else {
-		error(req, res, err, 500)
-	}
-})
+// Routes
+for (const { route, handler } of routes) {
+	app.use(route, handler)
+}
 
 // Serve media files
 app.use(
@@ -96,7 +112,7 @@ app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 		}
 
 		if (!filePath) {
-			throw new Error('Page not found')
+			return next()
 		}
 
 		const content = fs.readFileSync(filePath, 'utf-8')
@@ -127,6 +143,14 @@ app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 	} catch (error) {
 		console.error('Error loading dynamic page:', error)
 		next(error)
+	}
+})
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+	if (req.path.includes('.php')) {
+		res.status(403).send('Forbidden')
+	} else {
+		error(req, res, err, 500)
 	}
 })
 

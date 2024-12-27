@@ -30,7 +30,6 @@ const router = Router()
 const statsCache = new NodeCache({ stdTTL: 300 })
 
 router.get('/', async (req: Request, res: Response) => {
-	const stats = await new GitHubService().getStats()
 	const allPosts = await getAllPosts()
 	const recentPosts = allPosts
 		.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
@@ -46,7 +45,6 @@ router.get('/', async (req: Request, res: Response) => {
 			author: 'Stella',
 			tags: ['Web Development', 'Design', 'Creative Coding'],
 		},
-		stats,
 		recentPosts,
 		formatDistance,
 	})

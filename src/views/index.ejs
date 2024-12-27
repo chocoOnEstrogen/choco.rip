@@ -14,23 +14,9 @@
                         <a href="/about" class="btn btn-outline">
                             <i class="fas fa-user me-2"></i>About Me
                         </a>
-                        <a href="/projects" class="btn btn-outline">
-                            <i class="fas fa-code me-2"></i>View Projects
+                        <a href="/docs" class="btn btn-outline">
+                            <i class="fas fa-file-alt me-2"></i>My Docs
                         </a>
-                    </div>
-                    <div class="hero-stats mt-4">
-                        <div class="stat-item">
-                            <i class="fas fa-star"></i>
-                            <span><%= stats.stars %> Stars</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-code-branch"></i>
-                            <span><%= stats.repos.length %> Repos</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-users"></i>
-                            <span><%= stats.followers %> Followers</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -40,11 +26,6 @@
                          alt="Profile Image" 
                          class="hero-image" 
                          data-speed="0.5">
-                    <div class="hero-badges">
-                        <% stats.mostUsedLangs.forEach((lang) => { %>
-                            <span class="tech-badge"><%= lang.name %></span>
-                        <% }) %>
-                    </div>
                 </div>
             </div>
         </div>
