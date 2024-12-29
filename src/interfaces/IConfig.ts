@@ -55,4 +55,10 @@ export interface IConfig {
 		// Something like: /home/user/Pictures  \\
 		[key: string]: string
 	}
+	rate_limit?: {
+		enabled: boolean
+		window_ms?: number
+		max?: number
+		message?: string
+	}
 }

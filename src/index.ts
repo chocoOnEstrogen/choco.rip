@@ -20,6 +20,8 @@ import { ensureDirs, PAGES_DIR } from '@/paths'
 import { parsePageFile } from './utils/pages'
 import { parseMarkdownFile } from './utils/pages'
 import config from '@/cfg'
+// Express rate limit
+import rateLimit from 'express-rate-limit'
 
 dotenv.config()
 
@@ -52,6 +54,17 @@ app.use(express.static(path.join(__dirname, '../public')))
 app.use(cookieParser())
 app.use(checkBlocklist)
 app.set('trust proxy', true)
+
+if (config.rate_limit && config.rate_limit.enabled) {
+	// Rate limit middleware
+	const limiter = rateLimit({
+		windowMs: config.rate_limit.window_ms || 15 * 60 * 1000, // 15 minutes
+		max: config.rate_limit.max || 100, // Limit each IP to 100 requests per windowMs
+		message: config.rate_limit.message || 'Too many requests from this IP, please try again later.'
+	})
+
+	app.use(limiter)
+}
 
 const routes = [
 	{
