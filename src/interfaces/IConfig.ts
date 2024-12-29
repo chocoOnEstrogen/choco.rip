@@ -51,4 +51,8 @@ export interface IConfig {
 		image: string
 	}
 	variables?: NestedVariable
+	media_paths?: {
+		// Something like: /home/user/Pictures  \\
+		[key: string]: string
+	}
 }

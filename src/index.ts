@@ -19,6 +19,7 @@ import { CronService } from '@/services/cron'
 import { ensureDirs, PAGES_DIR } from '@/paths'
 import { parsePageFile } from './utils/pages'
 import { parseMarkdownFile } from './utils/pages'
+import config from '@/cfg'
 
 dotenv.config()
 
@@ -84,11 +85,11 @@ for (const { route, handler } of routes) {
 	app.use(route, handler)
 }
 
-// Serve media files
-app.use(
-	'/media',
-	express.static(process.env.BLOG_MEDIA || path.join(process.cwd(), 'media')),
-)
+if (config.media_paths) {
+	for (const [key, value] of Object.entries(config.media_paths)) {
+		app.use(`/media/${key}`, express.static(value))
+	}
+}
 
 
 app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
