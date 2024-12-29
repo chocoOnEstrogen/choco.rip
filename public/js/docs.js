@@ -92,11 +92,50 @@ function initializeCodeBlocks() {
 		const language = block.className.match(/language-(\w+)/)?.[1] || 'text'
 
 		// Create header with language info and actions
+
+		function normalizeLanguage(language) {
+			// Remove 'language-' prefix if present
+			language = language.replace('language-', '')
+			
+			// Handle special cases
+			const specialCases = {
+				'js': 'JavaScript',
+				'ts': 'TypeScript',
+				'py': 'Python',
+				'rb': 'Ruby',
+				'cpp': 'C++',
+				'cs': 'C#',
+				'jsx': 'React',
+				'tsx': 'React TSX',
+				'yml': 'YAML',
+				'ini': 'INI',
+				'conf': 'Config',
+				'md': 'Markdown',
+				'json': 'JSON',
+				'sql': 'SQL',
+				'sh': 'Shell',
+				'bash': 'Bash',
+				'txt': 'Text',
+				'html': 'HTML',
+				'css': 'CSS',
+				'scss': 'SCSS',
+			}
+
+			if (specialCases[language]) {
+				return specialCases[language]
+			}
+
+			// Capitalize first letter and convert kebab/snake case to spaces
+			return language
+				.replace(/[-_]/g, ' ')
+				.replace(/\b\w/g, l => l.toUpperCase())
+		}
+
 		const header = document.createElement('div')
 		header.className = 'code-block-header'
 		header.innerHTML = `
             <div class="code-block-language">
-                <img src="/images/icons/programming/${language}.svg" alt="${language}" onerror="this.onerror=null; this.src='/images/icons/error.svg'; this.style.fill='var(--text-color)'" loading="lazy" decoding="async" />
+				${normalizeLanguage(language)}
             </div>
             <div class="code-block-actions">
                 <button class="code-block-btn" title="Copy code">
