@@ -23,6 +23,8 @@ async function processVariables(content: string) {
 	for (const match of result.matchAll(variablePattern)) {
 		const [fullMatch, prefix, path] = match
 		const parts = path.split('.')
+
+		if (!config.variables) return result
 		
 		// Handle different variable types
 		let value: any

@@ -50,5 +50,5 @@ export interface IConfig {
 	profile: {
 		image: string
 	}
-	variables: NestedVariable
+	variables?: NestedVariable
 }
