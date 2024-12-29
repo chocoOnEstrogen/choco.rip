@@ -10,6 +10,11 @@ interface INavigation {
 	footer_links?: INavigationLink[]
 }
 
+// New type for nested variables
+type NestedVariable = {
+	[key: string]: string | number | boolean | NestedVariable
+}
+
 export interface IConfig {
 	app: {
 		name: string
@@ -45,4 +50,5 @@ export interface IConfig {
 	profile: {
 		image: string
 	}
+	variables: NestedVariable
 }

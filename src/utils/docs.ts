@@ -34,16 +34,19 @@ export async function getDocsStructure(): Promise<DocsStructure> {
 	// Group docs by category
 	docs.forEach((doc) => {
 		const { category, title, order = 999 } = doc.frontmatter
-		const slug = doc._path.split('/').pop()?.replace('.md', '')
+		const pathParts = doc._path.split('/')
+		const slug = pathParts[pathParts.length - 1].replace('.md', '').replace("content\\docs\\", "")
 
 		if (!slug) return
+
+		const url = `/docs/${slug}`
 
 		const page: DocPage = {
 			title,
 			slug,
 			order,
 			icon: doc.frontmatter.icon,
-			url: `/docs/${category ? `${category}/${slug}` : slug}`,
+			url,
 			showInNav: doc.frontmatter.showInNav,
 		}
 

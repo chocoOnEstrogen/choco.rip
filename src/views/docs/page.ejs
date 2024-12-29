@@ -140,27 +140,3 @@
     }
 }
 </style>
-
-<script>
-function sendFeedback(type) {
-    // You can implement feedback tracking here
-    const button = event.target.closest('button');
-    const buttons = document.querySelectorAll('.feedback-buttons button');
-    
-    buttons.forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
-    
-    // Optional: Send feedback to server
-    fetch('/api/docs/feedback', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            page: window.location.pathname,
-            type: type,
-            timestamp: new Date().toISOString()
-        })
-    }).catch(console.error);
-}
-</script> 

@@ -871,6 +871,16 @@ body {
 /* Animation */
 .card {
     animation: fadeIn 0.5s ease-out;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .card {
+    animation: fadeIn 0.5s ease-out;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 @keyframes fadeIn {

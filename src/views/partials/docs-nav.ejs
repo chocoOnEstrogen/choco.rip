@@ -31,10 +31,10 @@
             <div class="docs-nav-pages <%= path.includes(category.slug) ? 'show' : '' %>"
                  data-category="<%= category.slug %>">
                 <% category.pages.forEach(function(page) { %>
-                        <a href="<%= page.url %>" 
-                           class="docs-nav-item <%= path === page.url ? 'active' : '' %>">
-                           <i class="<%= page.icon || 'fas fa-file-alt' %> me-2" style="font-size: 0.9rem;"></i> <%= page.title %>
-                        </a>
+                    <a href="<%= page.url %>" 
+                       class="docs-nav-item <%= path === page.url ? 'active' : '' %>">
+                       <i class="<%= page.icon || 'fas fa-file-alt' %> me-2" style="font-size: 0.9rem;"></i> <%= page.title %>
+                    </a>
                 <% }); %>
             </div>
         </div>
