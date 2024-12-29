@@ -90,10 +90,6 @@ app.use(
 	express.static(process.env.BLOG_MEDIA || path.join(process.cwd(), 'media')),
 )
 
-app.use(
-	'/wallpapers',
-	express.static('D:/wallpapers'), // Or wherever your wallpapers are stored
-)
 
 app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 	try {
