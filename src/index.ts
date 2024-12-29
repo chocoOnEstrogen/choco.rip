@@ -60,10 +60,16 @@ if (config.rate_limit && config.rate_limit.enabled) {
 	const limiter = rateLimit({
 		windowMs: config.rate_limit.window_ms || 15 * 60 * 1000, // 15 minutes
 		max: config.rate_limit.max || 100, // Limit each IP to 100 requests per windowMs
-		message: config.rate_limit.message || 'Too many requests from this IP, please try again later.'
-	})
+		handler: (req, res) => {
+			// Render the error page with rate limit message
+			error(req, res, {
+				status: 429,
+				message: config.rate_limit?.message || 'Too many requests from this IP, please try again later.'
+			}, 429);
+		}
+	});
 
-	app.use(limiter)
+	app.use(limiter);
 }
 
 const routes = [
