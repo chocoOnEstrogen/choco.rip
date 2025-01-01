@@ -46,8 +46,4 @@ const ShortURLSchema = new mongoose.Schema({
   timestamps: true,
 })
 
-// Indexes for better query performance
-ShortURLSchema.index({ shortCode: 1 })
-ShortURLSchema.index({ expiresAt: 1 })
-
 export default mongoose.model('ShortURL', ShortURLSchema) 
