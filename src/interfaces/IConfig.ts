@@ -15,12 +15,20 @@ type NestedVariable = {
 	[key: string]: string | number | boolean | NestedVariable
 }
 
+interface ISkill {
+	title: string
+	description: string
+	icon: string
+	tags: string[]
+}
+
 export interface IConfig {
 	app: {
 		name: string
 		navbar_brand: string
 		username: string
 		user_description: string
+		featured_skills?: ISkill[]
 	}
 	seo: {
 		description: string

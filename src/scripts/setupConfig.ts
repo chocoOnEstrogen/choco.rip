@@ -174,6 +174,33 @@ async function setupConfig() {
 		if (fbPixelId) config.analytics.facebook_pixel = fbPixelId
 	}
 
+	// Featured Skills Setup
+	console.log(chalk.yellow('\nFeatured Skills Setup:'))
+	const setupSkills = await question(rl, 'Do you want to set up featured skills? (y/N)')
+	
+	if (setupSkills.toLowerCase() === 'y') {
+		config.app.featured_skills = []
+		
+		while (true) {
+			const title = await question(
+				rl,
+				'\nEnter skill title (or press enter to finish)',
+			)
+			if (!title) break
+
+			const description = await question(rl, 'Enter skill description')
+			const icon = await question(rl, 'Enter Font Awesome icon class (e.g., fas fa-code)')
+			const tags = await question(rl, 'Enter tags (comma-separated)')
+
+			config.app.featured_skills.push({
+				title,
+				description,
+				icon,
+				tags: tags.split(',').map(tag => tag.trim())
+			})
+		}
+	}
+
 	rl.close()
 
 	const websiteDataPath = path.join(os.tmpdir(), 'website-data.txt')

@@ -2,92 +2,165 @@
 
 <!-- Hero Section -->
 <section id="home" class="hero-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6" data-aos="fade-right">
-                <div class="hero-content">
-                    <h1 class="hero-title" data-text="Hi, I'm <%= constants.USERNAME %>">
-                        Hi, I'm <%= constants.USERNAME %>
-                    </h1>
-                    <p class="hero-subtitle"><%= constants.USER_DESCRIPTION %></p>
-                    <div class="hero-buttons">
-                        <a href="/about" class="btn btn-outline">
-                            <i class="fas fa-user me-2"></i>About Me
-                        </a>
-                        <a href="/docs" class="btn btn-outline">
-                            <i class="fas fa-file-alt me-2"></i>My Docs
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6" data-aos="fade-left">
-                <div class="hero-image-wrapper">
-                    <img src="/profile-image" 
-                         alt="Profile Image" 
-                         class="hero-image" 
-                         data-speed="0.5">
-                </div>
-            </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="hero-content">
+          <h1 class="hero-title" data-text="Hi, I'm <%= constants.USERNAME %>">
+            Hi, I'm <%= constants.USERNAME %>
+          </h1>
+          <p class="hero-subtitle"><%= constants.USER_DESCRIPTION %></p>
+          <div class="hero-buttons">
+            <a href="/about" class="btn btn-outline">
+              <i class="fas fa-user me-2"></i>About Me
+            </a>
+            <a href="/docs" class="btn btn-outline">
+              <i class="fas fa-file-alt me-2"></i>My Docs
+            </a>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="hero-image-wrapper">
+          <img src="/profile-image" alt="Profile Image" class="hero-image" data-speed="0.5">
+        </div>
+      </div>
     </div>
+  </div>
 </section>
+
+<!-- Featured Skills Section -->
+<% if (cfg.app.featured_skills && cfg.app.featured_skills.length > 0) { %>
+<section id="skills" class="skills-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">My Expertise</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Specialized skills and technologies I work with</p>
+    </div>
+    <div class="row g-4">
+      <% cfg.app.featured_skills.forEach((skill, index) => { %>
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+        <div class="skill-card h-100 p-4 bg-glass rounded-4">
+          <div class="skill-icon mb-3">
+            <i class="<%= skill.icon %> fa-2x text-primary"></i>
+          </div>
+          <h3 class="h5 mb-3"><%= skill.title %></h3>
+          <p class="text-muted mb-3"><%= skill.description %></p>
+          <div class="skill-tags">
+            <% skill.tags.forEach(tag => { %>
+            <span class="badge me-2 mb-2"><%= tag %></span>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
 
 <!-- Recent Blog Posts Section -->
 <section id="recent-posts" class="recent-posts-section">
-    <div class="container">
-        <div class="section-header text-center mb-5">
-            <h2 class="section-title" data-aos="fade-up">Recent Blog Posts</h2>
-            <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Check out my latest thoughts and updates</p>
-        </div>
-
-        <div class="row g-4">
-            <% recentPosts.forEach((post, index) => { %>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
-                    <article class="card h-100 border-0 shadow-sm bg-glass hover-card">
-                        <a href="/blog/<%= post.publishedAt.getFullYear() %>/<%= (post.publishedAt.getMonth() + 1).toString().padStart(2, '0') %>/<%= post.publishedAt.getDate().toString().padStart(2, '0') %>/<%= post.slug %>" 
-                           class="text-decoration-none">
-                            <% if (post.coverImage) { %>
-                                <img src="<%= post.coverImage %>" 
-                                     class="card-img-top" 
-                                     alt="<%= post.title %>"
-                                     style="height: 200px; object-fit: cover;">
-                            <% } %>
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <% post.tags.forEach(tag => { %>
-                                        <span class="badge rounded-pill">
-                                            <%= tag %>
-                                        </span>
-                                    <% }) %>
-                                </div>
-                                <h3 class="card-title h5 mb-2"><%= post.title %></h3>
-                                <p class="card-text text-muted mb-3"><%= post.excerpt %></p>
-                                <div class="d-flex align-items-center mt-auto">
-                                    <div class="d-flex align-items-center text-muted">
-                                        <i class="far fa-clock me-1"></i>
-                                        <small><%= post.readingTime %> min read</small>
-                                    </div>
-                                    <small class="text-muted ms-auto post-date">
-                                        <%= formatDistance(post.publishedAt, new Date(), { addSuffix: true }) %>
-                                    </small>
-                                </div>
-                            </div>
-                        </a>
-                    </article>
-                </div>
-            <% }) %>
-        </div>
-
-        <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="300">
-            <a href="/blog" class="btn btn-outline">
-                <i class="fas fa-book me-2"></i>View All Posts
-            </a>
-        </div>
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">Recent Blog Posts</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Check out my latest thoughts and updates</p>
     </div>
+
+    <div class="row g-4">
+      <% recentPosts.forEach((post, index) => { %>
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+        <article class="card h-100 border-0 shadow-sm bg-glass hover-card">
+          <a href="/blog/<%= post.publishedAt.getFullYear() %>/<%= (post.publishedAt.getMonth() + 1).toString().padStart(2, '0') %>/<%= post.publishedAt.getDate().toString().padStart(2, '0') %>/<%= post.slug %>" class="text-decoration-none">
+            <% if (post.coverImage) { %>
+            <img src="<%= post.coverImage %>" class="card-img-top" alt="<%= post.title %>" style="height: 200px; object-fit: cover;">
+            <% } %>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <% post.tags.forEach(tag => { %>
+                <span class="badge rounded-pill">
+                  <%= tag %>
+                </span>
+                <% }) %>
+              </div>
+              <h3 class="card-title h5 mb-2"><%= post.title %></h3>
+              <p class="card-text text-muted mb-3"><%= post.excerpt %></p>
+              <div class="d-flex align-items-center mt-auto">
+                <div class="d-flex align-items-center text-muted">
+                  <i class="far fa-clock me-1"></i>
+                  <small><%= post.readingTime %> min read</small>
+                </div>
+                <small class="text-muted ms-auto post-date">
+                  <%= formatDistance(post.publishedAt, new Date(), { addSuffix: true }) %>
+                </small>
+              </div>
+            </div>
+          </a>
+        </article>
+      </div>
+      <% }) %>
+    </div>
+
+    <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="300">
+      <a href="/blog" class="btn btn-outline">
+        <i class="fas fa-book me-2"></i>View All Posts
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">Get in Touch</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Let's discuss your next project or collaboration</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8" data-aos="fade-up">
+        <div class="contact-card bg-glass p-4 rounded-4">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="contact-info d-flex align-items-center mb-4">
+                <i class="fas fa-envelope fa-lg text-primary me-3"></i>
+                <div>
+                  <h5 class="mb-1">Email</h5>
+                  <p class="mb-0"><%= cfg.contact?.email || 'contact@example.com' %></p>
+                </div>
+              </div>
+              <% if (cfg.contact?.discord) { %>
+              <div class="contact-info d-flex align-items-center">
+                <i class="fab fa-discord fa-lg text-primary me-3"></i>
+                <div>
+                  <h5 class="mb-1">Discord</h5>
+                  <p class="mb-0" onclick="window.open('<%= cfg.contact.discord.invite %>', '_blank')"><%= cfg.contact.discord.name %></p>
+                </div>
+              </div>
+              <% } %>
+            </div>
+            <div class="col-md-6">
+              <div class="social-links">
+                <h5 class="mb-3">Follow Me</h5>
+                <div class="d-flex gap-3">
+                  <% links.forEach(link => { %>
+                  <% if (link.icon && link.url) { %>
+                  <a href="<%= link.url %>" class="social-link" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                    <i class="<%= link.icon %> fa-lg"></i>
+                  </a>
+                  <% } %>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <style>
-.hero-section {
+  .hero-section {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -95,14 +168,14 @@
     position: relative;
     margin-top: var(--navbar-height);
     overflow: hidden;
-}
+  }
 
-.hero-content {
+  .hero-content {
     position: relative;
     z-index: 2;
-}
+  }
 
-.hero-title {
+  .hero-title {
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
@@ -112,24 +185,24 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     position: relative;
-}
+  }
 
-.hero-subtitle {
+  .hero-subtitle {
     font-size: 1.25rem;
     color: var(--text-color);
     margin-bottom: 2rem;
     opacity: 0.9;
     max-width: 600px;
-}
+  }
 
-.hero-buttons {
+  .hero-buttons {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-}
+  }
 
 
-.btn-outline {
+  .btn-outline {
     background: transparent;
     color: var(--text-color);
     padding: 0.75rem 1.5rem;
@@ -137,47 +210,47 @@
     font-weight: 500;
     transition: all 0.3s ease;
     border: 1px solid var(--border-color);
-}
+  }
 
-.btn-outline:hover {
+  .btn-outline:hover {
     background: var(--card-bg);
     transform: translateY(-2px);
     color: var(--text-color);
-}
+  }
 
-.hero-stats {
+  .hero-stats {
     display: flex;
     gap: 2rem;
     margin-top: 2rem;
-}
+  }
 
-.stat-item {
+  .stat-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: var(--text-color);
     font-weight: 500;
-}
+  }
 
-.stat-item i {
+  .stat-item i {
     color: var(--primary-color);
-}
+  }
 
-.hero-image-wrapper {
+  .hero-image-wrapper {
     position: relative;
     text-align: center;
-}
+  }
 
-.hero-image {
+  .hero-image {
     width: 400px;
     height: 400px;
     border-radius: 30px;
     object-fit: cover;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-}
+  }
 
-.hero-badges {
+  .hero-badges {
     position: absolute;
     bottom: -20px;
     left: 50%;
@@ -188,9 +261,9 @@
     padding: 1rem;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.tech-badge {
+  .tech-badge {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -199,80 +272,79 @@
     border-radius: 8px;
     font-weight: 500;
     color: var(--text-color);
-}
+  }
 
-.tech-badge i {
+  .tech-badge i {
     color: var(--primary-color);
-}
+  }
 
-/* Dark mode adjustments */
-[data-theme="dark"] .hero-image {
+  /* Dark mode adjustments */
+  [data-theme="dark"] .hero-image {
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
-}
+  }
 
-[data-theme="dark"] .blog-title {
+  [data-theme="dark"] .blog-title {
     color: var(--text-color);
-}
+  }
 
-/* Responsive design */
-@media (max-width: 991px) {
+  /* Responsive design */
+  @media (max-width: 991px) {
     .hero-section {
-        padding: 4rem 0;
-        text-align: center;
+      padding: 4rem 0;
+      text-align: center;
     }
 
     .hero-title {
-        font-size: 2.5rem;
+      font-size: 2.5rem;
     }
 
     .hero-buttons {
-        justify-content: center;
+      justify-content: center;
     }
 
     .hero-stats {
-        justify-content: center;
+      justify-content: center;
     }
 
     .hero-image {
-        width: 300px;
-        height: 300px;
-        margin-top: 3rem;
+      width: 300px;
+      height: 300px;
+      margin-top: 3rem;
     }
 
     .hero-badges {
-        flex-wrap: wrap;
-        justify-content: center;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-}
+  }
 
-@media (max-width: 576px) {
+  @media (max-width: 576px) {
     .hero-title {
-        font-size: 2rem;
+      font-size: 2rem;
     }
 
     .hero-subtitle {
-        font-size: 1.1rem;
+      font-size: 1.1rem;
     }
 
     .hero-image {
-        width: 250px;
-        height: 250px;
+      width: 250px;
+      height: 250px;
     }
 
     .hero-stats {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: center;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
     }
-}
+  }
 
-/* Add these new styles */
-.recent-posts-section {
+  .recent-posts-section {
     padding: 6rem 0;
     background: linear-gradient(180deg, var(--bg-color) 0%, var(--card-bg) 100%);
-}
+  }
 
-.section-title {
+  .section-title {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -281,67 +353,128 @@
     -moz-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-}
+  }
 
-.hover-card {
+  .hover-card {
     transition: all 0.3s ease;
-}
+  }
 
-.hover-card:hover {
+  .hover-card:hover {
     transform: translateY(-5px);
-}
+  }
 
-/* Dark mode adjustments */
-[data-theme="dark"] .recent-posts-section {
-    background: linear-gradient(180deg, var(--bg-color) 0%, rgba(0,0,0,0.1) 100%);
-}
+  /* Dark mode adjustments */
+  [data-theme="dark"] .recent-posts-section {
+    background: linear-gradient(180deg, var(--bg-color) 0%, rgba(0, 0, 0, 0.1) 100%);
+  }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
     .recent-posts-section {
-        padding: 4rem 0;
+      padding: 4rem 0;
     }
 
     .section-title {
-        font-size: 2rem;
+      font-size: 2rem;
     }
-}
+  }
 
-/* Updated card styles */
-.card {
+  /* Updated card styles */
+  .card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-}
+  }
 
-.badge {
+  .badge {
     background: rgba(99, 102, 241, 0.1);
     color: #818cf8;
     font-weight: 500;
     font-size: 0.875rem;
     padding: 0.35rem 0.75rem;
     border: 1px solid rgba(99, 102, 241, 0.2);
-}
+  }
 
-.post-date {
+  .post-date {
     opacity: 0.7;
     font-size: 0.875rem;
-}
+  }
 
-/* Dark mode adjustments */
-[data-theme="dark"] .card {
+  /* Dark mode adjustments */
+  [data-theme="dark"] .card {
     background: rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.05);
-}
+  }
 
-[data-theme="dark"] .badge {
+  [data-theme="dark"] .badge {
     background: rgba(99, 102, 241, 0.15);
     border-color: rgba(99, 102, 241, 0.3);
-}
+  }
 
-[data-theme="dark"] .text-muted {
+  [data-theme="dark"] .text-muted {
     color: rgba(255, 255, 255, 0.6) !important;
-}
+  }
+
+  .skills-section,
+  .projects-section,
+  .contact-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card,
+  .project-card,
+  .contact-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .skill-card:hover,
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .skill-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary-color);
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+  }
+
+  .social-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .contact-info h5 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+  }
+
+  .contact-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .bg-light {
+    background-color: rgba(var(--bg-color-rgb), 0.5) !important;
+  }
 </style>
-
-
