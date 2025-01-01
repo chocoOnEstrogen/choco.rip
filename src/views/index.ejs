@@ -109,6 +109,130 @@
   </div>
 </section>
 
+<!-- Projects Section -->
+<section id="projects" class="projects-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Explore some of my recent work and contributions</p>
+    </div>
+    <div class="row g-4">
+      <% if (cfg.app.featured_projects && cfg.app.featured_projects.length > 0) { %>
+        <% cfg.app.featured_projects.forEach((project, index) => { %>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+            <div class="project-card h-100">
+              <% if (project.image) { %>
+                <img src="<%= project.image %>" class="card-img-top" alt="<%= project.title %>">
+              <% } %>
+              <div class="card-body">
+                <h3 class="h5 mb-3"><%= project.title %></h3>
+                <p class="text-muted mb-3"><%= project.description %></p>
+                <div class="project-tags mb-3">
+                  <% project.technologies?.forEach(tech => { %>
+                    <span class="badge me-2 mb-2"><%= tech %></span>
+                  <% }) %>
+                </div>
+                <% if (project.url) { %>
+                  <a href="<%= project.url %>" class="btn btn-outline-primary" target="_blank">
+                    View Project <i class="fas fa-external-link-alt ms-2"></i>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">Services</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Professional services and solutions I offer</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4" data-aos="fade-up">
+        <div class="service-card h-100 p-4 bg-glass rounded-4">
+          <div class="service-icon mb-3">
+            <i class="fas fa-code fa-2x text-primary"></i>
+          </div>
+          <h3 class="h5 mb-3">Web Development</h3>
+          <p class="text-muted">Custom web applications and websites built with modern technologies and best practices.</p>
+          <ul class="list-unstyled mt-3">
+            <li><i class="fas fa-check text-success me-2"></i>Responsive Design</li>
+            <li><i class="fas fa-check text-success me-2"></i>Performance Optimization</li>
+            <li><i class="fas fa-check text-success me-2"></i>SEO Best Practices</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-card h-100 p-4 bg-glass rounded-4">
+          <div class="service-icon mb-3">
+            <i class="fas fa-paint-brush fa-2x text-primary"></i>
+          </div>
+          <h3 class="h5 mb-3">UI/UX Design</h3>
+          <p class="text-muted">User-centered design solutions that create engaging and intuitive experiences.</p>
+          <ul class="list-unstyled mt-3">
+            <li><i class="fas fa-check text-success me-2"></i>User Research</li>
+            <li><i class="fas fa-check text-success me-2"></i>Wireframing & Prototyping</li>
+            <li><i class="fas fa-check text-success me-2"></i>Visual Design</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-card h-100 p-4 bg-glass rounded-4">
+          <div class="service-icon mb-3">
+            <i class="fas fa-server fa-2x text-primary"></i>
+          </div>
+          <h3 class="h5 mb-3">Technical Consulting</h3>
+          <p class="text-muted">Expert guidance on technology solutions and implementation strategies.</p>
+          <ul class="list-unstyled mt-3">
+            <li><i class="fas fa-check text-success me-2"></i>Architecture Planning</li>
+            <li><i class="fas fa-check text-success me-2"></i>Technology Stack Selection</li>
+            <li><i class="fas fa-check text-success me-2"></i>Security Best Practices</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="testimonials-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title" data-aos="fade-up">Client Testimonials</h2>
+      <p class="text-muted" data-aos="fade-up" data-aos-delay="100">What others say about working with me</p>
+    </div>
+    <div class="row g-4">
+      <% if (cfg.app.testimonials && cfg.app.testimonials.length > 0) { %>
+        <% cfg.app.testimonials.forEach((testimonial, index) => { %>
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+            <div class="testimonial-card h-100 p-4 bg-glass rounded-4">
+              <div class="testimonial-content mb-4">
+                <i class="fas fa-quote-left fa-2x text-primary opacity-25 mb-3"></i>
+                <p class="mb-0"><%= testimonial.content %></p>
+              </div>
+              <div class="testimonial-author d-flex align-items-center">
+                <% if (testimonial.avatar) { %>
+                  <img src="<%= testimonial.avatar %>" alt="<%= testimonial.name %>" class="rounded-circle me-3" width="48">
+                <% } %>
+                <div>
+                  <h5 class="mb-1"><%= testimonial.name %></h5>
+                  <p class="text-muted mb-0"><%= testimonial.title %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
 <!-- Contact Section -->
 <section id="contact" class="contact-section py-5">
   <div class="container">

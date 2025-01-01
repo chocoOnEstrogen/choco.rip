@@ -22,6 +22,21 @@ interface ISkill {
 	tags: string[]
 }
 
+interface IProject {
+	title: string
+	description: string
+	image?: string
+	technologies?: string[]
+	url?: string
+}
+
+interface ITestimonial {
+	content: string
+	name: string
+	title: string
+	avatar?: string
+}
+
 export interface IConfig {
 	app: {
 		name: string
@@ -29,6 +44,8 @@ export interface IConfig {
 		username: string
 		user_description: string
 		featured_skills?: ISkill[]
+		featured_projects?: IProject[]
+		testimonials?: ITestimonial[]
 	}
 	seo: {
 		description: string
