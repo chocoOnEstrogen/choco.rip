@@ -209,25 +209,6 @@ server.listen(
 					task: () => {
 						fs.rmSync('.cache', { recursive: true, force: true })
 					},
-				},
-				{
-					name: 'cleanup-expired-urls',
-					schedule: '0 * * * *', // Run every hour
-					task: async () => {
-						try {
-							const result = await ShortURL.deleteMany({
-								expiresAt: { $lt: new Date() }
-							})
-							if (result.deletedCount > 0) {
-								console.log(`Cleaned up ${result.deletedCount} expired URLs`)
-							}
-						} catch (error) {
-							console.error('Error cleaning up expired URLs:', error)
-						}
-					},
-					onError: (error) => {
-						console.error('Error in URL cleanup job:', error)
-					}
 				}
 			])
 
