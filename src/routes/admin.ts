@@ -8,6 +8,8 @@ import multer from 'multer'
 import path from 'path'
 import { ensureDirs, UPLOADS_DIR } from '@/paths'
 import fs from 'fs'
+import ShortURL from '@/schemas/shorturl.schema'
+import { formatDistance } from 'date-fns'
 
 const router = Router()
 
@@ -381,5 +383,33 @@ router.post(
 		}
 	},
 )
+
+// URL Shortener routes
+router.get('/urls', requireAuth, async (req: Request, res: Response) => {
+	try {
+		const urls = await ShortURL.find().sort({ createdAt: -1 })
+		
+		render(req, res, 'admin/urls', {
+			title: 'URL Shortener',
+			urls,
+			formatDistance,
+		})
+	} catch (err) {
+		console.error('Error loading URLs:', err)
+		error(req, res, 'Error loading URLs')
+	}
+})
+
+// Delete URL
+router.delete('/api/urls/:code', requireAuth, async (req: Request, res: Response) => {
+	try {
+		const { code } = req.params
+		await ShortURL.findOneAndDelete({ shortCode: code })
+		res.json({ success: true })
+	} catch (err) {
+		console.error('Error deleting URL:', err)
+		res.status(500).json({ error: 'Error deleting URL' })
+	}
+})
 
 export default router

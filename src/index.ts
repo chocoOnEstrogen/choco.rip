@@ -14,6 +14,7 @@ import * as fs from 'fs'
 import { checkBlocklist } from '@/middleware/blockList'
 import ogImageRouter from '@/routes/og-image'
 import blogRouter from '@/routes/blog'
+import shortenerRouter from '@/routes/shortener'
 import updaterRouter from '@/routes/updater'
 import { CronService } from '@/services/cron'
 import { ensureDirs, PAGES_DIR } from '@/paths'
@@ -22,6 +23,7 @@ import { parseMarkdownFile } from './utils/pages'
 import config from '@/cfg'
 // Express rate limit
 import rateLimit from 'express-rate-limit'
+import ShortURL from '@/schemas/shorturl.schema'
 
 dotenv.config()
 
@@ -96,6 +98,10 @@ const routes = [
 	{
 		route: '/updater',
 		handler: updaterRouter,
+	},
+	{
+		route: '/s',
+		handler: shortenerRouter,
 	},
 ]
 
@@ -195,13 +201,38 @@ server.listen(
 			)
 			console.log('MongoDB connected')
 
-			cronService.registerJob({
-				name: 'clear-cache',
-				schedule: '0 0 * * *',
-				task: () => {
-					fs.rmSync('.cache', { recursive: true, force: true })
+			// Register cron jobs
+			cronService.registerJob([
+				{
+					name: 'clear-cache',
+					schedule: '0 0 * * *',
+					task: () => {
+						fs.rmSync('.cache', { recursive: true, force: true })
+					},
 				},
-			})
+				{
+					name: 'cleanup-expired-urls',
+					schedule: '0 * * * *', // Run every hour
+					task: async () => {
+						try {
+							const result = await ShortURL.deleteMany({
+								expiresAt: { $lt: new Date() }
+							})
+							if (result.deletedCount > 0) {
+								console.log(`Cleaned up ${result.deletedCount} expired URLs`)
+							}
+						} catch (error) {
+							console.error('Error cleaning up expired URLs:', error)
+						}
+					},
+					onError: (error) => {
+						console.error('Error in URL cleanup job:', error)
+					}
+				}
+			])
+
+			// Start all cron jobs
+			cronService.start()
 		} catch (error) {
 			console.error('Startup error:', error)
 			process.exit(1)
