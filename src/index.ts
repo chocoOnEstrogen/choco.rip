@@ -110,7 +110,7 @@ if (config.media_paths) {
 	}
 }
 
-
+//@ts-ignore
 app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		let requestPath = req.path.endsWith('/') ? req.path + 'index' : req.path
@@ -162,7 +162,7 @@ app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 		})
 	} catch (error) {
 		console.error('Error loading dynamic page:', error)
-		next(error)
+		return res.status(404).send('Page not found')
 	}
 })
 

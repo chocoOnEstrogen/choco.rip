@@ -99,11 +99,14 @@
     <link rel="stylesheet" href="/css/markdown.css">
     <link rel="stylesheet" href="/css/scrollbar.css">
 
-    <% if (locals.css && css.length > 0) { %>
-        <% css.forEach(function(href) { %>
-            <link rel="stylesheet" href="<%= href %>">
-        <% }); %>
-    <% } %> 
+    <!-- CSS -->
+<% css.forEach(function(style) { %>
+  <% if (style.isFile) { %>
+    <style><%- style.content %></style>
+  <% } else { %>
+    <link rel="stylesheet" href="<%- style.src %>">
+  <% } %>
+<% }); %>
 
     <% if (path.includes('docs')) { %>
       <link rel="stylesheet" href="/css/docs.css">
@@ -119,8 +122,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 
     <% if (locals.js && js.length > 0) { %>
-      <% js.forEach(function(src) { %>
-          <script src="<%= src %>"></script>
+      <% js.forEach(function(script) { %>
+        <% if (script.isFile) { %>
+          <script><%- script.content %></script>
+        <% } else { %>
+          <script src="<%- script.src %>"></script>
+        <% } %>
       <% }); %>
   <% } %>
 </head> 
