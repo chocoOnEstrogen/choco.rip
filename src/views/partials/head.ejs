@@ -22,13 +22,8 @@
 
     <% if (config.analytics?.google_ads) { %>
     <!-- Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= config.analytics.google_ads %>"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '<%= config.analytics.google_ads %>');
-    </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= config.analytics.google_ads %>"
+     crossorigin="anonymous"></script>
     <% } %>
 
     <% if (config.analytics?.microsoft_clarity) { %>
