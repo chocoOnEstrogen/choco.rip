@@ -4,12 +4,12 @@ import Main from "../layouts/Main.astro"
 const title = "Transgender Resources & Support"
 const description = "A comprehensive collection of resources, support services, and information for the transgender community. Find crisis support, healthcare resources, legal help, and more."
 const tags = [
-    "transgender resources",
+    "transgender resources", 
     "trans support",
     "crisis support",
     "mental health",
     "healthcare",
-    "legal resources",
+    "legal resources", 
     "community support",
     "trans healthcare",
     "LGBTQ+ support"
@@ -32,17 +32,17 @@ const resourcePageSchema = {
             },
             {
                 "@type": "Thing",
-                "name": "Healthcare Resources",
+                "name": "Healthcare Resources", 
                 "description": "Medical resources and healthcare providers for transgender individuals"
             },
             {
-                "@type": "Thing", 
+                "@type": "Thing",
                 "name": "Mental Health Resources",
                 "description": "Mental health support and counseling services for transgender individuals"
             },
             {
                 "@type": "Thing",
-                "name": "Legal Resources", 
+                "name": "Legal Resources",
                 "description": "Legal assistance and advocacy for transgender rights"
             },
             {
@@ -63,6 +63,85 @@ const resourcePageSchema = {
         ]
     }
 }
+
+// Define resource sections for better organization
+const resourceSections = [
+    {
+        title: "Mental Health Resources",
+        icon: "fa-brain",
+        color: "purple",
+        items: [
+            { name: "The Trevor Project", url: "https://www.thetrevorproject.org", desc: "24/7 Crisis Support" },
+            { name: "Pride Counseling", url: "https://www.pridecounseling.com", desc: "LGBTQ+ Focused Therapy" },
+            { name: "Trans Lifeline", url: "https://translifeline.org", desc: "Peer Support Services" },
+            { name: "GALAP", url: "https://thegalap.org", desc: "Free Trans-Affirming Letters" },
+            { name: "Psychology Today", url: "https://www.psychologytoday.com/us/therapists/transgender", desc: "Find Trans-Friendly Therapists" }
+        ]
+    },
+    {
+        title: "Medical Resources",
+        icon: "fa-heart",
+        color: "pink",
+        items: [
+            { name: "WPATH Standards of Care", url: "https://www.wpath.org", desc: "Official Medical Guidelines" },
+            { name: "Planned Parenthood Gender Services", url: "https://www.plannedparenthood.org/learn/gender-identity/transgender", desc: "Local Healthcare Access" },
+            { name: "FOLX Health", url: "https://www.folxhealth.com", desc: "Virtual Trans Healthcare" },
+            { name: "Plume", url: "https://getplume.co", desc: "Telehealth HRT Services" },
+            { name: "QMed", url: "https://www.queermed.com", desc: "LGBTQ+ Focused Healthcare" },
+            { name: "RAD Remedy", url: "https://radremedy.org", desc: "Healthcare Provider Database" }
+        ]
+    },
+    {
+        title: "Legal Resources",
+        icon: "fa-scale-balanced", 
+        color: "blue",
+        items: [
+            { name: "Transgender Law Center", url: "https://transgenderlawcenter.org", desc: "Legal Support & Advocacy" },
+            { name: "Lambda Legal", url: "https://www.lambdalegal.org", desc: "LGBTQ+ Legal Defense" },
+            { name: "National Center for Transgender Equality", url: "https://transequality.org", desc: "Policy & Legal Resources" },
+            { name: "TLDEF", url: "https://transgenderlegal.org", desc: "Trans Legal Defense & Education" },
+            { name: "GLAD", url: "https://www.glad.org", desc: "LGBTQ+ Legal Advocates" }
+        ]
+    },
+    {
+        title: "Community Support",
+        icon: "fa-people-group",
+        color: "emerald",
+        items: [
+            { name: "r/asktransgender", url: "https://www.reddit.com/r/asktransgender", desc: "Online Discussion Forum" },
+            { name: "PFLAG", url: "https://pflag.org", desc: "Family & Ally Support" },
+            { name: "Trans Lifeline Community", url: "https://translifeline.org/community", desc: "Peer Support Network" },
+            { name: "Gender Spectrum", url: "https://www.genderspectrum.org", desc: "Youth & Family Support" },
+            { name: "Point of Pride", url: "https://pointofpride.org", desc: "Financial Aid & Resources" }
+        ]
+    },
+    {
+        title: "Educational Resources",
+        icon: "fa-book-open",
+        color: "indigo",
+        items: [
+            { name: "The Gender Dysphoria Bible", url: "https://genderdysphoria.fyi", desc: "Comprehensive Guide" },
+            { name: "Trans Hub 101", url: "https://www.transhub.org.au/101", desc: "Educational Resources" },
+            { name: "Know Your Rights", url: "https://transequality.org/know-your-rights", desc: "Legal Information" },
+            { name: "Trans Student Educational Resources", url: "https://transstudent.org", desc: "Youth Education" },
+            { name: "Gender Wiki", url: "https://gender.fandom.com", desc: "Community Knowledge Base" }
+        ]
+    }
+]
+
+const crisisResources = [
+    { name: "Suicide and Crisis Lifeline", contact: "988", href: "tel:988", icon: "fa-phone" },
+    { name: "Crisis Text Line", contact: "741741", isText: true, icon: "fa-message" },
+    { name: "Trans Lifeline", contact: "877-565-8860", href: "tel:877-565-8860", icon: "fa-phone" },
+    { name: "LGBT National Hotline", contact: "888-843-4564", href: "tel:888-843-4564", icon: "fa-phone" },
+    { name: "Trevor Project Lifeline", contact: "866-488-7386", href: "tel:866-488-7386", icon: "fa-phone" }
+]
+
+const diyResources = [
+    { name: "DIY HRT Directory", url: "https://diyhrt.wiki", desc: "Information Database" },
+    { name: "HRT Cafe", url: "https://hrtcafe.net", desc: "Resource Collection" },
+    { name: "Trans Fem HRT Guide", url: "https://diyhrt.market/transfem-hrt-guide", desc: "Detailed Guide" }
+]
 ---
 
 <Main 
@@ -74,25 +153,24 @@ const resourcePageSchema = {
     modifiedTime={new Date()}
     schema={resourcePageSchema}
 >
-
     <section class="py-12">
         <div class="max-w-4xl mx-auto">
             <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-blue-400 text-transparent bg-clip-text" data-ani="slide-in-blur">
                 Transgender Resources
             </h1>
-            <p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="200">
-                A collection of resources, support services, and information for the transgender community. 
+            <p class="text-xl text-zinc-300 mb-6" data-ani="fade-up" data-delay="200">
+                A comprehensive collection of resources, support services, and information for the transgender community. 
                 <span class="text-pink-300">Remember, you're not alone in this journey. 💜</span>
             </p>
 
-            <p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="200">
-                I made this page to help people like me find resources and information about transgender stuff.
+            <p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="300">
+                This curated list of resources aims to provide support, information, and guidance for transgender individuals, their families, and allies.
             </p>
             
             <div 
                 class="mb-12 p-6 rounded-xl bg-zinc-800/30 border border-pink-500/20 hover:bg-zinc-800/50 transition-all group"
                 data-ani="fade-up"
-                data-delay="300"
+                data-delay="400"
             >
                 <a 
                     href="/blog/2025/1/23/trans-help" 
@@ -100,7 +178,7 @@ const resourcePageSchema = {
                 >
                     <i class="fa-solid fa-pencil text-pink-400 group-hover:rotate-12 transition-transform"></i>
                     <div>
-                        <span class="text-white group-hover:text-pink-400 transition-colors">Read more about this page</span>
+                        <span class="text-white group-hover:text-pink-400 transition-colors">Read more about this resource collection</span>
                         <p class="text-sm text-zinc-400 mt-1">
                             Learn about the story behind this resource and how you can contribute to make it better 💜
                         </p>
@@ -120,12 +198,7 @@ const resourcePageSchema = {
                         24/7 Crisis Support
                     </h2>
                     <div class="grid sm:grid-cols-2 gap-6">
-                        {[
-                            { name: "Suicide and Crisis Lifeline", contact: "988", href: "tel:988", icon: "fa-phone" },
-                            { name: "Crisis Text Line", contact: "741741", isText: true, icon: "fa-message" },
-                            { name: "Trans Lifeline", contact: "877-565-8860", href: "tel:877-565-8860", icon: "fa-phone" },
-                            { name: "LGBT National Hotline", contact: "888-843-4564", href: "tel:888-843-4564", icon: "fa-phone" },
-                        ].map((resource, index) => (
+                        {crisisResources.map((resource, index) => (
                             <div 
                                 class="flex items-center gap-4 p-4 bg-red-500/5 rounded-lg hover:bg-red-500/10 transition-all"
                                 data-ani="fade-up"
@@ -146,59 +219,7 @@ const resourcePageSchema = {
                 </section>
 
                 <!-- Resource Sections -->
-                {[
-                    {
-                        title: "Mental Health Resources",
-                        icon: "fa-brain",
-                        color: "purple",
-                        items: [
-                            { name: "The Trevor Project", url: "https://www.thetrevorproject.org", desc: "24/7 Crisis Support" },
-                            { name: "Pride Counseling", url: "https://www.pridecounseling.com", desc: "LGBTQ+ Focused Therapy" },
-                            { name: "Trans Lifeline", url: "https://translifeline.org", desc: "Peer Support Services" }
-                        ]
-                    },
-                    {
-                        title: "Medical Resources",
-                        icon: "fa-heart",
-                        color: "pink",
-                        items: [
-                            { name: "WPATH Standards of Care", url: "https://www.wpath.org" },
-                            { name: "Planned Parenthood Gender Services", url: "https://www.plannedparenthood.org/learn/gender-identity/transgender" },
-                            { name: "FOLX Health", url: "https://www.folxhealth.com", desc: "Virtual Trans Healthcare" },
-                            { name: "Plume", url: "https://getplume.co", desc: "Telehealth HRT Services" }
-                        ]
-                    },
-                    {
-                        title: "Legal Resources",
-                        icon: "fa-scale-balanced",
-                        color: "blue",
-                        items: [
-                            { name: "Transgender Law Center", url: "https://transgenderlawcenter.org" },
-                            { name: "Lambda Legal", url: "https://www.lambdalegal.org" },
-                            { name: "National Center for Transgender Equality", url: "https://transequality.org" }
-                        ]
-                    },
-                    {
-                        title: "Community Support",
-                        icon: "fa-people-group",
-                        color: "emerald",
-                        items: [
-                            { name: "r/asktransgender", url: "https://www.reddit.com/r/asktransgender" },
-                            { name: "PFLAG", url: "https://pflag.org" },
-                            { name: "Trans Lifeline Community", url: "https://translifeline.org/community" }
-                        ]
-                    },
-                    {
-                        title: "Educational Resources",
-                        icon: "fa-book-open",
-                        color: "indigo",
-                        items: [
-                            { name: "The Gender Dysphoria Bible", url: "https://genderdysphoria.fyi" },
-                            { name: "Trans Hub 101", url: "https://www.transhub.org.au/101" },
-                            { name: "National Center for Transgender Equality - Know Your Rights", url: "https://transequality.org/know-your-rights" }
-                        ]
-                    }
-                ].map((section, index) => (
+                {resourceSections.map((section, index) => (
                     <section 
                         class={`rounded-xl border border-${section.color}-500/20 bg-zinc-800/50 p-6 transform transition-all hover:scale-[1.01] hover:bg-zinc-800/70`}
                         data-ani="fade-up"
@@ -239,14 +260,10 @@ const resourcePageSchema = {
                         DIY Resources (Proceed with Caution)
                     </h2>
                     <div class="mb-4 p-4 bg-yellow-500/5 rounded-lg text-zinc-300">
-                        <strong class="text-yellow-400">⚠️ Warning:</strong> DIY hormone therapy carries significant risks. Always consult healthcare professionals when possible. These resources are provided for harm reduction purposes only.
+                        <strong class="text-yellow-400">⚠️ Important Safety Warning:</strong> DIY hormone therapy carries significant health risks. These resources are provided for harm reduction purposes only. Always prioritize professional medical care when possible. If you must pursue DIY options, please research thoroughly and monitor your health carefully.
                     </div>
                     <div class="grid sm:grid-cols-2 gap-4">
-                        {[
-                            { name: "DIY HRT Directory", url: "https://diyhrt.wiki" },
-                            { name: "HRT Cafe", url: "https://hrtcafe.net" },
-                            { name: "Trans Fem HRT Guide", url: "https://diyhrt.market/transfem-hrt-guide" }
-                        ].map((resource, index) => (
+                        {diyResources.map((resource, index) => (
                             <a 
                                 href={resource.url}
                                 target="_blank"
@@ -256,7 +273,10 @@ const resourcePageSchema = {
                                 data-delay={`${index * 100}`}
                             >
                                 <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
-                                <span class="font-medium">{resource.name}</span>
+                                <div>
+                                    <div class="font-medium">{resource.name}</div>
+                                    {resource.desc && <div class="text-sm text-zinc-400">{resource.desc}</div>}
+                                </div>
                             </a>
                         ))}
                     </div>
