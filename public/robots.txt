@@ -1,0 +1,28 @@
+# robots.txt for choco.rip
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Crisis support pages should be indexed for accessibility
+Allow: /trans-help
+
+# Sitemaps
+Sitemap: https://choco.rip/sitemap.xml
+Sitemap: https://choco.rip/sitemap-blog.xml
+
+# Crawl-delay for heavy crawlers
+Crawl-delay: 10
+
+# Additional rules for specific bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /

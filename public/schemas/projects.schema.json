@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Projects",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["title", "description", "tags", "featured"],
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Project title"
+      },
+      "description": {
+        "type": "string",
+        "description": "Project description"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Technologies used in the project"
+      },
+      "link": {
+        "type": "string",
+        "format": "uri",
+        "description": "Live project URL"
+      },
+      "git": {
+        "type": "string",
+        "format": "uri",
+        "description": "GitHub repository URL"
+      },
+      "featured": {
+        "type": "boolean",
+        "description": "Whether the project should be featured"
+      }
+    }
+  }
+} 

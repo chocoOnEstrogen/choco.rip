@@ -1,0 +1,37 @@
+{
+  "name": "choco.rip",
+  "version": "1.0.0",
+  "description": "My personal website",
+  "main": "dist/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "format": "prettier --cache --write . --ignore-path .prettierignore",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chocoOnEstrogen/choco.rip.git"
+  },
+  "author": "choco <choco.rip>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/chocoOnEstrogen/choco.rip/issues"
+  },
+  "homepage": "https://github.com/chocoOnEstrogen/choco.rip#readme",
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.1.9",
+    "astro-compress": "^2.3.6",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  }
+}

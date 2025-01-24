@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Crisis Support
+    url: /trans-help#crisis-support
+    about: 🚨 If you're in crisis, please visit our crisis support resources or call 988
+  - name: Discord Community
+    url: https://discord.gg/KtaNFKjFKQ
+    about: Join our Discord community for real-time discussion and support
+  - name: Email Contact
+    url: mailto:stella@choco.rip
+    about: For private inquiries, you can email me directly

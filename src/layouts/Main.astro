@@ -1,0 +1,282 @@
+---
+import '../styles/global.css'
+import { normalizeSocial } from '../utils/string'
+import config from '../config'
+import Modal from '../components/Modal.astro'
+import keywords from '../../public/keywords.json'
+
+interface Props {
+	title?: string
+	description?: string
+	image?: string
+	currentPage?: string
+	type?: string
+	publishedTime?: Date
+	modifiedTime?: Date
+	tags?: string[]
+	canonicalURL?: string
+	schema?: any
+	noindex?: boolean
+}
+
+const {
+	title = 'Stella | Software Engineer',
+	description = 'Full-stack developer specializing in React, Node.js, and cloud architecture',
+	image = '/images/social-card.jpg',
+	currentPage = '',
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	tags = [],
+	canonicalURL = Astro.url.href,
+	noindex = false,
+	schema,
+} = Astro.props
+
+const navItems = [
+	{ name: 'Home', path: '/' },
+	{ name: 'Projects', path: '/projects' },
+	{ name: 'Blog', path: '/blog' },
+	{ name: 'About', path: '/about' },
+]
+
+// Structured data for organization
+const organizationSchema = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	"name": config.author.name,
+	"url": config.url,
+	"logo": config.image,
+	"sameAs": Object.values(config.author.social)
+}
+
+// Structured data for person
+const personSchema = {
+	"@context": "https://schema.org",
+	"@type": "Person",
+	"name": config.author.name,
+	"url": config.url,
+	"image": config.image,
+	"sameAs": Object.values(config.author.social)
+}
+
+
+const allKeywords = [...keywords, ...tags]
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Basic SEO -->
+		<title>{title} | {config.author.name}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content={config.author.name} />
+		<link rel="canonical" href={canonicalURL} />
+		{noindex && <meta name="robots" content="noindex,nofollow" />}
+		{allKeywords.length > 0 && <meta name="keywords" content={allKeywords.join(', ')} />}
+
+		<!-- Theme Color for browsers -->
+		<meta name="theme-color" content="#1a1a1a" />
+
+		<!-- Favicon -->
+		<link rel="icon" type={`image/${config.image.split('.').pop()}`} href={config.image} />
+		<link rel="manifest" href="/manifest.json" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content={type} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.url)} />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:site_name" content={config.author.name} />
+		{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+		{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+		{tags.map(tag => <meta property="article:tag" content={tag} />)}
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content={config.author.name} />
+		<meta name="twitter:creator" content={config.author.name} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(image, Astro.url)} />
+
+		<!-- Structured Data -->
+		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+		{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+
+		<!-- Font Awesome -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+		/>
+
+		<!-- KaTeX CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+		<!-- Preconnect to external domains -->
+		<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+		<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+	</head>
+	<body class="bg-zinc-900 text-zinc-100">
+		<header
+			class="fixed w-full top-0 z-50 backdrop-blur-sm border-b border-zinc-800/50"
+		>
+			<nav class="max-w-4xl mx-auto px-4 py-3">
+				<div class="flex items-center justify-between">
+					<a
+						href="/"
+						class="text-xl font-bold hover:text-emerald-400 transition-colors"
+						data-ani="fade-down"
+					>
+						&lt;{config.author.name} /&gt;
+					</a>
+					<ul class="flex gap-6">
+						{
+							navItems.map((item, index) => (
+								<li data-ani="fade-down" data-delay={`${(index + 1) * 100}`}>
+									<a
+										href={item.path}
+										class:list={[
+											'hover:text-emerald-400 transition-colors',
+											currentPage === item.path ?
+												'text-emerald-400'
+											:	'text-zinc-300',
+										]}
+									>
+										{item.name}
+									</a>
+								</li>
+							))
+						}
+
+						<li data-ani="fade-down" data-delay={`${(navItems.length + 1) * 100}`}>
+							<button
+								data-modal-trigger="contact-modal"
+								class:list={[
+									'hover:text-emerald-400 transition-colors',
+									currentPage === '/contact' ?
+										'text-emerald-400'
+									:	'text-zinc-300',
+								]}
+							>
+								Contact
+							</button>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+
+		<main class="max-w-4xl mx-auto px-4 pt-24 pb-12">
+			<slot />
+
+			<Modal id="contact-modal" title="Get in Touch">
+				<div class="space-y-6">
+					<div
+						class="flex items-center gap-4 p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors"
+					>
+						<div class="bg-emerald-500/20 p-3 rounded-full">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6 text-emerald-500"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+								></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Email</h3>
+							<a
+								href={`mailto:${config.author.email}`}
+								class="text-emerald-400 hover:text-emerald-300 transition-colors"
+								>{config.author.email}</a
+							>
+						</div>
+					</div>
+
+					<div
+						class="flex items-center gap-4 p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors"
+					>
+						<div class="bg-indigo-500/20 p-3 rounded-full">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6 text-indigo-500"
+								fill="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"
+								></path>
+							</svg>
+						</div>
+						{
+							config.author.discord && (
+								<div>
+									<h3 class="font-semibold">Discord Server</h3>
+									<a
+										href={config.author.discord}
+										class="text-indigo-400 hover:text-indigo-300 transition-colors"
+									>
+										Join our community
+									</a>
+								</div>
+							)
+						}
+					</div>
+
+					<div class="grid grid-cols-3 gap-4">
+						{
+							Object.entries(config.author.social).map(([key, value]) => (
+								<a
+									href={value}
+									class="flex items-center justify-center p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors group"
+								>
+									<i class={`fab fa-${key}`} />
+								</a>
+							))
+						}
+					</div>
+				</div>
+			</Modal>
+		</main>
+
+		<footer class="border-t border-zinc-800/50">
+			<div class="max-w-4xl mx-auto px-4 py-6">
+				<div class="flex justify-between items-center">
+					<p class="text-zinc-400" data-ani="fade-up">
+						© {new Date().getFullYear()}
+						{config.author.name} | This website is open source and licensed under the <a href="/open-source/license" class="text-emerald-400 hover:text-emerald-300 transition-colors">GNU General Public License v3.0</a>.
+					</p>
+					<div class="flex gap-4">
+						{
+							Object.keys(config.author.social).map((social, index) => (
+								<a
+									href={config.author.social[social]}
+									class="text-zinc-400 hover:text-emerald-400 transition-colors"
+									data-ani="fade-up"
+									data-delay={`${(index + 1) * 100}`}
+								>
+									{normalizeSocial(social)}
+								</a>
+							))
+						}
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

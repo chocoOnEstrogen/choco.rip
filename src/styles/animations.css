@@ -1,0 +1,221 @@
+/* Fade animations */
+[data-ani="fade-in"] {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+[data-ani="fade-up"] {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease-out forwards;
+}
+
+[data-ani="fade-down"] {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeDown 0.6s ease-out forwards;
+}
+
+[data-ani="fade-left"] {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: fadeLeft 0.6s ease-out forwards;
+}
+
+[data-ani="fade-right"] {
+    opacity: 0;
+    transform: translateX(20px);
+    animation: fadeRight 0.6s ease-out forwards;
+}
+
+/* Scale animations */
+[data-ani="scale-in"] {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: scaleIn 0.6s ease-out forwards;
+}
+
+[data-ani="scale-up"] {
+    opacity: 0;
+    transform: scale(0.8);
+    animation: scaleUp 0.6s ease-out forwards;
+}
+
+/* Special animations */
+[data-ani="typing"] {
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 2s steps(40, end) forwards;
+}
+
+[data-ani="bounce"] {
+    animation: bounce 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Animation delay utilities */
+[data-delay="100"] { animation-delay: 100ms; }
+[data-delay="200"] { animation-delay: 200ms; }
+[data-delay="300"] { animation-delay: 300ms; }
+[data-delay="400"] { animation-delay: 400ms; }
+[data-delay="500"] { animation-delay: 500ms; }
+
+/* Keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Custom animations */
+[data-ani="slide-in-blur"] {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(-20px);
+    animation: slideInBlur 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+[data-ani="pop-up"] {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    animation: popUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+[data-ani="glow-pulse"] {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+[data-ani="float"] {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* New keyframes */
+@keyframes slideInBlur {
+    from {
+        opacity: 0;
+        filter: blur(5px);
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(0);
+    }
+}
+
+@keyframes popUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 5px rgba(52, 211, 153, 0.2);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+    }
+    100% {
+        text-shadow: 0 0 5px rgba(52, 211, 153, 0.2);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+} 

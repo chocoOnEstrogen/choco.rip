@@ -1,0 +1,63 @@
+---
+import Main from '../layouts/Main.astro'
+import projects from '../json/projects.json'
+---
+
+<Main currentPage="/projects" title="Projects">
+	<section class="py-12">
+		<h1 class="text-4xl font-bold mb-6" data-ani="slide-in-blur">
+			Projects & Work
+		</h1>
+		<p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="200">
+			A collection of my recent work and side projects. Each project is built
+			with a focus on user experience and clean code.
+		</p>
+
+		<div class="grid gap-8">
+			{
+				projects.map((project, index) => (
+					<article
+						class="group relative overflow-hidden rounded-xl bg-zinc-800/50 hover:bg-zinc-800/80 transition-all"
+						data-ani="fade-up"
+						data-delay={`${index * 200}`}
+					>
+						<div class="grid md:grid-cols-2 gap-6 p-6">
+							<div class="space-y-4">
+								<h3 class="text-2xl font-bold group-hover:text-emerald-400 transition-colors">
+									{project.title}
+								</h3>
+								<p class="text-zinc-300">{project.description}</p>
+								<div class="flex flex-wrap gap-2">
+									{project.tags.map((tag) => (
+										<span class="px-3 py-1 bg-zinc-700 rounded-full text-xs">
+											{tag}
+										</span>
+									))}
+								</div>
+								<div class="flex gap-4 pt-4">
+									{project.link && (
+										<a
+											href={project.link}
+											class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-full transition-colors text-sm"
+										>
+											View Project
+										</a>
+									)}
+									{project.git && (
+										<a
+											href={project.git}
+											class="px-4 py-2 border border-emerald-500 text-emerald-400 hover:bg-emerald-500/10 rounded-full transition-colors text-sm"
+										>
+											View Code
+										</a>
+									)}
+								</div>
+							</div>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Main>
+

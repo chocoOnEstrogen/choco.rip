@@ -1,0 +1,138 @@
+---
+import Main from '../layouts/Main.astro'
+import About from '../components/About.astro'
+import tech from '../json/tech.json'
+import config from '../config'
+import experience from '../json/experience.json'
+---
+
+<Main currentPage="/about" title="About">
+	<section class="py-12">
+		<div class="grid md:grid-cols-[2fr,1fr] gap-12">
+			<div>
+				<h1 class="text-4xl font-bold mb-6" data-ani="slide-in-blur">
+					About Me
+				</h1>
+				<div class="space-y-6 text-lg text-zinc-300">
+					<About />
+				</div>
+
+				<h2 class="text-2xl font-bold mt-12 mb-6" data-ani="fade-up">
+					Experience
+				</h2>
+				<div class="space-y-8">
+					{
+						experience.map((job, index) => (
+							<div
+								class="relative pl-6 border-l border-emerald-500"
+								data-ani="fade-up"
+								data-delay={`${index * 200}`}
+							>
+								<div class="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[6.5px] top-2" />
+								<h3 class="text-xl font-bold">{job.role}</h3>
+								<p class="text-emerald-400">{job.company}</p>
+								<p class="text-zinc-400 text-sm">{job.period}</p>
+								<p class="text-zinc-300 mt-2">{job.description}</p>
+								<ul class="mt-4 space-y-3">
+									{job.highlights.map((highlight, index) => (
+										<li class="flex items-start gap-2 text-zinc-300">
+											<span class="text-emerald-400 mt-1">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-4 w-4"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+											</span>
+											<span class="leading-tight">{highlight}</span>
+										</li>
+									))}
+								</ul>
+							</div>
+						))
+					}
+				</div>
+			</div>
+
+			<div class="space-y-8">
+				<div data-ani="fade-left" data-delay="200">
+					<h2 class="text-2xl font-bold mb-6">Skills</h2>
+					<div class="flex flex-wrap gap-4">
+						{tech.map((t) => (
+							<div 
+								class={`flex items-center gap-2 px-4 py-2 rounded-full text-sm 
+								${t.color} backdrop-blur-sm 
+								shadow-lg transition-all duration-300
+								hover:scale-105 hover:shadow-xl`}
+							>
+								<i class={`${t.icon} text-xl`}></i>
+								<span class="font-medium">{t.name}</span>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div data-ani="fade-left" data-delay="400">
+					<h2 class="text-2xl font-bold mb-6">Let's Connect</h2>
+					<div class="space-y-4">
+						<a
+							href={`mailto:${config.author.email}`}
+							class="flex items-center gap-3 px-4 py-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+						>
+							<span class="text-emerald-400 text-xl">
+								<i class="fa-solid fa-envelope"></i>
+							</span>
+							<span
+								class="text-zinc-300 group-hover:text-white transition-colors"
+								>{config.author.email}</span
+							>
+						</a>
+
+						{
+							Object.entries(config.author.social).map(([platform, url]) => (
+								<a
+									href={url}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-3 px-4 py-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+								>
+									<span class="text-emerald-400 text-xl">
+										<i class={`fa-brands fa-${platform}`} />
+									</span>
+									<span class="text-zinc-300 group-hover:text-white transition-colors">
+										{platform.charAt(0).toUpperCase() + platform.slice(1)}
+									</span>
+								</a>
+							))
+						}
+
+						{
+							config.author.discord && (
+								<a
+									href={config.author.discord}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-3 px-4 py-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+								>
+									<span class="text-emerald-400 text-xl">
+										<i class="fa-brands fa-discord" />
+									</span>
+									<span class="text-zinc-300 group-hover:text-white transition-colors">
+										Discord
+									</span>
+								</a>
+							)
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</Main>
+

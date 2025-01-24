@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+
+const about = (await getCollection("misc")).find(
+    (post: any) => post.slug === "about"
+);
+
+if (!about) {
+    throw new Error("Could not find about content");
+}
+
+const { Content } = await about.render();
+---
+
+<div class="markdown">
+    <Content />
+</div>

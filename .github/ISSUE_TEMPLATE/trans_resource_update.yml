@@ -1,0 +1,68 @@
+name: Trans Resource Update/Correction
+description: Report outdated information or suggest updates to existing resources
+title: "[UPDATE] "
+labels: 
+  - trans-resources
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us keep our resources accurate and up-to-date by reporting any changes or corrections needed.
+
+  - type: input
+    id: resource-name
+    attributes:
+      label: "Resource Name"
+      description: "Which resource needs to be updated?"
+      placeholder: "e.g., Trans Lifeline"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: update-type
+    attributes:
+      label: "Type of Update"
+      description: "What kind of update is needed?"
+      options:
+        - Broken Link
+        - Outdated Information
+        - Incorrect Information
+        - Service Changes
+        - Contact Information Update
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-info
+    attributes:
+      label: "Current Information"
+      description: "What is currently shown on the page?"
+      placeholder: "The current information shows..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: corrected-info
+    attributes:
+      label: "Corrected Information"
+      description: "What should it be updated to?"
+      placeholder: "The correct information is..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification-source
+    attributes:
+      label: "Verification Source"
+      description: "Please provide a source to verify this update (if applicable)"
+      placeholder: "This can be verified at..."
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: "Confirmation"
+      options:
+        - label: "I have verified this information is current and accurate"
+          required: true 

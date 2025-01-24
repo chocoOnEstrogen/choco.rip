@@ -1,0 +1,39 @@
+[
+    {
+        "title": "VTubersTV",
+        "description": "A comprehensive platform dedicated to VTuber content and community engagement. The Ultimate VTuber Platform for content and community engagement.",
+        "tags": ["TypeScript", "Next.js", "TailwindCSS"],
+        "link": "https://vtubers.tv",
+        "git": "https://github.com/VTubersTV/spec",
+        "featured": true
+    },
+    {
+        "title": "Flux",
+        "description": "An advanced, customizable shell for modern systems. Built with performance and extensibility in mind.",
+        "tags": ["Rust", "CLI"],
+        "link": "https://flux.choco.rip",
+        "git": "https://github.com/chocoOnEstrogen/flux",
+        "featured": true
+    },
+    {
+        "title": "AnimeStream",
+        "description": "Your personal anime streaming platform. Watch your favorite series anytime, track your progress, and discover new shows - all in one place.",
+        "tags": ["JavaScript", "Node.js", "EJS"],
+        "git": "https://github.com/chocoOnEstrogen/AnimeStream",
+        "featured": true
+    },
+    {
+        "title": "Orbit",
+        "description": "A feature-rich Discord bot designed to enhance community server functionality with various utility, moderation, and fun commands.",
+        "tags": ["TypeScript", "Discord.js", "Node.js"],
+        "git": "https://github.com/chocoOnEstrogen/orbit",
+        "featured": true
+    },
+    {
+        "title": "Portfolio Website",
+        "description": "My personal portfolio website built with Astro and TailwindCSS. Features a clean, modern design with smooth animations.",
+        "tags": ["Astro", "TailwindCSS", "TypeScript"],
+        "git": "https://github.com/chocoOnEstrogen/choco.rip",
+        "featured": false
+    }
+]

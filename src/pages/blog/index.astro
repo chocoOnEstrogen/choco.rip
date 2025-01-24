@@ -1,0 +1,261 @@
+---
+import Main from "../../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import { calculateReadingTime, createSlug } from "../../utils/blog";
+import { SearchParser, highlightMatches } from '../../utils/search';
+
+const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+}).then(posts => posts.sort((a, b) => {
+    return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+}));
+
+// Search and filter functionality
+const searchParams = Astro.url.searchParams;
+const query = searchParams.get('q')?.toLowerCase() || '';
+const tags = searchParams.get('tags')?.split(',') || [];
+const beforeDate = searchParams.get('before');
+const afterDate = searchParams.get('after');
+
+const filteredPosts = posts.filter(post => {
+  // Text search
+  const matchesQuery = !query || 
+    post.data.title.toLowerCase().includes(query) ||
+    post.data.excerpt.toLowerCase().includes(query) ||
+    post.body.toLowerCase().includes(query);
+
+  // Tags filter
+  const matchesTags = tags.length === 0 || 
+    tags.every(tag => post.data.tags.includes(tag));
+
+  // Date filters
+  const postDate = new Date(post.data.pubDate).getFullYear();
+  const matchesBeforeDate = !beforeDate || postDate <= parseInt(beforeDate);
+  const matchesAfterDate = !afterDate || postDate >= parseInt(afterDate);
+
+  return matchesQuery && matchesTags && matchesBeforeDate && matchesAfterDate;
+});
+---
+
+<Main currentPage="/blog" title="Blog">
+    <section class="py-12">
+        <h1 class="text-4xl font-bold mb-6" data-ani="slide-in-blur">
+            Blog & Insights
+        </h1>
+        <p class="text-xl text-zinc-300 mb-8" data-ani="fade-up" data-delay="200">
+            Thoughts, tutorials, and insights about web development, technology, and software engineering.
+        </p>
+
+        <div class="mb-8 relative" data-ani="fade-up" data-delay="300">
+            <input 
+                type="text" 
+                id="searchInput"
+                placeholder="Search posts by title, content, tags... (e.g., 'react 2023' or '#typescript')"
+                class="w-full px-4 py-3 bg-zinc-800/50 rounded-lg border border-zinc-700 
+                       focus:border-emerald-400 focus:outline-none pr-12"
+            />
+            <div class="absolute right-3 top-3 text-zinc-500">
+                <kbd class="hidden sm:inline-block px-2 py-1 text-xs font-mono bg-zinc-700 rounded">⌘K</kbd>
+            </div>
+        </div>
+
+        <div 
+            id="searchHelp" 
+            class="hidden absolute z-10 max-w-2xl left-1/2 -translate-x-1/2 -translate-y-[calc(100%+1rem)]
+                   bg-zinc-800/95 rounded-lg border border-zinc-700 backdrop-blur-sm shadow-xl
+                   w-[calc(100vw-2rem)] sm:w-full"
+            data-ani="fade-down"
+        >
+            <div class="text-sm text-zinc-300 p-4">
+                <h3 class="font-semibold mb-2 text-white">Search Syntax:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="mb-2 text-zinc-400">Basic Search:</p>
+                        <ul class="space-y-1">
+                            <li><code class="text-emerald-400">react hooks</code> - Search in content</li>
+                            <li><code class="text-emerald-400">#typescript</code> - Search by tag</li>
+                            <li><code class="text-emerald-400">@2023</code> - Posts from year</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="mb-2 text-zinc-400">Advanced Filters:</p>
+                        <ul class="space-y-1">
+                            <li><code class="text-emerald-400">by:stella</code> - Posts by author</li>
+                            <li><code class="text-emerald-400">in:tutorials</code> - Posts in category</li>
+                            <li><code class="text-emerald-400">before:2024</code> / <code class="text-emerald-400">after:2022</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-3 text-xs text-zinc-500">
+                    Tip: You can combine multiple filters, e.g., <code class="text-emerald-400">#react in:tutorials @2023</code>
+                </p>
+            </div>
+            <!-- Tooltip Arrow -->
+            <div class="absolute left-1/2 bottom-0 -mb-2 transform -translate-x-1/2 
+                        border-8 border-transparent border-t-zinc-700"></div>
+            <div class="absolute left-1/2 bottom-0 -mb-[9px] transform -translate-x-1/2 
+                        border-8 border-transparent border-t-zinc-800/95"></div>
+        </div>
+
+        <div id="searchInfo" class="mb-4 text-sm text-zinc-400 hidden">
+            Showing <span id="resultCount">0</span> results
+            <button id="clearSearch" class="ml-2 text-emerald-400 hover:text-emerald-300">Clear</button>
+        </div>
+
+        <div id="postsGrid" class="grid gap-8">
+            {posts.map((post, index) => (
+                <article 
+                    class="group p-6 rounded-xl bg-zinc-800/50 hover:bg-zinc-800/80 transition-all"
+                    data-ani="fade-up"
+                    data-delay={`${index * 200}`}
+                    data-post={JSON.stringify({
+                        title: post.data.title,
+                        excerpt: post.data.excerpt,
+                        tags: post.data.tags,
+                        categories: post.data.categories,
+                        content: post.body,
+                        date: post.data.pubDate,
+                    })}
+                >
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        {post.data.tags.map(tag => (
+                            <span class="px-3 py-1 bg-zinc-700 rounded-full text-xs cursor-pointer hover:bg-zinc-600"
+                                  data-tag={tag}>
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition-colors">
+                        <a href={`/blog/${createSlug(post.data.pubDate, post.slug)}`}>
+                            {post.data.title}
+                        </a>
+                    </h2>
+                    <p class="text-zinc-300 mb-4">
+                        {post.data.excerpt}
+                    </p>
+                    <div class="flex items-center gap-4 text-sm text-zinc-400">
+                        <time datetime={post.data.pubDate instanceof Date ? post.data.pubDate.toISOString() : post.data.pubDate}>
+                            {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </time>
+                        <span>•</span>
+                        <span>{calculateReadingTime(post.body)} min read</span>
+                    </div>
+                </article>
+            ))}
+        </div>
+
+        <div id="noResults" class="hidden text-center p-12 rounded-xl bg-zinc-800/50 border border-zinc-700">
+            <div class="text-4xl mb-4">📝</div>
+            <h3 class="text-xl font-bold mb-2">No Posts Found</h3>
+            <p class="text-zinc-400">
+                No posts match your search criteria. Try adjusting your search!
+            </p>
+        </div>
+    </section>
+</Main>
+
+<script>
+    import { SearchParser, highlightMatches } from '../../utils/search';
+
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const postsGrid = document.getElementById('postsGrid')!;
+    const searchInfo = document.getElementById('searchInfo')!;
+    const resultCount = document.getElementById('resultCount')!;
+    const clearSearch = document.getElementById('clearSearch')!;
+    const noResults = document.getElementById('noResults')!;
+    const articles = Array.from(document.querySelectorAll('[data-post]'));
+    const searchHelp = document.getElementById('searchHelp')!;
+
+    // Command/Ctrl + K shortcut to focus search
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    });
+
+    // Clear search button
+    clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        handleSearch();
+    });
+
+    // Click on tag to search
+    document.querySelectorAll('[data-tag]').forEach(tag => {
+        tag.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tagText = (tag as HTMLElement).dataset.tag;
+            searchInput.value = `#${tagText}`;
+            handleSearch();
+        });
+    });
+
+    // Show/hide help text on focus/blur
+    searchInput.addEventListener('focus', () => {
+        searchHelp.classList.remove('hidden');
+    });
+
+    // Hide help when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target as Node) && 
+            !searchHelp.contains(e.target as Node)) {
+            searchHelp.classList.add('hidden');
+        }
+    });
+
+    // Keep help visible when clicking inside it
+    searchHelp.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Hide help when pressing Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchHelp.classList.add('hidden');
+        }
+    });
+
+    function handleSearch() {
+        const query = searchInput.value;
+        const tokens = SearchParser.parseQuery(query);
+        let matchCount = 0;
+
+        articles.forEach((article: HTMLElement) => {
+            const postData = JSON.parse(article.dataset.post!);
+            const matches = SearchParser.matchesPost(postData, tokens);
+
+            if (matches) {
+                article.classList.remove('hidden');
+                
+                // Highlight matching text
+                const titleEl = article.querySelector('h2 a');
+                const excerptEl = article.querySelector('p');
+                if (titleEl && excerptEl) {
+                    titleEl.innerHTML = highlightMatches(postData.title, tokens);
+                    excerptEl.innerHTML = highlightMatches(postData.excerpt, tokens);
+                }
+                
+                matchCount++;
+            } else {
+                article.classList.add('hidden');
+            }
+        });
+
+        // Update UI
+        searchInfo.classList.toggle('hidden', query === '');
+        resultCount.textContent = matchCount.toString();
+        noResults.classList.toggle('hidden', matchCount > 0);
+        postsGrid.classList.toggle('hidden', matchCount === 0);
+    }
+
+    // Debounce search for better performance
+    let debounceTimeout: NodeJS.Timeout;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(handleSearch, 300);
+    });
+</script> 

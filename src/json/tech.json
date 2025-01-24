@@ -1,0 +1,104 @@
+[
+    {
+        "name": "TypeScript",
+        "icon": "fa-brands fa-js",
+        "color": "text-[#3178C6] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "JavaScript",
+        "icon": "fa-brands fa-js", 
+        "color": "text-[#F7DF1E] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "Python",
+        "icon": "fa-brands fa-python",
+        "color": "text-[#3776AB] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "Rust",
+        "icon": "fa-solid fa-gear",
+        "color": "text-[#DEA584] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "C",
+        "icon": "fa-solid fa-code",
+        "color": "text-[#A8B9CC] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "C#",
+        "icon": "fa-solid fa-hashtag",
+        "color": "text-[#239120] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Programming Languages"
+    },
+    {
+        "name": "HTML5",
+        "icon": "fa-brands fa-html5",
+        "color": "text-[#E34F26] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Frontend"
+    },
+    {
+        "name": "Nuxt.js",
+        "icon": "fa-brands fa-vuejs",
+        "color": "text-[#00DC82] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Frontend Frameworks"
+    },
+    {
+        "name": "Astro",
+        "icon": "fa-solid fa-rocket",
+        "color": "text-[#FF5D01] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Frontend Frameworks"
+    },
+    {
+        "name": "TailwindCSS",
+        "icon": "fa-brands fa-css3",
+        "color": "text-[#06B6D4] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "CSS Frameworks"
+    },
+    {
+        "name": "Bootstrap",
+        "icon": "fa-brands fa-bootstrap",
+        "color": "text-[#7952B3] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "CSS Frameworks"
+    },
+    {
+        "name": "Discord.js",
+        "icon": "fa-brands fa-discord",
+        "color": "text-[#5865F2] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Libraries"
+    },
+    {
+        "name": "Neovim",
+        "icon": "fa-solid fa-terminal",
+        "color": "text-[#57A143] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Development Tools"
+    },
+    {
+        "name": "Azure",
+        "icon": "fa-brands fa-microsoft",
+        "color": "text-[#0078D4] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Cloud Services"
+    },
+    {
+        "name": "Cloudflare",
+        "icon": "fa-solid fa-cloud",
+        "color": "text-[#F38020] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Cloud Services"
+    },
+    {
+        "name": "Google Cloud",
+        "icon": "fa-brands fa-google",
+        "color": "text-[#4285F4] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Cloud Services"
+    },
+    {
+        "name": "Git",
+        "icon": "fa-brands fa-git-alt",
+        "color": "text-[#F05032] bg-zinc-800/50 hover:bg-zinc-800",
+        "category": "Development Tools"
+    }
+]

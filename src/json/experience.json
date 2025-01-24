@@ -1,0 +1,26 @@
+[
+    {
+        "role": "Lead Developer",
+        "company": "VTubersTV",
+        "period": "2024 - Present",
+        "description": "Leading the development of a comprehensive VTuber content platform. Architecting and implementing scalable solutions using TypeScript, Nuxt.js, and modern cloud infrastructure.",
+        "highlights": [
+            "Designed and built the platform architecture from ground up",
+            "Implemented real-time features and content delivery systems",
+            "Managed cloud infrastructure across multiple providers",
+            "Led the technical decision-making process"
+        ]
+    },
+    {
+        "role": "Open Source Developer",
+        "company": "Various Projects",
+        "period": "2021 - Present",
+        "description": "Actively contributing to and maintaining several open-source projects, focusing on developer tools and community-driven software.",
+        "highlights": [
+            "Developed Flux, a modern shell written in Rust",
+            "Created and maintained Orbit, a feature-rich Discord bot",
+            "Contributed to various open-source projects",
+            "Built developer tools and utilities"
+        ]
+    }
+] 

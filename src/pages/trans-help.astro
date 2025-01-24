@@ -1,0 +1,267 @@
+---
+import Main from "../layouts/Main.astro"
+
+const title = "Transgender Resources & Support"
+const description = "A comprehensive collection of resources, support services, and information for the transgender community. Find crisis support, healthcare resources, legal help, and more."
+const tags = [
+    "transgender resources",
+    "trans support",
+    "crisis support",
+    "mental health",
+    "healthcare",
+    "legal resources",
+    "community support",
+    "trans healthcare",
+    "LGBTQ+ support"
+]
+
+// Structured data for the resources page
+const resourcePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": title,
+    "description": description,
+    "url": Astro.url.toString(),
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {
+                "@type": "Thing",
+                "name": "Crisis Support",
+                "description": "24/7 crisis support services for the transgender community"
+            },
+            {
+                "@type": "Thing",
+                "name": "Healthcare Resources",
+                "description": "Medical resources and healthcare providers for transgender individuals"
+            },
+            {
+                "@type": "Thing", 
+                "name": "Mental Health Resources",
+                "description": "Mental health support and counseling services for transgender individuals"
+            },
+            {
+                "@type": "Thing",
+                "name": "Legal Resources", 
+                "description": "Legal assistance and advocacy for transgender rights"
+            },
+            {
+                "@type": "Thing",
+                "name": "Community Support",
+                "description": "Online and in-person transgender community support networks"
+            },
+            {
+                "@type": "Thing",
+                "name": "Educational Resources",
+                "description": "Educational materials and guides about transgender topics"
+            },
+            {
+                "@type": "Thing",
+                "name": "DIY Resources",
+                "description": "Harm reduction information for DIY transition-related care"
+            }
+        ]
+    }
+}
+---
+
+<Main 
+    title={title}
+    description={description}
+    tags={tags}
+    type="article"
+    publishedTime={new Date("2025-01-23")}
+    modifiedTime={new Date()}
+    schema={resourcePageSchema}
+>
+
+    <section class="py-12">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-blue-400 text-transparent bg-clip-text" data-ani="slide-in-blur">
+                Transgender Resources
+            </h1>
+            <p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="200">
+                A collection of resources, support services, and information for the transgender community. 
+                <span class="text-pink-300">Remember, you're not alone in this journey. 💜</span>
+            </p>
+
+            <p class="text-xl text-zinc-300 mb-12" data-ani="fade-up" data-delay="200">
+                I made this page to help people like me find resources and information about transgender stuff.
+            </p>
+            
+            <div 
+                class="mb-12 p-6 rounded-xl bg-zinc-800/30 border border-pink-500/20 hover:bg-zinc-800/50 transition-all group"
+                data-ani="fade-up"
+                data-delay="300"
+            >
+                <a 
+                    href="/blog/2025/1/23/trans-help" 
+                    class="flex items-center gap-4 text-lg"
+                >
+                    <i class="fa-solid fa-pencil text-pink-400 group-hover:rotate-12 transition-transform"></i>
+                    <div>
+                        <span class="text-white group-hover:text-pink-400 transition-colors">Read more about this page</span>
+                        <p class="text-sm text-zinc-400 mt-1">
+                            Learn about the story behind this resource and how you can contribute to make it better 💜
+                        </p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right ml-auto text-pink-400 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Crisis Support -->
+            <div class="grid gap-8 mb-12">
+                <section 
+                    class="rounded-xl border border-red-500/50 bg-red-500/10 p-6 transform transition-all hover:scale-[1.02] hover:border-red-400" 
+                    data-ani="pop-up"
+                >
+                    <h2 class="text-2xl font-bold mb-4 text-red-400 flex items-center gap-3">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        24/7 Crisis Support
+                    </h2>
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        {[
+                            { name: "Suicide and Crisis Lifeline", contact: "988", href: "tel:988", icon: "fa-phone" },
+                            { name: "Crisis Text Line", contact: "741741", isText: true, icon: "fa-message" },
+                            { name: "Trans Lifeline", contact: "877-565-8860", href: "tel:877-565-8860", icon: "fa-phone" },
+                            { name: "LGBT National Hotline", contact: "888-843-4564", href: "tel:888-843-4564", icon: "fa-phone" },
+                        ].map((resource, index) => (
+                            <div 
+                                class="flex items-center gap-4 p-4 bg-red-500/5 rounded-lg hover:bg-red-500/10 transition-all"
+                                data-ani="fade-up"
+                                data-delay={`${index * 100}`}
+                            >
+                                <i class={`fa-solid ${resource.icon} text-2xl text-red-400`}></i>
+                                <div>
+                                    <div class="font-medium">{resource.name}</div>
+                                    {resource.href ? (
+                                        <a href={resource.href} class="text-red-400 hover:underline text-lg font-bold">{resource.contact}</a>
+                                    ) : (
+                                        <span class="text-red-400 text-lg font-bold">{resource.contact}</span>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <!-- Resource Sections -->
+                {[
+                    {
+                        title: "Mental Health Resources",
+                        icon: "fa-brain",
+                        color: "purple",
+                        items: [
+                            { name: "The Trevor Project", url: "https://www.thetrevorproject.org", desc: "24/7 Crisis Support" },
+                            { name: "Pride Counseling", url: "https://www.pridecounseling.com", desc: "LGBTQ+ Focused Therapy" },
+                            { name: "Trans Lifeline", url: "https://translifeline.org", desc: "Peer Support Services" }
+                        ]
+                    },
+                    {
+                        title: "Medical Resources",
+                        icon: "fa-heart",
+                        color: "pink",
+                        items: [
+                            { name: "WPATH Standards of Care", url: "https://www.wpath.org" },
+                            { name: "Planned Parenthood Gender Services", url: "https://www.plannedparenthood.org/learn/gender-identity/transgender" },
+                            { name: "FOLX Health", url: "https://www.folxhealth.com", desc: "Virtual Trans Healthcare" },
+                            { name: "Plume", url: "https://getplume.co", desc: "Telehealth HRT Services" }
+                        ]
+                    },
+                    {
+                        title: "Legal Resources",
+                        icon: "fa-scale-balanced",
+                        color: "blue",
+                        items: [
+                            { name: "Transgender Law Center", url: "https://transgenderlawcenter.org" },
+                            { name: "Lambda Legal", url: "https://www.lambdalegal.org" },
+                            { name: "National Center for Transgender Equality", url: "https://transequality.org" }
+                        ]
+                    },
+                    {
+                        title: "Community Support",
+                        icon: "fa-people-group",
+                        color: "emerald",
+                        items: [
+                            { name: "r/asktransgender", url: "https://www.reddit.com/r/asktransgender" },
+                            { name: "PFLAG", url: "https://pflag.org" },
+                            { name: "Trans Lifeline Community", url: "https://translifeline.org/community" }
+                        ]
+                    },
+                    {
+                        title: "Educational Resources",
+                        icon: "fa-book-open",
+                        color: "indigo",
+                        items: [
+                            { name: "The Gender Dysphoria Bible", url: "https://genderdysphoria.fyi" },
+                            { name: "Trans Hub 101", url: "https://www.transhub.org.au/101" },
+                            { name: "National Center for Transgender Equality - Know Your Rights", url: "https://transequality.org/know-your-rights" }
+                        ]
+                    }
+                ].map((section, index) => (
+                    <section 
+                        class={`rounded-xl border border-${section.color}-500/20 bg-zinc-800/50 p-6 transform transition-all hover:scale-[1.01] hover:bg-zinc-800/70`}
+                        data-ani="fade-up"
+                        data-delay={`${index * 200}`}
+                    >
+                        <h2 class={`text-2xl font-bold mb-6 text-${section.color}-400 flex items-center gap-3`}>
+                            <i class={`fa-solid ${section.icon}`}></i>
+                            {section.title}
+                        </h2>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            {section.items.map((item, itemIndex) => (
+                                <a 
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class={`flex items-center gap-4 p-4 rounded-lg bg-zinc-800/50 hover:bg-${section.color}-500/10 transition-all duration-300`}
+                                    data-ani="fade-up"
+                                    data-delay={`${(index * 200) + (itemIndex * 100)}`}
+                                >
+                                    <i class={`fa-solid fa-link text-${section.color}-400`}></i>
+                                    <div>
+                                        <div class="font-medium">{item.name}</div>
+                                        {item.desc && <div class="text-sm text-zinc-400">{item.desc}</div>}
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                ))}
+
+                <!-- DIY Resources Warning Section -->
+                <section 
+                    class="rounded-xl border border-yellow-500/50 bg-yellow-500/10 p-6 transform transition-all hover:scale-[1.01]" 
+                    data-ani="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-4 text-yellow-400 flex items-center gap-3">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        DIY Resources (Proceed with Caution)
+                    </h2>
+                    <div class="mb-4 p-4 bg-yellow-500/5 rounded-lg text-zinc-300">
+                        <strong class="text-yellow-400">⚠️ Warning:</strong> DIY hormone therapy carries significant risks. Always consult healthcare professionals when possible. These resources are provided for harm reduction purposes only.
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        {[
+                            { name: "DIY HRT Directory", url: "https://diyhrt.wiki" },
+                            { name: "HRT Cafe", url: "https://hrtcafe.net" },
+                            { name: "Trans Fem HRT Guide", url: "https://diyhrt.market/transfem-hrt-guide" }
+                        ].map((resource, index) => (
+                            <a 
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex items-center gap-4 p-4 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-all duration-300"
+                                data-ani="fade-up"
+                                data-delay={`${index * 100}`}
+                            >
+                                <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
+                                <span class="font-medium">{resource.name}</span>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</Main>
