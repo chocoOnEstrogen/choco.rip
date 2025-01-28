@@ -1,0 +1,27 @@
+<div 
+    class="fixed top-0 left-0 w-full h-1 bg-zinc-800 z-50"
+    aria-hidden="true"
+>
+    <div 
+        id="reading-progress" 
+        class="h-full bg-emerald-400 w-0 transition-all duration-150"
+    ></div>
+</div>
+
+<script>
+    const progressBar = document.getElementById('reading-progress');
+    
+    function updateReadingProgress() {
+        if (!progressBar) return;
+        
+        const winHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight - winHeight;
+        const scrollTop = window.scrollY;
+        const progress = (scrollTop / docHeight) * 100;
+        
+        progressBar.style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', updateReadingProgress);
+    window.addEventListener('resize', updateReadingProgress);
+</script> 

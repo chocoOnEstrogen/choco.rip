@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import Main from '../../layouts/Main.astro';
 import { calculateReadingTime } from '../../utils/blog';
+import TableOfContents from '../../components/TableOfContents.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('blog', ({ data }) => {
@@ -33,6 +35,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 ---
 
 <Main title={post.data.title} currentPage="/blog">
+    <ReadingProgress />
     <article class="max-w-3xl mx-auto py-12">
         <header class="mb-12">
             <div class="flex gap-2 mb-4">
@@ -53,8 +56,6 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
                 </time>
                 <span>•</span>
                 <span>{calculateReadingTime(post.body)} min read</span>
-                <span>•</span>
-                <span>By {post.data.author}</span>
             </div>
 
             {post.data.image && (
