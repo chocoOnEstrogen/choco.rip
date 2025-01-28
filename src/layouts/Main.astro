@@ -4,6 +4,8 @@ import { normalizeSocial } from '../utils/string'
 import config from '../config'
 import Modal from '../components/Modal.astro'
 import keywords from '../../public/keywords.json'
+import HomeAbout from '../components/HomeAbout.astro'
+
 
 interface Props {
 	title?: string
@@ -254,27 +256,52 @@ const allKeywords = [...keywords, ...tags]
 			</Modal>
 		</main>
 
-		<footer class="border-t border-zinc-800/50">
-			<div class="max-w-4xl mx-auto px-4 py-6">
-				<div class="flex justify-between items-center">
-					<p class="text-zinc-400" data-ani="fade-up">
-						© {new Date().getFullYear()}
-						{config.author.name} | This website is open source and licensed under the <a href="/open-source/license" class="text-emerald-400 hover:text-emerald-300 transition-colors">GNU General Public License v3.0</a>.
-					</p>
-					<div class="flex gap-4">
-						{
-							Object.keys(config.author.social).map((social, index) => (
-								<a
-									href={config.author.social[social]}
-									class="text-zinc-400 hover:text-emerald-400 transition-colors"
-									data-ani="fade-up"
-									data-delay={`${(index + 1) * 100}`}
-								>
-									{normalizeSocial(social)}
-								</a>
-							))
-						}
+		<footer class="border-t border-zinc-800/50 mt-auto">
+			<div class="max-w-4xl mx-auto px-4 py-8">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div class="space-y-4" data-ani="fade-up">
+						<h3 class="text-lg font-semibold text-emerald-400">&lt;{config.author.name} /&gt;</h3>
+						<p class="text-zinc-400 text-sm">
+							<HomeAbout />
+						</p>
 					</div>
+
+					<div class="space-y-4" data-ani="fade-up" data-delay="100">
+						<h3 class="text-lg font-semibold text-emerald-400">Quick Links</h3>
+						<ul class="space-y-2">
+							{navItems.map(item => (
+								<li>
+									<a href={item.path} class="text-zinc-400 hover:text-emerald-400 transition-colors text-sm">
+										{item.name}
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+
+					<div class="space-y-4" data-ani="fade-up" data-delay="200">
+						<h3 class="text-lg font-semibold text-emerald-400">Connect</h3>
+						<div class="flex gap-4">
+							{Object.entries(config.author.social).map(([key, value]) => (
+								<a
+									href={value}
+									class="text-zinc-400 hover:text-emerald-400 transition-colors"
+									title={normalizeSocial(key)}
+								>
+									<i class={`fab fa-${key} text-lg`}></i>
+								</a>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<div class="border-t border-zinc-800/50 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+					<p class="text-zinc-400 text-sm text-center md:text-left" data-ani="fade-up">
+						© {new Date().getFullYear()} {config.author.name} | Licensed under the <a href="/open-source/license" class="text-emerald-400 hover:text-emerald-300 transition-colors">GNU GPL v3.0</a> | <a href="https://github.com/chocoOnEstrogen/choco.rip" class="text-emerald-400 hover:text-emerald-300 transition-colors">Source Code</a>
+					</p>
+					<p class="text-zinc-400 text-sm" data-ani="fade-up" data-delay="100">
+						Made with <span class="text-red-500">♥</span> using <a href="https://astro.build" class="text-emerald-400 hover:text-emerald-300 transition-colors">Astro</a>
+					</p>
 				</div>
 			</div>
 		</footer>
