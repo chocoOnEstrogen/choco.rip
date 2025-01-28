@@ -233,7 +233,7 @@ const allKeywords = [...keywords, ...tags]
 										href={config.author.discord}
 										class="text-indigo-400 hover:text-indigo-300 transition-colors"
 									>
-										Join our community
+										{ config.author.discord.includes('https://discord.gg/') ? 'Join our community' : 'Add me on Discord!' }
 									</a>
 								</div>
 							)

@@ -13,7 +13,7 @@ const config: IConfig = {
             github: "https://github.com/chocoOnEstrogen",
             bluesky: "https://bsky.app/profile/choco.rip"
         },
-        discord: "https://discord.gg/x8A89TVJUv"
+        discord: "https://discord.com/users/1248626823638552701"
     },
     site: {
         language: "en",
