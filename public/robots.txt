@@ -7,10 +7,6 @@ Allow: /
 # Crisis support pages should be indexed for accessibility
 Allow: /trans-help
 
-# Sitemaps
-Sitemap: https://choco.rip/sitemap.xml
-Sitemap: https://choco.rip/sitemap-blog.xml
-
 # Crawl-delay for heavy crawlers
 Crawl-delay: 10
 
