@@ -67,7 +67,7 @@ npm run build
 
 ## 🆘 Crisis Support
 
-If you're in crisis, please visit our [crisis support resources](/trans-help#crisis-support) or call 988.
+If you're in crisis, please visit our [crisis support resources](https://choco.rip/trans-help#crisis-support) or call 988.
 
 ## 📝 License
 
@@ -77,7 +77,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 - Join our [Discord community](https://discord.gg/KtaNFKjFKQ)
 - Follow updates on [Bsky](https://bsky.app/profile/choco.rip)
-- Email: stella@choco.rip
+- Email: hello@choco.rip
 
 
 
