@@ -11,7 +11,8 @@ const config: IConfig = {
         email: "hello@choco.rip",
         social: {
             github: "https://github.com/chocoOnEstrogen",
-            bluesky: "https://bsky.app/profile/choco.rip"
+            bluesky: "https://bsky.app/profile/choco.rip",
+            x: "https://x.com/chocoOnEstrogen"
         },
         discord: "https://discord.com/users/1248626823638552701"
     },
