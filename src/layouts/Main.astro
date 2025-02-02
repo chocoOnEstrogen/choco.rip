@@ -5,6 +5,7 @@ import config from '../config'
 import Modal from '../components/Modal.astro'
 import keywords from '../../public/keywords.json'
 import HomeAbout from '../components/HomeAbout.astro'
+import Alert from '../components/ui/Alert.astro'
 
 
 interface Props {
@@ -25,7 +26,7 @@ const {
 	title = 'Stella | Software Engineer',
 	description = 'Full-stack developer specializing in React, Node.js, and cloud architecture',
 	image = '/images/social-card.jpg',
-	currentPage = '',
+	currentPage = Astro.url.pathname,
 	type = 'website',
 	publishedTime,
 	modifiedTime,
@@ -171,6 +172,15 @@ const allKeywords = [...keywords, ...tags]
 								Contact
 							</button>
 						</li>
+
+						<!-- <button data-modal-trigger="danger-modal" class="link-modal-opener" class:list={[
+							'hover:text-emerald-400 transition-colors link-modal-opener',
+							currentPage === '/contact' ?
+								'text-emerald-400'
+							:	'text-zinc-300',
+						]}>
+							Open Modal
+						</button> -->
 					</ul>
 				</div>
 			</nav>
@@ -254,6 +264,24 @@ const allKeywords = [...keywords, ...tags]
 					</div>
 				</div>
 			</Modal>
+
+			<Modal id="danger-modal" title="You are leaving the site" actionText="Yes, Leave">
+				<p class="text-zinc-400">
+					Are you sure you want to leave this site? You will be redirected to an external site.
+				</p>
+
+				<p class="text-zinc-400">
+					Clicking "Yes, Leave" will redirect you to the external site.
+				</p>
+
+				<code class="text-sm text-emerald-400 block" id="danger-link">
+					<!-- The external link will be displayed here -->
+				</code>
+			</Modal>
+
+			<button data-modal-trigger="danger-modal" class="link-modal-opener" style="display: none;">
+				Open Modal
+			</button>
 		</main>
 
 		<footer class="border-t border-zinc-800/50 mt-auto">
@@ -308,5 +336,8 @@ const allKeywords = [...keywords, ...tags]
 
 		<!-- Oneko -->
 		<script src="/js/oneko.js" is:inline></script>
+
+		<!-- Links and Hrefs -->
+		<script src="/js/links.js" is:inline></script>
 	</body>
 </html>

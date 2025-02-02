@@ -3,12 +3,16 @@ interface Props {
     id: string;
     title?: string;
     maxWidth?: string;
+    actionText?: string;
+    onAction?: () => void;
 }
 
 const { 
     id, 
     title, 
-    maxWidth = "max-w-2xl" // default max width
+    maxWidth = "max-w-2xl", // default max width
+    actionText = "Confirm",
+    onAction
 } = Astro.props;
 ---
 
@@ -30,6 +34,22 @@ const {
                 </h2>
             )}
             <slot />
+        </div>
+        <div class="flex justify-end gap-4 mt-4 p-6">
+            <button
+                class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                aria-label="Close modal"
+                data-close-modal
+            >
+                Cancel
+            </button>
+            <button
+                class="px-4 py-2 bg-emerald-500 text-white rounded hover:bg-emerald-600 transition-colors"
+                aria-label="Confirm action"
+                data-action-modal
+            >
+                {actionText}
+            </button>
         </div>
         <button
             class="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
@@ -73,6 +93,12 @@ const {
                 const closeButton = (e.target as HTMLElement).closest('[data-close-modal]');
                 if (closeButton) {
                     this.closeActiveModal();
+                }
+
+                // Handle action button clicks
+                const actionButton = (e.target as HTMLElement).closest('[data-action-modal]');
+                if (actionButton) {
+                    this.handleAction();
                 }
 
                 // Handle backdrop clicks
@@ -154,8 +180,18 @@ const {
                 this.focusedElementBeforeOpen = null;
             }, 200);
         }
+
+        private handleAction() {
+            if (this.activeModal) {
+                const actionEvent = new CustomEvent('modal-action', {
+                    detail: { modalId: this.activeModal.id },
+                });
+                document.dispatchEvent(actionEvent);
+                this.closeActiveModal();
+            }
+        }
     }
 
     // Initialize the modal manager
     ModalManager.getInstance();
-</script> 
+</script>
