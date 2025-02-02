@@ -1,0 +1,22 @@
+---
+import Main from '../layouts/Main.astro';
+import { getCollection } from 'astro:content';
+
+const file = (await getCollection('misc')).find(
+	(post: any) => post.slug === 'no_hello'
+);
+
+if (!file) {
+	throw new Error('Could not find file content');
+}
+
+const { Content } = await file.render();
+---
+
+<Main currentPage="/no-hello" title="No Hello" description='A Guide to Efficient Communication'>
+	<section class="max-w-4xl mx-auto px-4 py-12">
+		<div class="prose prose-invert prose-lg max-w-none markdown">
+			<Content />
+		</div>
+	</section>
+</Main>
