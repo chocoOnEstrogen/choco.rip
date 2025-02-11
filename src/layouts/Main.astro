@@ -172,15 +172,6 @@ const allKeywords = [...keywords, ...tags]
 								Contact
 							</button>
 						</li>
-
-						<!-- <button data-modal-trigger="danger-modal" class="link-modal-opener" class:list={[
-							'hover:text-emerald-400 transition-colors link-modal-opener',
-							currentPage === '/contact' ?
-								'text-emerald-400'
-							:	'text-zinc-300',
-						]}>
-							Open Modal
-						</button> -->
 					</ul>
 				</div>
 			</nav>
@@ -214,7 +205,7 @@ const allKeywords = [...keywords, ...tags]
 							<h3 class="font-semibold">Email</h3>
 							<a
 								href={`mailto:${config.author.email}`}
-								class="text-emerald-400 hover:text-emerald-300 transition-colors"
+								class="text-emerald-400 hover:text-emerald-300 transition-colors no-modal"
 								>{config.author.email}</a
 							>
 						</div>
@@ -241,7 +232,7 @@ const allKeywords = [...keywords, ...tags]
 									<h3 class="font-semibold">Discord Server</h3>
 									<a
 										href={config.author.discord}
-										class="text-indigo-400 hover:text-indigo-300 transition-colors"
+										class="text-indigo-400 hover:text-indigo-300 transition-colors no-modal"
 									>
 										{ config.author.discord.includes('https://discord.gg/') ? 'Join our community' : 'Add me on Discord!' }
 									</a>
@@ -255,7 +246,7 @@ const allKeywords = [...keywords, ...tags]
 							Object.entries(config.author.social).map(([key, value]) => (
 								<a
 									href={value}
-									class="flex items-center justify-center p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors group"
+									class="flex items-center justify-center p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors group no-modal"
 								>
 									<i class={`fab fa-${key}`} />
 								</a>

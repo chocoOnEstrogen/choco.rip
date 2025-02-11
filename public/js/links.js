@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     links.forEach(link => {
         const linkDomain = new URL(link.href).hostname;
-        if (linkDomain && linkDomain !== currentDomain) {
+        // Check if it has a 'no-modal' class
+        const noModal = link.classList.contains('no-modal');
+        if (linkDomain && linkDomain !== currentDomain && !noModal) {
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
 
