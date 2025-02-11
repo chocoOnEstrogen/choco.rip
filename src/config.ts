@@ -12,7 +12,8 @@ const config: IConfig = {
         social: {
             github: "https://github.com/chocoOnEstrogen",
             bluesky: "https://bsky.app/profile/choco.rip",
-            x: "https://x.com/chocoOnEstrogen"
+            x: "https://x.com/chocoOnEstrogen",
+            mastodon: "https://tech.lgbt/@choco"
         },
         discord: "https://discord.com/users/1248626823638552701"
     },
