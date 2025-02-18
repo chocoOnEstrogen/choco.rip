@@ -10,7 +10,7 @@ const config: IConfig = {
         role: "Software Engineer",
         email: "hello@choco.rip",
         social: {
-            github: "https://github.com/chocoOnEstrogen",
+            github: "https://github.com/korpselgbt",
             bluesky: "https://bsky.app/profile/choco.rip",
             x: "https://x.com/chocoOnEstrogen",
             mastodon: "https://tech.lgbt/@choco"
