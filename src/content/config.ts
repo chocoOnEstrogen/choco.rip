@@ -27,4 +27,14 @@ const miscCollection = defineCollection({
 export const collections = {
 	blog: blogCollection,
 	misc: miscCollection,
+	garden: defineCollection({
+		schema: z.object({
+			title: z.string(),
+			description: z.string(),
+			lastModified: z.date(),
+			category: z.string(),
+			stage: z.enum(['seedling', 'budding', 'mature']),
+			tags: z.array(z.string())
+		})
+	})
 };

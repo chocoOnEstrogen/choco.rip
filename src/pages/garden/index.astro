@@ -1,0 +1,127 @@
+---
+import Layout from "../../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import config from "../../config";
+
+const gardenNotes = await getCollection("garden");
+const sortedNotes = gardenNotes.sort((a, b) => b.data.lastModified.valueOf() - a.data.lastModified.valueOf());
+
+const categories = [...new Set(gardenNotes.map(note => note.data.category))];
+---
+
+<Layout title="Digital Garden" description="Welcome to my forest of ideas - where thoughts take root, concepts branch out, and knowledge blooms.">
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex items-center gap-3 mb-8">
+            <h1 class="text-4xl font-bold">The Forest of Knowledge</h1>
+            <div class="relative group">
+                <button 
+                    class="p-1 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
+                    aria-label="Learn more about the Digital Garden"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                    </svg>
+                </button>
+                <div class="absolute z-10 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 -right-4 top-8 w-96 p-4 bg-white dark:bg-zinc-800 rounded-lg shadow-lg border border-emerald-100/20 dark:border-emerald-900/20">
+                    <h3 class="font-semibold mb-3 text-emerald-700 dark:text-emerald-300">About the Digital Garden</h3>
+                    <div class="space-y-4 text-sm prose dark:prose-invert prose-emerald max-w-none">
+                        <div>
+                            <h4 class="font-medium text-zinc-900 dark:text-zinc-50 mb-1">What is a Digital Garden?</h4>
+                            <p class="text-zinc-700 dark:text-zinc-300">A digital garden is a personal knowledge base that grows organically. Unlike traditional blogs, these are living documents that evolve as understanding deepens and new connections form.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-zinc-900 dark:text-zinc-50 mb-1">Navigation</h4>
+                            <p class="text-zinc-700 dark:text-zinc-300">Browse through different Groves (categories) or use tags to discover related content. Each note shows its growth stage and last update time.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-medium text-zinc-900 dark:text-zinc-50 mb-2">Growth Stages</h4>
+                            <ul class="space-y-2 ml-1">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-medium">Seedling</span>
+                                    <span class="text-zinc-600 dark:text-zinc-400">- Initial thoughts and early explorations</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    <span class="text-amber-600 dark:text-amber-400 font-medium">Budding</span>
+                                    <span class="text-zinc-600 dark:text-zinc-400">- Developing ideas with growing substance</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                                    <span class="text-teal-600 dark:text-teal-400 font-medium">Mature</span>
+                                    <span class="text-zinc-600 dark:text-zinc-400">- Well-researched, comprehensive notes</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-8">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+                Welcome to my forest of ideas - where thoughts take root, concepts branch out, and knowledge blooms. 
+                Like a living forest, these notes grow organically, intertwining with each other and reaching ever upward.
+            </p>
+        </div>
+
+        <div class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Groves</h2>
+            <div class="flex flex-wrap gap-2">
+                {categories.map(category => (
+                    <a 
+                        href={`#${category}`}
+                        class="px-4 py-2 bg-emerald-100/10 dark:bg-emerald-900/20 rounded-full hover:bg-emerald-100/20 dark:hover:bg-emerald-900/30 transition"
+                    >
+                        {category}
+                    </a>
+                ))}
+            </div>
+        </div>
+
+        <div class="space-y-12">
+            {categories.map(category => (
+                <section id={category as string}>
+                    <h2 class="text-2xl font-semibold mb-6">{category}</h2>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        {sortedNotes
+                            .filter(note => note.data.category === category)
+                            .map(note => (
+                                <article class="p-6 bg-gradient-to-br from-emerald-50/5 to-transparent dark:from-emerald-900/10 dark:to-transparent rounded-lg shadow-sm hover:shadow-md transition border border-emerald-100/10 dark:border-emerald-900/20">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="text-sm text-emerald-700/70 dark:text-emerald-300/70">
+                                            Last tended: {new Date(note.data.lastModified).toLocaleDateString()}
+                                        </span>
+                                        <span class={`px-2 py-1 text-xs rounded ${
+                                            note.data.stage === 'seedling' ? 'bg-emerald-100/20 text-emerald-700 dark:text-emerald-300' :
+                                            note.data.stage === 'budding' ? 'bg-amber-100/20 text-amber-700 dark:text-amber-300' :
+                                            'bg-teal-100/20 text-teal-700 dark:text-teal-300'
+                                        }`}>
+                                            {note.data.stage}
+                                        </span>
+                                    </div>
+                                    <h3 class="text-xl font-semibold mb-2">
+                                        <a href={`/garden/${note.slug}`} class="hover:text-emerald-500 transition">
+                                            {note.data.title}
+                                        </a>
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        {note.data.description}
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-2">
+                                        {note.data.tags.map(tag => (
+                                            <span class="px-2 py-1 bg-emerald-100/10 dark:bg-emerald-900/20 rounded text-sm text-emerald-700 dark:text-emerald-300">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </article>
+                            ))}
+                    </div>
+                </section>
+            ))}
+        </div>
+    </main>
+</Layout>
