@@ -23,7 +23,7 @@ interface Props {
 const {
 	title = `${config.author.name} | Software Engineer`,
 	description = 'Full-stack developer specializing in React, Node.js, and cloud architecture',
-	image = '/images/bg.gif',
+	image = `${config.url}/images/bg.gif`,
 	type = 'website',
 	publishedTime,
 	modifiedTime,
@@ -62,8 +62,9 @@ const personSchema = {
 
 
 const allKeywords = [...keywords, ...tags]
+const path = Astro.url.pathname
 
-const currentPage = Astro.url.pathname
+const __URL__ = `${config.url}${path}`
 ---
 
 <!doctype html>
@@ -77,7 +78,7 @@ const currentPage = Astro.url.pathname
 		<title>{title} | {config.author.name}</title>
 		<meta name="description" content={description} />
 		<meta name="author" content={config.author.name} />
-		<link rel="canonical" href={canonicalURL} />
+		<link rel="canonical" href={__URL__} />
 		{noindex && <meta name="robots" content="noindex,nofollow" />}
 		{allKeywords.length > 0 && <meta name="keywords" content={allKeywords.join(', ')} />}
 
@@ -92,8 +93,8 @@ const currentPage = Astro.url.pathname
 		<meta property="og:type" content={type} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL(image, Astro.url)} />
-		<meta property="og:url" content={Astro.url} />
+		<meta property="og:image" content={image} />
+		<meta property="og:url" content={__URL__} />
 		<meta property="og:site_name" content={config.author.name} />
 		{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
 		{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
@@ -105,7 +106,7 @@ const currentPage = Astro.url.pathname
 		<meta name="twitter:creator" content={config.author.name} />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={new URL(image, Astro.url)} />
+		<meta name="twitter:image" content={image} />
 
 		<!-- Structured Data -->
 		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
