@@ -1,7 +1,7 @@
 @import './animations.css';
 @import './markdown.css';
 @import './matrix.css';
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,7 +27,7 @@ a:hover {
 
 
 body {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Fira Code', monospace;
   min-height: 100vh;
   line-height: 1.5;
   font-size: 14px;
