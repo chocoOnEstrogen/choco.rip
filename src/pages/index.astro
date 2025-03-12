@@ -180,10 +180,18 @@ import config from '../config'
             }
 
             this.addToHistory(input, output);
+            
+            // Wait for animations to complete before scrolling
+            setTimeout(() => {
+                this.scrollToBottom();
+            }, 500); // Adjust timing based on your animation durations
         }
 
         scrollToBottom() {
-            window.scrollTo(0, document.body.scrollHeight);
+            const terminalContent = document.querySelector('.terminal-content');
+            if (terminalContent) {
+                terminalContent.scrollTop = terminalContent.scrollHeight;
+            }
         }
     }
 
