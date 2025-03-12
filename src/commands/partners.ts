@@ -15,7 +15,7 @@ export class PartnersCommand extends Command {
     ];
 
     constructor() {
-        super('partners', 'Display information about my partners');
+        super('partners', 'Display information about my partners', undefined, true);
     }
 
     async execute(): Promise<string> {

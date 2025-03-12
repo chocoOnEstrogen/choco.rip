@@ -12,10 +12,11 @@ export interface ParsedArgs {
 }
 
 export abstract class Command {
-    constructor(public name: string, public description: string, public args?: CommandArgs) {
+    constructor(public name: string, public description: string, public args?: CommandArgs, public privated?: boolean) {
         this.name = name;
         this.description = description;
         this.args = args || {};
+        this.privated = privated || false;
     }
 
     protected parseArgs(args: string[]): ParsedArgs {
@@ -101,6 +102,6 @@ export class CommandManager {
     }
 
     getCommands(): Command[] {
-        return Array.from(this.commands.values());
+        return Array.from(this.commands.values()).filter(command => !command.privated);
     }
 }
