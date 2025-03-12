@@ -1,0 +1,178 @@
+---
+import Main from "../layouts/Main.astro"
+import Terminal from "../components/Terminal.astro"
+
+const title = "Resource Collection"
+const description = "A curated collection of helpful resources and tools"
+
+// Structured data for better SEO
+const resourcePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": title,
+    "description": description,
+    "url": Astro.url.toString(),
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {
+                "@type": "Thing",
+                "name": "Development Tools",
+                "description": "Essential tools for software development"
+            },
+            {
+                "@type": "Thing",
+                "name": "Learning Resources",
+                "description": "Educational materials and documentation"
+            },
+            {
+                "@type": "Thing",
+                "name": "Community Support",
+                "description": "Forums and community platforms"
+            }
+        ]
+    }
+}
+
+// Define resource sections
+const resourceSections = [
+    {
+        title: "Development Tools",
+        icon: "fa-code",
+        color: "blue",
+        items: [
+            {
+                name: "Visual Studio Code",
+                url: "https://code.visualstudio.com",
+                desc: "Popular Code Editor"
+            },
+            {
+                name: "GitHub",
+                url: "https://github.com",
+                desc: "Version Control Platform"
+            },
+            {
+                name: "Docker",
+                url: "https://www.docker.com",
+                desc: "Container Platform"
+            }
+        ]
+    },
+    {
+        title: "Learning Resources",
+        icon: "fa-book",
+        color: "green",
+        items: [
+            {
+                name: "MDN Web Docs",
+                url: "https://developer.mozilla.org",
+                desc: "Web Development Documentation"
+            },
+            {
+                name: "freeCodeCamp",
+                url: "https://www.freecodecamp.org",
+                desc: "Free Coding Tutorials"
+            },
+            {
+                name: "Dev.to",
+                url: "https://dev.to",
+                desc: "Developer Community"
+            }
+        ]
+    },
+    {
+        title: "Community Support",
+        icon: "fa-users",
+        color: "purple",
+        items: [
+            {
+                name: "Stack Overflow",
+                url: "https://stackoverflow.com",
+                desc: "Q&A Platform"
+            },
+            {
+                name: "Discord",
+                url: "https://discord.com",
+                desc: "Community Chat"
+            },
+            {
+                name: "Reddit Programming",
+                url: "https://www.reddit.com/r/programming",
+                desc: "Programming Discussions"
+            }
+        ]
+    }
+]
+
+// Emergency/Important resources
+const importantResources = [
+    {
+        name: "GitHub Status",
+        url: "https://www.githubstatus.com",
+        icon: "fa-circle-check"
+    },
+    {
+        name: "Down Detector",
+        url: "https://downdetector.com",
+        icon: "fa-triangle-exclamation"
+    }
+]
+
+const date = "03/12/2025"
+const lastUpdated = new Date(date).toLocaleDateString()
+---
+
+<Main title={title} description={description}>
+    <Terminal>
+        <div class="space-y-8">
+            <header class="space-y-4">
+                <h1 class="text-2xl font-bold text-everforest-green">
+                    Developer Resources
+                </h1>
+                <p class="text-everforest-fg/80">
+                    A curated collection of essential tools, learning materials, and community resources for developers.
+                </p>
+            </header>
+
+            <!-- Important Resources Section -->
+            <section class="space-y-4">
+                <h2 class="text-xl font-bold text-everforest-yellow">Important Links</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {importantResources.map(resource => (
+                        <a href={resource.url} 
+                           class="flex items-center gap-3 p-4 rounded-lg bg-everforest-bg-light hover:bg-everforest-bg-dim transition-colors">
+                            <i class={`fas ${resource.icon} text-everforest-green`}></i>
+                            <span>{resource.name}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <!-- Main Resources Sections -->
+            {resourceSections.map(section => (
+                <section class="space-y-4">
+                    <h2 class="text-xl font-bold text-everforest-blue flex items-center gap-2">
+                        <i class={`fas ${section.icon}`}></i>
+                        {section.title}
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {section.items.map(item => (
+                            <a href={item.url} 
+                               class="block p-4 rounded-lg bg-everforest-bg-light hover:bg-everforest-bg-dim transition-colors">
+                                <h3 class="font-bold text-everforest-green">{item.name}</h3>
+                                <p class="text-sm text-everforest-fg/80">{item.desc}</p>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            ))}
+
+            <!-- Footer Note -->
+            <footer class="mt-8 pt-4 border-t border-everforest-gray/20">
+                <p class="text-everforest-fg/60 text-sm">
+                    This resource collection is regularly updated. Last updated: {lastUpdated}
+                </p>
+            </footer>
+        </div>
+    </Terminal>
+</Main> 

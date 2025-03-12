@@ -1,85 +1,114 @@
 .markdown {
-    @apply text-zinc-300 leading-relaxed;
+    @apply text-everforest-fg leading-relaxed font-mono text-sm;
 }
 
 /* Headings */
 .markdown h1 {
-    @apply text-4xl font-bold mb-6 text-white;
+    @apply text-2xl font-bold mb-4 text-everforest-green;
+    border-bottom: 1px solid theme('colors.everforest.gray');
+    padding-bottom: 0.5rem;
 }
 
 .markdown h2 {
-    @apply text-3xl font-bold mb-4 mt-8 text-white;
+    @apply text-xl font-bold mb-3 mt-6 text-everforest-blue;
 }
 
 .markdown h3 {
-    @apply text-2xl font-bold mb-3 mt-6 text-white;
+    @apply text-lg font-bold mb-2 mt-4 text-everforest-aqua;
 }
 
 .markdown h4 {
-    @apply text-xl font-bold mb-2 mt-4 text-white;
+    @apply text-base font-bold mb-2 mt-4 text-everforest-purple;
 }
 
 /* Paragraphs and Lists */
 .markdown p {
-    @apply mb-4;
+    @apply mb-4 leading-relaxed;
 }
 
 .markdown ul {
-    @apply list-disc list-inside mb-4 space-y-2;
+    @apply mb-4 space-y-1;
 }
 
 .markdown ol {
-    @apply list-decimal list-inside mb-4 space-y-2;
+    @apply mb-4 pl-8 space-y-1 list-decimal;
+    counter-reset: item;
 }
 
 .markdown li {
     @apply ml-4;
+    position: relative;
+}
+
+.markdown ul li::before {
+    content: '>';
+    @apply text-everforest-green;
+    position: absolute;
+    left: -1rem;
+}
+
+.markdown ol li {
+    @apply relative ml-4;
+    display: block;
+}
+
+.markdown ol li::before {
+    content: '•';
+    @apply absolute text-everforest-yellow;
+    left: -1rem;
 }
 
 /* Links */
 .markdown a {
-    @apply text-emerald-400 hover:text-emerald-300 transition-colors underline-offset-2 hover:underline;
+    @apply text-everforest-blue no-underline border-b border-transparent;
+    transition: border-color 0.2s ease;
+}
+
+.markdown a:hover {
+    @apply border-everforest-blue;
 }
 
 /* Blockquotes */
 .markdown blockquote {
-    @apply border-l-4 border-emerald-400 pl-4 my-4 italic text-zinc-400;
+    @apply pl-4 my-4 text-everforest-gray;
+    border-left: 2px solid theme('colors.everforest.gray');
 }
 
 /* Code blocks */
 .markdown pre {
-    @apply bg-zinc-800/50 p-4 rounded-lg mb-4 overflow-x-auto;
+    @apply bg-everforest-bg p-4 rounded mb-4 overflow-x-auto border border-everforest-gray/20;
 }
 
 .markdown code {
-    @apply bg-zinc-800/50 px-1.5 py-0.5 rounded text-sm font-mono text-emerald-400;
+    @apply bg-everforest-bg px-1.5 py-0.5 rounded text-sm font-mono text-everforest-green;
 }
 
 .markdown pre code {
-    @apply bg-transparent p-0 text-zinc-300;
+    @apply bg-transparent p-0 text-everforest-fg border-none;
 }
 
 /* Tables */
 .markdown table {
-    @apply w-full mb-4 border-collapse;
+    @apply w-full mb-4 border-collapse text-sm;
 }
 
 .markdown th {
-    @apply bg-zinc-800 text-left p-2 font-bold border border-zinc-700;
+    @apply bg-everforest-bg-light text-left p-2 font-bold border border-everforest-gray/20 text-everforest-blue;
 }
 
 .markdown td {
-    @apply p-2 border border-zinc-700;
+    @apply p-2 border border-everforest-gray/20;
 }
 
 /* Horizontal Rule */
 .markdown hr {
-    @apply my-8 border-zinc-700;
+    @apply my-6 border-everforest-gray/20;
+    border-style: dashed;
 }
 
 /* Images */
 .markdown img {
-    @apply max-w-full h-auto rounded-lg my-4;
+    @apply max-w-full h-auto rounded border border-everforest-gray/20 my-4;
 }
 
 /* Custom Elements */
@@ -88,39 +117,103 @@
 }
 
 .markdown summary {
-    @apply cursor-pointer font-semibold text-emerald-400 hover:text-emerald-300 transition-colors;
+    @apply cursor-pointer font-bold text-everforest-yellow;
+}
+
+.markdown summary:hover {
+    @apply text-everforest-orange;
 }
 
 /* Task Lists */
 .markdown input[type="checkbox"] {
-    @apply mr-2;
+    @apply mr-2 accent-everforest-green;
 }
 
 /* Emphasis */
 .markdown strong {
-    @apply font-bold text-white;
+    @apply font-bold text-everforest-yellow;
 }
 
 .markdown em {
-    @apply italic text-zinc-300;
+    @apply italic text-everforest-purple;
 }
 
 /* Definition Lists */
 .markdown dl {
-    @apply mb-4;
+    @apply mb-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2;
 }
 
 .markdown dt {
-    @apply font-bold text-white;
+    @apply font-bold text-everforest-blue;
 }
 
 .markdown dd {
-    @apply ml-4 mb-2;
+    @apply text-everforest-fg;
 }
 
-/* Footnotes */
-.markdown .footnotes {
-    @apply mt-8 pt-8 border-t border-zinc-700;
+/* Keyboard Shortcuts */
+.markdown kbd {
+    @apply px-2 py-1 text-xs font-mono bg-everforest-bg-light rounded border border-everforest-gray/20 text-everforest-yellow;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Code Block Titles */
+.markdown .code-title {
+    @apply -mb-2 bg-everforest-bg-light px-4 py-2 font-mono text-sm text-everforest-gray rounded-t border border-everforest-gray/20 border-b-0;
+}
+
+/* Inline Code Highlighting */
+.markdown .highlight {
+    @apply bg-everforest-bg-light text-everforest-green px-1 py-0.5 rounded;
+}
+
+/* File Tree */
+.markdown .file-tree {
+    @apply font-mono text-sm my-4 pl-4;
+}
+
+.markdown .file-tree-item {
+    @apply relative pl-4;
+}
+
+.markdown .file-tree-item::before {
+    content: '├──';
+    @apply text-everforest-gray absolute left-0;
+}
+
+.markdown .file-tree-item:last-child::before {
+    content: '└──';
+}
+
+/* Command Output */
+.markdown .command-output {
+    @apply bg-everforest-bg-light p-4 rounded font-mono text-sm my-4 border border-everforest-gray/20;
+    position: relative;
+}
+
+.markdown .command-output::before {
+    content: '$';
+    @apply text-everforest-green absolute left-2;
+}
+
+/* Error Messages */
+.markdown .error-message {
+    @apply bg-everforest-red/10 text-everforest-red p-4 rounded font-mono text-sm my-4 border border-everforest-red/20;
+}
+
+/* Success Messages */
+.markdown .success-message {
+    @apply bg-everforest-green/10 text-everforest-green p-4 rounded font-mono text-sm my-4 border border-everforest-green/20;
+}
+
+/* Warning Messages */
+.markdown .warning-message {
+    @apply bg-everforest-yellow/10 text-everforest-yellow p-4 rounded font-mono text-sm my-4 border border-everforest-yellow/20;
+}
+
+/* Info Messages */
+.markdown .info-message {
+    @apply bg-everforest-blue/10 text-everforest-blue p-4 rounded font-mono text-sm my-4 border border-everforest-blue/20;
 }
 
 /* Custom Containers */

@@ -34,7 +34,25 @@ export default {
 					400: '#FACC15',
 					500: '#EAB308',
 				},
+				everforest: {
+					bg: '#2B3339',
+					'bg-dim': '#232A2E',
+					'bg-light': '#333C43',
+					fg: '#D3C6AA',
+					red: '#E67E80',
+					green: '#A7C080',
+					yellow: '#DBBC7F',
+					blue: '#7FBBB3',
+					purple: '#D699B6',
+					aqua: '#83C092',
+					orange: '#E69875',
+					gray: '#7A8478'
+				}
 			},
+			fontFamily: {
+				mono: ['JetBrains Mono', 'monospace'],
+				sans: ['Inter', 'system-ui', 'sans-serif']
+			}
 		},
 	},
 	plugins: [],

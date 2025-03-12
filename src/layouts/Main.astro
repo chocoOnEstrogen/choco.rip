@@ -2,11 +2,9 @@
 import '../styles/global.css'
 import { normalizeSocial } from '../utils/string'
 import config from '../config'
-import Modal from '../components/Modal.astro'
 import keywords from '../../public/keywords.json'
-import HomeAbout from '../components/HomeAbout.astro'
-import Alert from '../components/ui/Alert.astro'
-
+import { ViewTransitions } from 'astro:transitions'
+import { makePath } from '../utils/string'
 
 interface Props {
 	title?: string
@@ -23,10 +21,9 @@ interface Props {
 }
 
 const {
-	title = 'Stella | Software Engineer',
+	title = `${config.author.name} | Software Engineer`,
 	description = 'Full-stack developer specializing in React, Node.js, and cloud architecture',
 	image = '/images/social-card.jpg',
-	currentPage = Astro.url.pathname,
 	type = 'website',
 	publishedTime,
 	modifiedTime,
@@ -65,6 +62,8 @@ const personSchema = {
 
 
 const allKeywords = [...keywords, ...tags]
+
+const currentPage = Astro.url.pathname
 ---
 
 <!doctype html>
@@ -126,209 +125,61 @@ const allKeywords = [...keywords, ...tags]
 		<!-- Preconnect to external domains -->
 		<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
 		<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+		<!-- Add JetBrains Mono font -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+		<ViewTransitions />
 	</head>
-	<body class="bg-zinc-900 text-zinc-100">
-		<header
-			class="fixed w-full top-0 z-50 backdrop-blur-sm border-b border-zinc-800/50"
-		>
-			<nav class="max-w-4xl mx-auto px-4 py-3">
-				<div class="flex items-center justify-between">
-					<a
-						href="/"
-						class="text-xl font-bold hover:text-emerald-400 transition-colors"
-						data-ani="fade-down"
-					>
-						&lt;{config.author.name} /&gt;
-					</a>
-					<ul class="flex gap-6">
-						{
-							navItems.map((item, index) => (
-								<li data-ani="fade-down" data-delay={`${(index + 1) * 100}`}>
-									<a
-										href={item.path}
-										class:list={[
-											'hover:text-emerald-400 transition-colors',
-											currentPage === item.path ?
-												'text-emerald-400'
-											:	'text-zinc-300',
-										]}
-									>
-										{item.name}
-									</a>
-								</li>
-							))
-						}
-
-						<li data-ani="fade-down" data-delay={`${(navItems.length + 1) * 100}`}>
-							<button
-								data-modal-trigger="contact-modal"
-								class:list={[
-									'hover:text-emerald-400 transition-colors',
-									currentPage === '/contact' ?
-										'text-emerald-400'
-									:	'text-zinc-300',
-								]}
-							>
-								Contact
-							</button>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</header>
-
-		<main class="max-w-4xl mx-auto px-4 pt-24 pb-12">
-			<slot />
-
-			<Modal id="contact-modal" title="Get in Touch">
-				<div class="space-y-6">
-					<div
-						class="flex items-center gap-4 p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors"
-					>
-						<div class="bg-emerald-500/20 p-3 rounded-full">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-emerald-500"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-								></path>
-							</svg>
-						</div>
-						<div>
-							<h3 class="font-semibold">Email</h3>
-							<a
-								href={`mailto:${config.author.email}`}
-								class="text-emerald-400 hover:text-emerald-300 transition-colors no-modal"
-								>{config.author.email}</a
-							>
-						</div>
-					</div>
-
-					<div
-						class="flex items-center gap-4 p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors"
-					>
-						<div class="bg-indigo-500/20 p-3 rounded-full">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-indigo-500"
-								fill="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"
-								></path>
-							</svg>
-						</div>
-						{
-							config.author.discord && (
-								<div>
-									<h3 class="font-semibold">Discord Server</h3>
-									<a
-										href={config.author.discord}
-										class="text-indigo-400 hover:text-indigo-300 transition-colors no-modal"
-									>
-										{ config.author.discord.includes('https://discord.gg/') ? 'Join our community' : 'Add me on Discord!' }
-									</a>
-								</div>
-							)
-						}
-					</div>
-
-					<div class="grid grid-cols-3 gap-4">
-						{
-							Object.entries(config.author.social).map(([key, value]) => (
-								<a
-									href={value}
-									class="flex items-center justify-center p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/80 transition-colors group no-modal"
-								>
-									<i class={`fab fa-${key}`} />
-								</a>
-							))
-						}
-					</div>
-				</div>
-			</Modal>
-
-			<Modal id="danger-modal" title="You are leaving the site" actionText="Yes, Leave">
-				<p class="text-zinc-400">
-					Are you sure you want to leave this site? You will be redirected to an external site.
-				</p>
-
-				<p class="text-zinc-400">
-					Clicking "Yes, Leave" will redirect you to the external site.
-				</p>
-
-				<code class="text-sm text-emerald-400 block" id="danger-link">
-					<!-- The external link will be displayed here -->
-				</code>
-			</Modal>
-
-			<button data-modal-trigger="danger-modal" class="link-modal-opener" style="display: none;">
-				Open Modal
-			</button>
-		</main>
-
-		<footer class="border-t border-zinc-800/50 mt-auto">
-			<div class="max-w-4xl mx-auto px-4 py-8">
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div class="space-y-4" data-ani="fade-up">
-						<h3 class="text-lg font-semibold text-emerald-400">&lt;{config.author.name} /&gt;</h3>
-						<p class="text-zinc-400 text-sm">
-							<HomeAbout />
-						</p>
-					</div>
-
-					<div class="space-y-4" data-ani="fade-up" data-delay="100">
-						<h3 class="text-lg font-semibold text-emerald-400">Quick Links</h3>
-						<ul class="space-y-2">
-							{navItems.map(item => (
-								<li>
-									<a href={item.path} class="text-zinc-400 hover:text-emerald-400 transition-colors text-sm">
-										{item.name}
-									</a>
-								</li>
-							))}
-						</ul>
-					</div>
-
-					<div class="space-y-4" data-ani="fade-up" data-delay="200">
-						<h3 class="text-lg font-semibold text-emerald-400">Connect</h3>
-						<div class="flex gap-4">
-							{Object.entries(config.author.social).map(([key, value]) => (
-								<a
-									href={value}
-									class="text-zinc-400 hover:text-emerald-400 transition-colors"
-									title={normalizeSocial(key)}
-								>
-									<i class={`fab fa-${key} text-lg`}></i>
-								</a>
-							))}
-						</div>
-					</div>
-				</div>
-
-				<div class="border-t border-zinc-800/50 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-					<p class="text-zinc-400 text-sm text-center md:text-left" data-ani="fade-up">
-						© {new Date().getFullYear()} {config.author.name} | Licensed under the <a href="/open-source/license" class="text-emerald-400 hover:text-emerald-300 transition-colors">GNU GPL v3.0</a> | <a href="https://github.com/chocoOnEstrogen/choco.rip" class="text-emerald-400 hover:text-emerald-300 transition-colors">Source Code</a>
-					</p>
-					<p class="text-zinc-400 text-sm" data-ani="fade-up" data-delay="100">
-						Made with <span class="text-red-500">♥</span> using <a href="https://astro.build" class="text-emerald-400 hover:text-emerald-300 transition-colors">Astro</a>
-					</p>
+	<body class="bg-everforest-bg text-everforest-fg min-h-screen p-4 md:p-8">
+		<main class="terminal-window max-w-4xl mx-auto h-full">
+			<div class="terminal-header">
+				<div class="terminal-button close" id="close-button"></div>
+				<div class="terminal-button minimize" id="minimize-button"></div>
+				<div class="terminal-button maximize" id="maximize-button"></div>
+				<div class="ml-4 text-sm text-everforest-gray">{config.author.name.toLowerCase()}@archlinux - {title}</div>
+			</div>
+			
+			<div class="terminal-content overflow-y-auto max-h-[calc(100vh-8rem)]">
+				<div class="terminal-content-area">
+					<slot />
 				</div>
 			</div>
-		</footer>
 
-		<!-- Oneko -->
+			<button id="restore-button" class="fixed bottom-4 right-4 bg-everforest-bg-light text-everforest-fg px-4 py-2 rounded shadow-lg" style="display: none;">Restore Window</button>
+		</main>
+
 		<script src="/js/oneko.js" is:inline></script>
+		<script>
+			const closeButton = document.getElementById('close-button');
+			const minimizeButton = document.getElementById('minimize-button');
+			const maximizeButton = document.getElementById('maximize-button');
+			const restoreButton = document.getElementById('restore-button');
+			const terminalWindow = document.querySelector('.terminal-window') as HTMLElement;
 
-		<!-- Links and Hrefs -->
-		<script src="/js/links.js" is:inline></script>
+			closeButton.addEventListener('click', () => {
+				const wantsToClose = confirm('Are you sure you want to close this window?');
+				if (wantsToClose) {
+					window.close();
+				}
+			});
+
+			minimizeButton.addEventListener('click', () => {
+				alert("Cannot minimize window");
+				return;
+			});
+
+			maximizeButton.addEventListener('click', () => {
+				if (!document.fullscreenElement) {
+					terminalWindow.requestFullscreen().catch(err => {
+						console.log(`Error attempting to enable fullscreen: ${err.message}`);
+					});
+				} else {
+					document.exitFullscreen();
+				}
+			});
+		</script>
 	</body>
 </html>

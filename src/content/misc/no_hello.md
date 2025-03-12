@@ -27,13 +27,15 @@ Example:
 
 > "Hi Stella, I’m working on [project] and need your input on [specific detail]. Here’s a link to the document: [link]. Let me know if you need more info!"
 
-## Preferred Communication Channels
+## Contact Information & Availability
 
-- **Email**: [hello@choco.rip](mailto:hello@choco.rip), [choco@choco.rip](mailto:choco@choco.rip)
-- **Socials**: [https://choco.rip/about](https://choco.rip/about)
-- **Time Zone**: JST (Japan Standard Time)
+- **Primary Email**: [hello@choco.rip](mailto:hello@choco.rip)
+- **Secondary Email**: [choco@choco.rip](mailto:choco@choco.rip) 
+- **Social Profiles**: [choco.rip/about](https://choco.rip/about)
+- **Time Zone**: Eastern Time (ET/UTC-5)
+- **Working Hours**: Monday-Friday, 9:00-17:00 ET
 
-Please keep in mind that I’m in JST, so responses may be delayed if you’re in a different time zone.
+I aim to respond within 24-48 business hours. Due to time zone differences, responses may be delayed for contacts outside of Eastern Time. For urgent matters, please indicate the time-sensitivity in your message.
 
 ## Why This Matters
 

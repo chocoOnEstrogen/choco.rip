@@ -1,91 +1,192 @@
 ---
 import Main from '../layouts/Main.astro'
 import config from '../config'
-import HomeAbout from '../components/HomeAbout.astro'
-import Modal from '../components/Modal.astro'
-import tech from '../json/tech.json'
-import projects from '../json/projects.json'
 ---
 
 <Main currentPage="/" title="Home">
-	<section class="min-h-[80vh] flex flex-col justify-center">
-		<div class="space-y-6">
-			<h1 class="text-5xl font-bold" data-ani="slide-in-blur">
-				Hi, I'm <span class="text-emerald-400" data-ani="glow-pulse"
-					>{config.author.name}</span
-				>
-				<span data-ani="float" class="inline-block">👋</span>
-			</h1>
-			<p
-				class="text-xl text-zinc-300 max-w-2xl"
-				data-ani="fade-up"
-				data-delay="200"
-			>
-				<HomeAbout />
-			</p>
-			<div class="flex gap-4" data-ani="fade-up" data-delay="400">
-				<a
-					href="/projects"
-					class="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-full transition-colors"
-				>
-					View My Work
-				</a>
-				<button
-					data-modal-trigger="contact-modal"
-					class="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-full transition-colors"
-				>
-					Contact Me
-				</button>
-			</div>
-		</div>
-	</section>
-
-	<section class="py-20">
-		<h2 class="text-3xl font-bold mb-10" data-ani="fade-up">
-			Technologies I Work With
-		</h2>
-		<div class="flex flex-wrap gap-4">
-			{tech.map((t, index) => (
-				<div 
-					class={`flex items-center gap-3 px-5 py-2.5 rounded-full text-sm 
-					${t.color} backdrop-blur-sm 
-					shadow-lg transition-all duration-300
-					hover:scale-105 hover:shadow-xl`}
-					data-ani="pop-up"
-					data-delay={`${(index + 1) * 100}`}
-				>
-					<i class={`${t.icon} text-xl`}></i>
-					<span class="font-medium">{t.name}</span>
-				</div>
-			))}
-		</div>
-	</section>
-
-	<section class="py-20">
-		<h2 class="text-3xl font-bold mb-10" data-ani="fade-up">
-			Featured Projects
-		</h2>
-		<div class="grid md:grid-cols-2 gap-6">
-			{
-				projects.filter((project) => project.featured).map((project, index) => (
-					<a
-						href={project.link || project.git}
-						class="block p-6 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors"
-						data-ani="fade-up"
-						data-delay={`${(index + 1) * 200}`}
-					>
-						<h3 class="text-xl font-bold mb-2">{project.title}</h3>
-						<p class="text-zinc-300 mb-4">{project.description}</p>
-						<div class="flex gap-2">
-							{project.tags.map((tag) => (
-								<span class="px-3 py-1 bg-zinc-700 rounded-full text-xs">
-									{tag}
-								</span>
-							))}
-						</div>
-					</a>
-				))
-			}
-		</div>
-	</section>
+    <div class="space-y-6">
+        <div class="terminal-history" id="terminal-history">
+            <!-- Command history will be populated here -->
+        </div>
+        <div class="command-line flex">
+            <span class="command-prompt">{config.author.name.toLowerCase()}@archlinux:~$&nbsp;</span>
+            <span class="command-input flex-1">
+                <input 
+                    type="text" 
+                    id="terminal-input"
+                    class="command-input-text bg-transparent w-full focus:outline-none" 
+                    autocomplete="off"
+                    spellcheck="false"
+                />
+            </span>
+        </div>
+    </div>
 </Main>
+
+
+<script>
+    import config from '../config';
+    import { loadCommands } from '../utils/commandLoader';
+
+    class Terminal {
+        history: HTMLElement;
+        input: HTMLInputElement;
+        commandHistory: string[] = [];
+        historyIndex: number = -1;
+        currentInputBeforeHistory: string = '';
+        commandManager = loadCommands();
+
+        constructor() {
+            this.history = document.getElementById('terminal-history')!;
+            this.input = document.getElementById('terminal-input') as HTMLInputElement;
+            this.setupEventListeners();
+            this.showWelcomeMessage();
+        }
+
+        showWelcomeMessage() {
+            const welcome = document.createElement('div');
+            welcome.className = 'mb-4';
+            welcome.innerHTML = `
+                <div class="text-everforest-green mb-2" data-ani="typing" data-delay="200">
+                    Welcome to ${config.author.name}'s Terminal
+                </div>
+                <div class="text-everforest-fg" data-ani="fade-up" data-delay="1000">
+                    Type 'help' to see available commands
+                </div>
+            `;
+            this.history.appendChild(welcome);
+        }
+
+        setupEventListeners() {
+            this.input.addEventListener('keydown', (e) => {
+                // Handle special key combinations
+                if (e.ctrlKey) {
+                    switch (e.key.toLowerCase()) {
+                        case 'l': // Ctrl+L: Clear terminal
+                            e.preventDefault();
+                            this.executeCommand('clear', [], this.input.value);
+                            return;
+                        case 'c': // Ctrl+C: Cancel current input
+                            e.preventDefault();
+                            this.addToHistory(this.input.value, '^C');
+                            this.input.value = '';
+                            return;
+                        case 'u': // Ctrl+U: Clear current line
+                            e.preventDefault();
+                            this.input.value = '';
+                            return;
+                    }
+                }
+
+                // Handle arrow keys for history navigation
+                switch (e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        this.navigateHistory('up');
+                        return;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        this.navigateHistory('down');
+                        return;
+                    case 'Enter':
+                        (async () => {
+                            const fullCommand = this.input.value.trim();
+                            if (fullCommand) {
+                                this.commandHistory.push(fullCommand);
+                                this.historyIndex = this.commandHistory.length;
+                                const [command, ...args] = fullCommand.split(' ');
+                                await this.executeCommand(command, args, fullCommand);
+                            }
+                            this.input.value = '';
+                        })();
+                        return;
+                }
+            });
+
+            // Auto-focus input when clicking anywhere in terminal
+            document.querySelector('.terminal-content')?.addEventListener('click', () => {
+                this.input.focus();
+            });
+        }
+
+        navigateHistory(direction: 'up' | 'down') {
+            if (this.commandHistory.length === 0) return;
+
+            if (this.historyIndex === -1) {
+                this.currentInputBeforeHistory = this.input.value;
+            }
+
+            if (direction === 'up') {
+                if (this.historyIndex > 0) {
+                    this.historyIndex--;
+                    this.input.value = this.commandHistory[this.historyIndex];
+                }
+            } else {
+                if (this.historyIndex < this.commandHistory.length - 1) {
+                    this.historyIndex++;
+                    this.input.value = this.commandHistory[this.historyIndex];
+                } else {
+                    this.historyIndex = this.commandHistory.length;
+                    this.input.value = this.currentInputBeforeHistory;
+                }
+            }
+
+            // Move cursor to end of input
+            setTimeout(() => {
+                this.input.selectionStart = this.input.selectionEnd = this.input.value.length;
+            }, 0);
+        }
+
+        addToHistory(fullCommand: string, output: string) {
+            const entry = document.createElement('div');
+            entry.className = 'mb-2';
+            
+            // Command input with typing animation
+            const commandDiv = document.createElement('div');
+            commandDiv.className = 'flex';
+            commandDiv.innerHTML = `
+                <span class="command-prompt">${config.author.name.toLowerCase()}@archlinux:~$&nbsp;</span>
+                <span data-ani="typing">${fullCommand}</span>
+            `;
+            entry.appendChild(commandDiv);
+
+            // Command output with fade-up animation
+            if (output) {
+                const outputDiv = document.createElement('div');
+                outputDiv.className = 'command-output whitespace-pre-line';
+                outputDiv.setAttribute('data-ani', 'fade-up');
+                outputDiv.setAttribute('data-delay', '300');
+                outputDiv.innerHTML = output;
+                entry.appendChild(outputDiv);
+            }
+
+            this.history.appendChild(entry);
+            this.scrollToBottom();
+        }
+
+        async executeCommand(command: string, args: string[], input: string) {
+            if (!command) return;
+
+            const output = await this.commandManager.executeCommand(command, args);
+            
+            if (command === 'clear') {
+                const oldHistory = this.history;
+                oldHistory.style.animation = 'fadeOut 0.3s forwards';
+                setTimeout(() => {
+                    this.history.innerHTML = '';
+                    oldHistory.style.animation = '';
+                }, 300);
+                return;
+            }
+
+            this.addToHistory(input, output);
+        }
+
+        scrollToBottom() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    }
+
+    // Initialize terminal when the page loads
+    new Terminal();
+</script>

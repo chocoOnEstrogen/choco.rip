@@ -1,8 +1,40 @@
-<h1 align="center">choco.rip</h1>
+# Terminal Portfolio & Resource Hub
 
-<p align="center">
-  My personal website and trans resources hub, built with Astro and TailwindCSS.
-</p>
+A modern, terminal-style personal website and resource hub built with Astro and TailwindCSS, featuring an interactive command-line interface.
+
+## Core Features
+
+- Interactive terminal interface with custom commands
+- Markdown-based blog with syntax highlighting
+- Comprehensive resource directories
+- Mobile-responsive design
+- Accessibility-focused UI
+- SEO optimization with structured data
+
+## Technology Stack
+
+- **Framework**: Astro
+- **Styling**: TailwindCSS
+- **Content**: Markdown/MDX
+- **Deployment**: Vercel/Netlify
+
+## Development
+
+```bash
+# Clone repository
+git clone https://github.com/chocoOnEstrogen/choco.rip
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Project Structure
 
 ## 🌈 About
 
@@ -71,11 +103,10 @@ If you're in crisis, please visit our [crisis support resources](https://choco.r
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the GPL v3 License - see the [LICENSE](./LICENSE) file for details.
 
 ## 💖 Support
 
-- Join our [Discord community](https://discord.gg/KtaNFKjFKQ)
 - Follow updates on [Bsky](https://bsky.app/profile/choco.rip)
 - Email: hello@choco.rip
 

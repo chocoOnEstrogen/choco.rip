@@ -1,13 +1,222 @@
 @import './animations.css';
 @import './markdown.css';
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  background-color: theme('colors.everforest.bg');
+  color: theme('colors.everforest.fg');
 }
 
+a {
+  color: theme('colors.everforest.blue');
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+} 
+
+a:hover {
+  color: theme('colors.everforest.blue');
+  border-bottom-color: theme('colors.everforest.blue');
+}
+
+
 body {
-    font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+::selection {
+  background: theme('colors.everforest.blue');
+  color: theme('colors.everforest.bg');
+}
+
+.terminal-window {
+  @apply bg-everforest-bg-dim rounded-lg border border-everforest-gray/20 shadow-lg;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.terminal-window:fullscreen {
+  @apply p-0;
+  max-width: none;
+}
+
+.terminal-window:fullscreen .terminal-content {
+  height: calc(100vh - 3rem); /* Account for header height */
+  max-height: none;
+}
+
+.terminal-header {
+  @apply flex items-center gap-2 p-3 border-b border-everforest-gray/20;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.terminal-button {
+  @apply w-3 h-3 rounded-full;
+  position: relative;
+}
+
+.terminal-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.terminal-button:hover::after {
+  opacity: 0.4;
+}
+
+.terminal-button.close { 
+  @apply bg-everforest-red;
+}
+.terminal-button.close::after {
+  background: #ff0000;
+}
+
+.terminal-button.minimize { 
+  @apply bg-everforest-yellow;
+}
+.terminal-button.minimize::after {
+  background: #ffff00;
+}
+
+.terminal-button.maximize { 
+  @apply bg-everforest-green;
+}
+.terminal-button.maximize::after {
+  background: #00ff00;
+}
+
+.terminal-content {
+  @apply p-4 font-mono text-everforest-fg;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, transparent 10px);
+}
+
+.command-line {
+  @apply flex items-center;
+  position: relative;
+  min-height: 1.5em;
+}
+
+.command-prompt {
+  @apply text-everforest-green whitespace-pre;
+  opacity: 0.9;
+  user-select: none;
+}
+
+.command-input-text {
+  @apply text-everforest-fg caret-everforest-green;
+  background: transparent;
+  position: relative;
+  min-width: 1ch;
+  display: inline-block;
+}
+
+/* Create a persistent cursor block */
+.command-input-text::after {
+  content: '';
+  position: absolute;
+  right: -1ch;
+  top: 0;
+  width: 0.8ch;
+  height: 1.2em;
+  background-color: theme('colors.everforest.green');
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { 
+    opacity: 1;
+  }
+  50% { 
+    opacity: 0;
+  }
+}
+
+.command-input {
+  @apply flex-1;
+  position: relative;
+  min-width: 1ch;
+}
+
+.command-input-text:focus {
+  outline: none;
+  caret-color: transparent;
+}
+
+/* Ensure text contrast */
+.command-input-text::selection {
+  background: theme('colors.everforest.blue');
+  color: theme('colors.everforest.bg');
+}
+
+.command-output {
+  @apply text-everforest-fg ml-8 mt-1;
+  opacity: 0.85;
+}
+
+.terminal-history {
+  @apply space-y-4;
+}
+
+.terminal-history div {
+  position: relative;
+}
+
+.terminal-history div::before {
+  content: '';
+  position: absolute;
+  left: -1rem;
+  width: 2px;
+  height: 100%;
+  background: theme('colors.everforest.gray');
+  opacity: 0.1;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.everforest.gray');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.everforest.blue');
+}
+
+/* Command input autofill override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: theme('colors.everforest.fg');
+  -webkit-box-shadow: 0 0 0px 1000px theme('colors.everforest.bg-dim') inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Override any potential conflicting styles */
+input.command-input-text {
+  color: theme('colors.everforest.fg') !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: theme('colors.everforest.fg') !important;
 }
