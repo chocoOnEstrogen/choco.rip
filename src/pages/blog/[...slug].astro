@@ -4,27 +4,33 @@ import Main from '../../layouts/Main.astro';
 import Terminal from '../../components/Terminal.astro';
 import { calculateReadingTime } from '../../utils/blog';
 
-export async function getStaticPaths() {
-    const posts = await getCollection('blog', ({ data }) => {
-        return import.meta.env.PROD ? !data.draft : true;
+const { slug } = Astro.params;
+const [year, month, day, postSlug] = slug.split('/');
+
+const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+});
+
+const post = posts.find(post => {
+    const postYear = post.data.pubDate.getFullYear().toString();
+    const postMonth = (post.data.pubDate.getMonth() + 1).toString();
+    const postDay = post.data.pubDate.getDate().toString();
+    const match = postYear === year && 
+                 postMonth === month && 
+                 postDay === day && 
+                 post.slug === postSlug;
+    return match;
+});
+
+if (!post) {
+    return new Response(null, {
+        status: 404,
+        statusText: 'Not found'
     });
 
-    return posts.map(post => ({
-        params: { 
-            // Create URL pattern: YYYY/MM/DD/slug
-            slug: `${post.data.pubDate.getFullYear()}/${
-                post.data.pubDate.getMonth() + 1
-            }/${
-                post.data.pubDate.getDate()
-            }/${post.slug}` 
-        },
-        props: { post },
-    }));
-}
-
-const { post } = Astro.props;
 const { Content } = await post.render();
 const readingTime = calculateReadingTime(post.body);
+
 const formattedDate = new Date(post.data.pubDate).toISOString();
 ---
 
