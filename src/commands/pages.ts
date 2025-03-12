@@ -34,7 +34,7 @@ const pages: Page[] = [
     },
     {
         name: 'Trans Resources',
-        path: '/trans-resources',
+        path: '/trans-help',
         description: 'Collection of essential tools, learning materials, and community resources for transgender individuals.'
     }
 ];
