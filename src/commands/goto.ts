@@ -19,8 +19,8 @@ export class GotoCommand extends Command {
     }
 
     async execute(args: string[]): Promise<string> {
-        const page = args[0];
-        const timeout = parseInt(args[1]) || 0;
+        const page = this.parseArgs(args).page as string;
+        const timeout = (this.parseArgs(args).timeout as number) || 0;
 
         if (timeout > 0) {
             setTimeout(() => {
