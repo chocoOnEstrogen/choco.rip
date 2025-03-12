@@ -27,6 +27,7 @@ if (!post) {
         status: 404,
         statusText: 'Not found'
     });
+}
 
 const { Content } = await post.render();
 const readingTime = calculateReadingTime(post.body);
