@@ -8,6 +8,7 @@ import { ProjectsCommand } from './projects';
 import { TechCommand } from './tech';
 import { PagesCommand } from './pages';
 import { SocialsCommand } from './socials';
+import { CfgCommand } from './cfg';
 export const commands = [
     new ClearCommand(),
     new PartnersCommand(),
@@ -19,4 +20,5 @@ export const commands = [
     new TechCommand(),
     new PagesCommand(),
     new SocialsCommand(),
+    new CfgCommand(),
 ];

@@ -5,47 +5,37 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-color: transparent;
+    background-color: rgb(43, 51, 57);
+    font-family: 'Fira Code', monospace;
     overflow: hidden;
+    /* Optimize performance */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Node styling */
-.matrix-node {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: theme('colors.everforest.green');
-    border-radius: 50%;
-    opacity: 0.5;
-    pointer-events: none;
-    animation: nodeFloat 20s infinite linear;
+/* Ensure canvas takes up full space */
+.matrix-background canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* Prevent any potential scaling artifacts */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
-/* Line styling */
-.matrix-line {
-    position: absolute;
-    height: 1px;
-    opacity: 0.2;
-    background: theme('colors.everforest.green');
-    pointer-events: none;
-    transform-origin: left center;
+/* Hide matrix background when printing */
+@media print {
+    .matrix-background {
+        display: none;
+    }
 }
 
-/* Node animations */
-@keyframes nodeFloat {
-    0% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(10px, 10px);
-    }
-    50% {
-        transform: translate(0, 20px);
-    }
-    75% {
-        transform: translate(-10px, 10px);
-    }
-    100% {
-        transform: translate(0, 0);
+/* Reduce animation intensity on devices that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .matrix-background {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 } 

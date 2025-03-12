@@ -2,70 +2,80 @@ class MatrixBackground {
     constructor() {
         this.canvas = document.createElement('canvas');
         this.canvas.className = 'matrix-background';
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { alpha: false }); // Optimize for non-transparent canvas
         document.body.appendChild(this.canvas);
         
-        this.nodes = [];
-        this.nodeCount = Math.floor(window.innerWidth * window.innerHeight / 25000); // Dynamic node count
-        this.maxDistance = Math.min(150, window.innerWidth / 8); // Adaptive max distance
+        // Configuration
+        this.fontSize = 14;
+        this.columns = 0;
+        this.drops = [];
+        this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ0123456789'.split('');
         this.lastTime = 0;
-        this.fps = 60;
+        this.fps = 30;
         this.fpsInterval = 1000 / this.fps;
+        
+        // Colors
+        this.bgColor = 'rgb(43, 51, 57)';
+        this.fadeColor = 'rgba(43, 51, 57, 0.95)'; 
+        this.textColor = 'rgba(167, 192, 128, 0.8)';
         
         this.resizeCanvas();
         this.init();
-        this.animate();
+        this.animate(0); // Pass initial timestamp
         this.handleResize();
     }
 
     resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.ctx.strokeStyle = 'rgba(141, 193, 73, 0.15)'; // Everforest green
-        this.ctx.lineWidth = 1;
+        const dpr = window.devicePixelRatio || 1;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Set display size
+        this.canvas.style.width = width + 'px';
+        this.canvas.style.height = height + 'px';
+        
+        // Set actual size in memory
+        this.canvas.width = width * dpr;
+        this.canvas.height = height * dpr;
+        
+        // Scale context to match device pixel ratio
+        this.ctx.scale(dpr, dpr);
+        
+        this.ctx.font = `${this.fontSize}px 'Fira Code', monospace`;
+        this.columns = Math.floor(width / this.fontSize);
     }
 
     init() {
-        this.nodes = Array.from({length: this.nodeCount}, () => ({
-            x: Math.random() * this.canvas.width,
-            y: Math.random() * this.canvas.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2 + 1
-        }));
+        // Initialize drops with random starting positions
+        this.drops = Array(this.columns).fill(0).map(() => 
+            Math.floor(Math.random() * -100)
+        );
     }
 
-    drawNodes() {
-        this.ctx.fillStyle = 'rgba(141, 193, 73, 0.5)';
-        this.nodes.forEach(node => {
-            this.ctx.beginPath();
-            this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-            this.ctx.fill();
+    draw() {
+        // Create fade effect
+        this.ctx.fillStyle = this.fadeColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.fillStyle = this.textColor;
+        
+        for (let i = 0; i < this.drops.length; i++) {
+            const x = i * this.fontSize;
+            const y = this.drops[i] * this.fontSize;
             
-            // Update position with boundary check
-            node.x += node.vx;
-            node.y += node.vy;
+            if (y > 0) { // Only draw visible characters
+                const char = this.characters[Math.floor(Math.random() * this.characters.length)];
+                this.ctx.fillText(char, x, y);
+            }
             
-            if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
-            if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
-        });
-    }
-
-    drawLines() {
-        this.ctx.beginPath();
-        for (let i = 0; i < this.nodes.length; i++) {
-            for (let j = i + 1; j < this.nodes.length; j++) {
-                const dx = this.nodes[i].x - this.nodes[j].x;
-                const dy = this.nodes[i].y - this.nodes[j].y;
-                const distance = dx * dx + dy * dy; // Faster than Math.hypot
-                
-                if (distance < this.maxDistance * this.maxDistance) {
-                    this.ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
-                    this.ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
+            // Reset drop when it reaches bottom or randomly
+            if (y > this.canvas.height) {
+                if (Math.random() > 0.98) {
+                    this.drops[i] = 0;
                 }
             }
+            this.drops[i]++;
         }
-        this.ctx.stroke();
     }
 
     animate(currentTime) {
@@ -75,23 +85,22 @@ class MatrixBackground {
         if (elapsed < this.fpsInterval) return;
         
         this.lastTime = currentTime - (elapsed % this.fpsInterval);
-        
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawNodes();
-        this.drawLines();
+        this.draw();
     }
 
     handleResize() {
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                this.resizeCanvas();
-                this.nodeCount = Math.floor(window.innerWidth * window.innerHeight / 25000);
-                this.maxDistance = Math.min(150, window.innerWidth / 8);
-                this.init();
-            }, 250);
-        });
+        const debounce = (fn, delay) => {
+            let timeoutId;
+            return (...args) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => fn.apply(this, args), delay);
+            };
+        };
+
+        window.addEventListener('resize', debounce(() => {
+            this.resizeCanvas();
+            this.init();
+        }, 250));
     }
 }
 

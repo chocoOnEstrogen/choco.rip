@@ -3,6 +3,8 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import Compress from 'astro-compress';
 import tailwind from '@astrojs/tailwind';
+import vercel from "@astrojs/vercel";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,4 +19,6 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
   },
+  adapter: vercel(),
+  output: "server",
 });

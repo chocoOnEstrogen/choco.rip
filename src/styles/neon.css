@@ -1,0 +1,52 @@
+.neon-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: rgb(43, 51, 57);
+    overflow: hidden;
+    /* Performance optimizations */
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.neon-background canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* Optimize canvas rendering */
+    image-rendering: optimizeSpeed;
+    /* Ensure smooth particle trails */
+    filter: blur(0);
+    -webkit-filter: blur(0);
+}
+
+/* Fallback for browsers that don't support canvas */
+.no-canvas .neon-background {
+    background: rgb(43, 51, 57);
+    background: radial-gradient(
+        circle,
+        rgba(167, 192, 128, 0.1) 0%,
+        rgba(127, 187, 179, 0.1) 50%,
+        rgba(214, 153, 182, 0.1) 100%
+    );
+}
+
+/* Hide neon effect when printing */
+@media print {
+    .neon-background {
+        display: none;
+    }
+}
+
+/* Reduce animation intensity for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .neon-background {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+} 

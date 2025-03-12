@@ -5,6 +5,7 @@ import config from '../config'
 import keywords from '../../public/keywords.json'
 import { ViewTransitions } from 'astro:transitions'
 import { makePath } from '../utils/string'
+import type { WebSettings } from '../classes/command'
 
 interface Props {
 	title?: string
@@ -65,6 +66,18 @@ const allKeywords = [...keywords, ...tags]
 const path = Astro.url.pathname
 
 const __URL__ = `${config.url}${path}`
+
+// Default web settings if cookie is not available during SSG
+const webSettings: WebSettings = {
+	background: 'nodes-and-links',
+	oneko: false,
+	...JSON.parse(Astro.cookies.get('web-settings')?.value || '{}')
+}
+
+console.log(webSettings)
+console.log(Astro.cookies.get('web-settings')?.value)
+
+const background = webSettings.background
 ---
 
 <!doctype html>
@@ -135,7 +148,7 @@ const __URL__ = `${config.url}${path}`
 		<ViewTransitions />
 	</head>
 	<body class="text-everforest-fg min-h-screen p-4 md:p-8">
-		<script src="/js/matrix.js" is:inline></script>
+		{background && <script src={`/js/${background}.js`} is:inline></script>}
 		<main class="terminal-window max-w-4xl mx-auto h-full">
 			<div class="terminal-header">
 				<div class="terminal-button close" id="close-button"></div>
@@ -153,12 +166,11 @@ const __URL__ = `${config.url}${path}`
 			<button id="restore-button" class="fixed bottom-4 right-4 bg-everforest-bg-light text-everforest-fg px-4 py-2 rounded shadow-lg" style="display: none;">Restore Window</button>
 		</main>
 
-		<script src="/js/oneko.js" is:inline></script>
+		{webSettings.oneko && <script src="/js/oneko.js" is:inline></script>}
 		<script>
 			const closeButton = document.getElementById('close-button');
 			const minimizeButton = document.getElementById('minimize-button');
 			const maximizeButton = document.getElementById('maximize-button');
-			const restoreButton = document.getElementById('restore-button');
 			const terminalWindow = document.querySelector('.terminal-window') as HTMLElement;
 
 			closeButton.addEventListener('click', () => {

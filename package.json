@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.1.5",
+    "@astrojs/vercel": "^8.1.2",
     "astro": "^5.1.9",
     "astro-compress": "^2.3.6",
     "rehype-katex": "^7.0.1",

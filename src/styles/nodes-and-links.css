@@ -1,0 +1,51 @@
+.matrix-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+/* Node styling */
+.matrix-node {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: theme('colors.everforest.green');
+    border-radius: 50%;
+    opacity: 0.5;
+    pointer-events: none;
+    animation: nodeFloat 20s infinite linear;
+}
+
+/* Line styling */
+.matrix-line {
+    position: absolute;
+    height: 1px;
+    opacity: 0.2;
+    background: theme('colors.everforest.green');
+    pointer-events: none;
+    transform-origin: left center;
+}
+
+/* Node animations */
+@keyframes nodeFloat {
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(10px, 10px);
+    }
+    50% {
+        transform: translate(0, 20px);
+    }
+    75% {
+        transform: translate(-10px, 10px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+} 

@@ -1,6 +1,8 @@
 @import './animations.css';
 @import './markdown.css';
+@import './nodes-and-links.css';
 @import './matrix.css';
+@import './neon.css';
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
