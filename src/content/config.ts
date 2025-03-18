@@ -24,17 +24,24 @@ const miscCollection = defineCollection({
 	})
 })
 
+const bskyListsCollection = defineCollection({
+	type: 'content',
+	schema: z.object({
+		title: z.string().min(1, "Title is required"),
+		description: z.string().min(1, "Description is required"),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		items: z.array(z.object({
+			name: z.string().min(1, "Name is required"),
+			url: z.string().url("URL must be a valid URL"),
+			description: z.string().min(1, "Description is required"),
+		})),
+		url: z.string().url("URL must be a valid URL"),
+	})
+})
+
 export const collections = {
 	blog: blogCollection,
 	misc: miscCollection,
-	garden: defineCollection({
-		schema: z.object({
-			title: z.string(),
-			description: z.string(),
-			lastModified: z.date(),
-			category: z.string(),
-			stage: z.enum(['seedling', 'budding', 'mature']),
-			tags: z.array(z.string())
-		})
-	})
+	bskyLists: bskyListsCollection
 };

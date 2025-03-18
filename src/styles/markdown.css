@@ -107,8 +107,17 @@
 }
 
 /* Images */
+.markdown figure {
+    @apply my-8 text-center;
+}
+
 .markdown img {
-    @apply max-w-full h-auto rounded border border-everforest-gray/20 my-4;
+    @apply max-w-full h-auto rounded border border-everforest-gray/20 my-0;
+}
+
+/* Style the figcaption */
+.markdown figcaption {
+    @apply block mt-2 text-sm text-everforest-gray italic text-center;
 }
 
 /* Custom Elements */
@@ -122,6 +131,20 @@
 
 .markdown summary:hover {
     @apply text-everforest-orange;
+}
+
+.markdown summary::before {
+    content: '🔍';
+    @apply mr-2;
+}
+
+.markdown summary:hover::before {
+    @apply text-everforest-orange;
+}
+
+.markdown summary::after {
+    content: ' (click to expand)';
+    @apply mr-2;
 }
 
 /* Task Lists */

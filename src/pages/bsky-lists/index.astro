@@ -1,0 +1,41 @@
+---
+import Main from "../../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import Terminal from "../../components/Terminal.astro";
+
+const lists = await getCollection('bskyLists').then(lists => lists.sort((a, b) => {
+    return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+}));
+---
+
+<Main currentPage="/bsky-lists" title="BSky Lists" description="A collection of lists that are useful for Bluesky">
+    <Terminal>
+        <h2 class="text-xl font-bold mb-6 text-everforest-green">BSky Lists</h2>
+        <div class="space-y-8">
+            {lists.map((list) => {
+                const formattedDate = new Date(list.data.pubDate).toISOString();
+                return (
+                    <article class="group">
+                        <a href={`/bsky-lists/${list.slug}`} class="block space-y-2 hover:no-underline">
+                            <h3 class="text-lg font-bold text-everforest-blue group-hover:text-everforest-aqua transition-colors">
+                                {list.data.title}
+                            </h3>
+                            <div class="flex items-center gap-4 text-sm text-everforest-gray">
+                                <time datetime={formattedDate}>
+                                    {new Date(list.data.pubDate).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </time>
+                                <span>·</span>
+                                <span>{list.data.items.length} items</span>
+                            </div>
+                            <p class="text-everforest-fg/80">{list.data.description}</p>
+                        </a>
+                    </article>
+                );
+            })}
+        </div>
+    </Terminal>
+</Main>

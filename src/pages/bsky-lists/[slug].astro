@@ -1,0 +1,137 @@
+---
+import { getCollection } from 'astro:content';
+import Main from '../../layouts/Main.astro';
+import Terminal from '../../components/Terminal.astro';
+
+const { slug } = Astro.params;
+const lists = await getCollection('bskyLists');
+const list = lists.find(list => list.slug === slug);
+
+if (!list) {
+    return new Response(null, {
+        status: 404,
+        statusText: 'Not found'
+    });
+}
+
+const { Content } = await list.render();
+const formattedDate = new Date(list.data.pubDate).toISOString();
+
+const MAX_ITEMS = 1;
+const showExpandButton = list.data.items.length > MAX_ITEMS;
+---
+
+<Main title={list.data.title} currentPage="/bsky-lists">
+    <Terminal>
+        <article class="space-y-6">
+            <header class="space-y-4">
+                <div class="flex justify-between items-start">
+                    <h1 class="text-2xl font-bold text-everforest-green">
+                        {list.data.title}
+                    </h1>
+                    <a href={list.data.url} target="_blank" class="px-4 py-2 bg-everforest-aqua text-everforest-bg rounded-lg hover:bg-everforest-green transition-colors"> Subscribe to List </a>
+                </div>
+                
+                <div class="flex items-center gap-4 text-sm text-everforest-gray">
+                    <time datetime={formattedDate}>
+                        {new Date(list.data.pubDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}
+                    </time>
+                    <span>·</span>
+                    <span>{list.data.items.length} items</span>
+                </div>
+
+                <p class="text-everforest-fg/80 text-lg italic">
+                    {list.data.description}
+                </p>
+
+                <div class="bg-everforest-bg-light p-4 rounded-lg border border-everforest-gray/20">
+                    <h4 class="text-everforest-purple font-bold mb-2" id="removal-request">Removal Request</h4>
+                    <p class="text-everforest-fg/80 text-sm">
+                        If you wish to be removed from this list, please send an email to 
+                        <a href="mailto:hello@choco.rip" class="text-everforest-aqua hover:text-everforest-green transition-colors font-medium">
+                            hello@choco.rip
+                        </a> with:
+                    </p>
+                    <ul class="text-sm mt-2 space-y-1">
+                        <li class="text-everforest-fg/80">• Subject: "Remove from {list.data.title}"</li>
+                        <li class="text-everforest-fg/80">• Your Bluesky handle in the email body</li>
+                    </ul>
+                </div>
+            </header>
+
+            <hr class="border-everforest-gray/20" />
+
+            <div class="space-y-6">
+                {list.data.items.slice(0, showExpandButton ? MAX_ITEMS : undefined).map((item) => (
+                    <div class="bg-everforest-bg-light p-4 rounded-lg">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-everforest-blue">
+                                {item.name}
+                            </h3>
+                            <a 
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-sm text-everforest-aqua hover:text-everforest-green transition-colors"
+                            >
+                                View Profile →
+                            </a>
+                        </div>
+                        <p class="text-everforest-fg/80">{item.description}</p>
+                    </div>
+                ))}
+
+                {showExpandButton && (
+                    <div class="hidden" id="remaining-items">
+                        {list.data.items.slice(MAX_ITEMS).map((item) => (
+                            <div class="bg-everforest-bg-light p-4 rounded-lg mt-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-everforest-blue">
+                                        {item.name}
+                                    </h3>
+                                    <a 
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-sm text-everforest-aqua hover:text-everforest-green transition-colors"
+                                    >
+                                        View Profile →
+                                    </a>
+                                </div>
+                                <p class="text-everforest-fg/80">{item.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {showExpandButton && (
+                    <button
+                        id="expand-button"
+                        class="w-full py-2 px-4 bg-everforest-bg-light text-everforest-blue hover:text-everforest-aqua transition-colors rounded-lg"
+                        onclick="
+                            document.getElementById('remaining-items').classList.toggle('hidden');
+                            const btn = document.getElementById('expand-button');
+                            btn.textContent = btn.textContent === 'Show More' ? 'Show Less' : 'Show More';
+                        "
+                    >
+                        Show More
+                    </button>
+                )}
+            </div>
+
+            <div class="markdown mt-6">
+                <Content />
+            </div>
+
+            <footer class="mt-8 pt-4 border-t border-everforest-gray/20">
+                <a href="/bsky-lists" class="text-everforest-blue hover:text-everforest-aqua transition-colors">
+                    ← Back to Lists
+                </a>
+            </footer>
+        </article>
+    </Terminal>
+</Main>
