@@ -1,0 +1,38 @@
+# VTuber Trust Protocol (VTP) - Domain Verification File
+# This file verifies ownership of a domain for VTuber agency / group authentication
+# Generated: 2025-03-20T20:31:10.360Z
+# Version: 1.0
+
+# ===== Protocol Information =====
+@PROTOCOL.START
+VERSION: 1.0
+TIMESTAMP: 2025-03-20T20:31:10.360Z
+EXPIRES: 2025-12-31T23:59:59.000Z
+@PROTOCOL.END
+
+# ===== Identity Verification =====
+@IDENTITY.START
+# Cryptographic signature of this file (excluding signature line)
+SIGNATURE: ed25519:f2f4e7a851e81a360bac4c8b4c3fbf2dc36d154337bfe5c5ac40f214d4814d4426744821b66ff02abae92b3cb5339c31e8aec553be5fe487a3c8508c2634ec0c
+# Unique identifier for the VTuber agency / group
+GROUP_ID: vtuber_123
+# Group name and contact information
+GROUP_NAME: Awesome VTubers
+CONTACT_EMAIL: hello@choco.rip
+@IDENTITY.END
+
+# ===== Website Information =====
+@WEBSITE.START
+# Primary domain being verified
+DOMAIN: choco.rip
+# Additional verified domains
+ALTERNATE_DOMAINS: gay.choco.rip
+@WEBSITE.END
+
+# ===== Security Information =====
+@SECURITY.START
+# Security contact information
+SECURITY_EMAIL: security@choco.rip
+# Security policy
+SECURITY_POLICY: https://choco.rip/security
+@SECURITY.END
