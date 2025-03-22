@@ -4,7 +4,7 @@ excerpt: "Detailed breakdown of VTubersTV's new documentation, including governa
 pubDate: "2025-01-20"
 draft: false
 featured: true
-author: "Stella"
+author: "Selina"
 categories: ["VTubersTV"]
 tags: ["Documentation", "Governance", "Community", "Updates", "VTubersTV"]
 ---
@@ -19,7 +19,7 @@ The newly added governance documentation establishes a clear framework for decis
 
 ### Core Team Structure
 - A small group of 3-5 trusted maintainers
-- Project leadership under [@Stella](https://github.com/chocoOnEstrogen)
+- Project leadership under [@Selina](https://github.com/chocoOnEstrogen)
 - Merit-based selection process for team members
 
 ### Decision Making Process

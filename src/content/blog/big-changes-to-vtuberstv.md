@@ -4,7 +4,7 @@ excerpt: "Exciting updates about the future of VTubersTV, including its new orga
 pubDate: "2024-11-19"
 draft: false
 featured: true
-author: "Stella"
+author: "Selina"
 categories: ["VTubersTV"]
 tags: ["VTubersTV", "Projects", "Updates", "Community"]
 ---

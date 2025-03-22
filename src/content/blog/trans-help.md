@@ -3,7 +3,7 @@ title: "Supporting Our Trans Community: New Resources Page"
 excerpt: "Learn about our new transgender resources page and how you can help make it even better."
 pubDate: "2025-01-23"
 draft: false
-author: "Stella"
+author: "Selina"
 categories: ["Community"]
 tags: ["Trans", "Resources", "Community", "Healthcare", "Support"]
 ---

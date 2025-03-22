@@ -14,7 +14,7 @@ Sending just "Hello" or "Hi" without context forces me to wait for you to explai
 
 1. Don't:
     - "Hello"
-    - "Hi Stella"
+    - "Hi Selina"
     - "Are you there?"
     - *[Insert vague greeting here]*
 2. Do:
@@ -25,7 +25,7 @@ Sending just "Hello" or "Hi" without context forces me to wait for you to explai
 
 Example:
 
-> "Hi Stella, I’m working on [project] and need your input on [specific detail]. Here’s a link to the document: [link]. Let me know if you need more info!"
+> "Hi Selina, I’m working on [project] and need your input on [specific detail]. Here’s a link to the document: [link]. Let me know if you need more info!"
 
 ## Contact Information & Availability
 

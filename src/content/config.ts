@@ -10,7 +10,7 @@ const blogCollection = defineCollection({
 		updatedDate: z.coerce.date().optional(),
 		draft: z.boolean().default(false),
 		featured: z.boolean().default(false),
-		author: z.string().default("Stella"),
+		author: z.string().default("Selina"),
 		categories: z.array(z.string()).min(1, "At least one category is required"),
 		tags: z.array(z.string()).default([]),
 	})

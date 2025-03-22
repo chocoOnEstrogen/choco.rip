@@ -1,12 +1,12 @@
 import type IConfig from "./interfaces/IConfig";
 
 const config: IConfig = {
-    title: "Stella",
-    description: "Stella is a software engineer and entrepreneur.",
+    title: "Selina",
+    description: "Selina is a software engineer and entrepreneur.",
     url: "https://choco.rip",
     image: "/images/choco.jpg",
     author: {
-        name: "Stella",
+        name: "Selina",
         role: "Software Engineer",
         email: "hello@choco.rip",
         social: {

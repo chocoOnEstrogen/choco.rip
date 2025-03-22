@@ -4,7 +4,7 @@ excerpt: "We need your help to raise $400 for VTubersTV's server infrastructure.
 pubDate: "2024-01-20"
 draft: false
 featured: true
-author: "Stella"
+author: "Selina"
 categories: ["VTubersTV"]
 tags: ["VTubersTV", "Projects", "Community", "Funding"]
 ---
@@ -31,7 +31,7 @@ A dedicated [caching](https://en.wikipedia.org/wiki/Cache_(computing)) server wi
 Hosting our infrastructure in-house is vital. I prefer not to rely on cloud services or virtual private servers (VPS), as owning the hardware gives us greater autonomy and ensures optimal performance.
 
 ## Commitment to Open Source
-VTubersTV is designed to be a **non-profit, open-source project**, and it will remain that way. Any revenue from donations or future premium features will go directly back into supporting the project. I, Stella, will not personally profit from VTubersTV. My goal is to create something valuable for the community, powered by the community.
+VTubersTV is designed to be a **non-profit, open-source project**, and it will remain that way. Any revenue from donations or future premium features will go directly back into supporting the project. I, Selina, will not personally profit from VTubersTV. My goal is to create something valuable for the community, powered by the community.
 
 ## How You Can Help
 Your donations will directly fund the server infrastructure needed to launch VTubersTV. If you can't donate, please consider sharing this message to help spread the word.
@@ -42,4 +42,4 @@ Your donations will directly fund the server infrastructure needed to launch VTu
 
 Thank you for your time and support!
 
-– Stella
+– Selina

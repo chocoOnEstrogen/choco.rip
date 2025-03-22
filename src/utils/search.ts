@@ -8,7 +8,7 @@ export class SearchParser {
     private static readonly PATTERNS = {
         tag: /(?:^|\s)#(\w+)/g,           // #typescript
         year: /(?:^|\s)@(\d{4})/g,        // @2023
-        author: /(?:^|\s)by:(\w+)/g,      // by:stella
+        author: /(?:^|\s)by:(\w+)/g,      // by:selina
         category: /(?:^|\s)in:(\w+)/g,    // in:tutorials
         before: /(?:^|\s)before:(\d{4})/g, // before:2024
         after: /(?:^|\s)after:(\d{4})/g,   // after:2022
