@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Selina - Software Engineer portfolio showcasing skills and projects">
+    <meta name="theme-color" content="#2563eb">
+    <title>Selina - Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --text-color: #1f2937;
+            --bg-color: #ffffff;
+            --accent-color: #3b82f6;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --gradient-start: #2563eb;
+            --gradient-end: #4f46e5;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition-speed: 0.2s;
+            --cursive-font: 'Dancing Script', 'Brush Script MT', cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(79, 70, 229, 0.1) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background: white;
+            box-shadow: var(--card-shadow);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-200);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        }
+
+        .header-left {
+            text-align: left;
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 2.75rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-info a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            background: var(--gray-100);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
+        }
+
+        .contact-info a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .contact-info a:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        section {
+            margin-bottom: 3rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: var(--gray-200);
+            margin-left: 0.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .skill-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skill-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            list-style: none;
+        }
+
+        .skill-list li {
+            background: linear-gradient(145deg, #ffffff, var(--gray-100));
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 500;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--gray-100);
+            padding: 1.75rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            transform: scaleX(0);
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-color);
+        }
+
+        .project-card:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .project-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .project-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #4b5563;
+            flex-grow: 1;
+        }
+
+        /* Print styles for PDF export */
+        @media print {
+            .container {
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+            }
+
+            .project-card, .skill-category {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            a {
+                text-decoration: none !important;
+            }
+
+            .contact-info a {
+                padding: 0.25rem 0.5rem;
+                border: 1px solid var(--gray-200);
+            }
+
+            @page {
+                margin: 0.5cm;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 1.5rem;
+                border-radius: 0;
+            }
+
+            header {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .header-left {
+                text-align: center;
+            }
+
+            .contact-info {
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0f172a;
+                --text-color: #e5e7eb;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+            }
+
+            body {
+                background-image: 
+                    radial-gradient(circle at top left, rgba(37, 99, 235, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at bottom right, rgba(79, 70, 229, 0.05) 0%, transparent 40%);
+            }
+
+            .container {
+                background: rgba(15, 23, 42, 0.95);
+            }
+
+            .project-card p {
+                color: #d1d5db;
+            }
+
+            .skill-list li {
+                background: linear-gradient(145deg, var(--gray-100), #1a1e2e);
+            }
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .achievement-card {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: transform 0.2s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .contribution-card {
+            background: var(--gray-100);
+            padding: 1.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .contribution-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .contribution-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .contribution-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 2px solid var(--gray-200);
+            padding-top: 2rem;
+        }
+
+        .signature {
+            font-family: var(--cursive-font);
+            margin: 2rem 0;
+        }
+
+        .signature p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        .signature-name {
+            font-family: var(--cursive-font);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .signature-name::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+            opacity: 0.3;
+        }
+
+        .tagline {
+            font-family: 'Inter', sans-serif;
+            font-style: italic;
+            color: var(--secondary-color);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>Selina</h1>
+                <div class="subtitle">Software Engineer & Tech Enthusiast</div>
+            </div>
+            <div class="contact-info">
+                <a href="https://choco.rip" target="_blank" rel="noopener noreferrer">Website</a>
+                <a href="https://discord.com/users/1248626823638552701" target="_blank" rel="noopener noreferrer">Discord</a>
+                <a href="https://bsky.app/profile/choco.vtubers.team" target="_blank" rel="noopener noreferrer">Bluesky</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>About Me</h2>
+            <p>Full Stack Developer passionate about building innovative web applications and tools. Based in Waycross, Georgia, with expertise in modern technologies and user experience. Multilingual in English, Japanese, Polish, and German.</p>
+        </section>
+
+        <section>
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <ul class="skill-list">
+                        <li>TypeScript</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>Rust</li>
+                        <li>C</li>
+                        <li>C#</li>
+                        <li>HTML5</li>
+                        <li>Markdown</li>
+                        <li>Bash</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Frameworks & Backend</h3>
+                    <ul class="skill-list">
+                        <li>Express.js</li>
+                        <li>Node.js</li>
+                        <li>Nuxt.js</li>
+                        <li>Astro</li>
+                        <li>TailwindCSS</li>
+                        <li>Bootstrap</li>
+                        <li>Discord.js</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Databases & Storage</h3>
+                    <ul class="skill-list">
+                        <li>MongoDB</li>
+                        <li>PostgreSQL</li>
+                        <li>Redis</li>
+                        <li>MySQL</li>
+                        <li>SQLite</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools & Services</h3>
+                    <ul class="skill-list">
+                        <li>Neovim</li>
+                        <li>Vim</li>
+                        <li>VSCode</li>
+                        <li>Azure</li>
+                        <li>Cloudflare</li>
+                        <li>Google Cloud</li>
+                        <li>Git</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Featured Projects</h2>
+            <div class="projects">
+                <a href="https://vtubers.tv" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>VTubersTV</h3>
+                    <p>The Ultimate VTuber Platform - A comprehensive platform dedicated to VTuber content and community engagement. Currently in development.</p>
+                </a>
+                <a href="https://github.com/chocoOnEstrogen/rem-bot" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>Rem Bot</h3>
+                    <p>A powerful GitHub bot designed to enhance repository management and collaboration.</p>
+                </a>
+                <a href="https://github.com/chocoOnEstrogen/flux" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>Flux</h3>
+                    <p>An advanced, customizable shell for modern systems written in Rust, supporting Windows, macOS, and Linux platforms.</p>
+                </a>
+                <a href="https://github.com/chocoOnEstrogen/git-account-switcher" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>Git Account Switcher</h3>
+                    <p>A Python tool for seamlessly managing and switching between multiple Git configurations and accounts.</p>
+                </a>
+                <a href="https://github.com/chocoOnEstrogen/AnimeStream" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>AnimeStream</h3>
+                    <p>A personal anime streaming platform for watching and tracking favorite series with progress tracking and discovery features.</p>
+                </a>
+                <a href="https://github.com/chocoOnEstrogen/vylet" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <h3>Vylet</h3>
+                    <p>A feature-rich Discord bot built with TypeScript, providing utility, moderation, and entertainment features.</p>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Languages</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Native</h3>
+                    <ul class="skill-list">
+                        <li>English</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Learning</h3>
+                    <ul class="skill-list">
+                        <li>German</li>
+                        <li>Japanese</li>
+                        <li>Polish</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Open Source Contributions</h2>
+            <div class="projects">
+                <div class="contribution-card">
+                    <h3>Active Maintainer</h3>
+                    <ul>
+                        <li>VTubersTV Organization</li>
+                        <li>Snap VC Organization</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <span class="achievement-icon">🌟</span>
+                    <h3>Public Sponsor</h3>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🦈</span>
+                    <h3>Pull Shark</h3>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🎯</span>
+                    <h3>Quickdraw</h3>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="signature">
+                <p>With love and dedication,</p>
+                <h3 class="signature-name">~ Selina ~</h3>
+                <p class="tagline">Building the future, one commit at a time 🌸</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
