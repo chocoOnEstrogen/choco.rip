@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My GitHub Info - Find Your GitHub ID</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="My GitHub Info - Find Your GitHub ID">
+    <meta name="description" content="Find your GitHub user ID and view your GitHub profile information. Useful for contributing to VTubers.TV translations.">
+    <meta name="keywords" content="github id, github user id, github profile, vtubers.tv, translations">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.choco.rip/pages/my-github.html">
+    <meta property="og:title" content="My GitHub Info - Find Your GitHub ID">
+    <meta property="og:description" content="Find your GitHub user ID and view your GitHub profile information. Useful for contributing to VTubers.TV translations.">
+    <meta property="og:image" content="https://www.choco.rip/images/bg.gif">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.choco.rip/pages/my-github.html">
+    <meta property="twitter:title" content="My GitHub Info - Find Your GitHub ID">
+    <meta property="twitter:description" content="Find your GitHub user ID and view your GitHub profile information. Useful for contributing to VTubers.TV translations.">
+    <meta property="twitter:image" content="https://www.choco.rip/images/bg.gif">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="Selina">
+    <link rel="canonical" href="https://www.choco.rip/pages/my-github.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#3b82f6',
+                            hover: '#2563eb',
+                        },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+            <h1 class="text-4xl font-bold text-primary-500">My GitHub Info</h1>
+            <div class="flex gap-2">
+                <a href="/" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 hover:bg-primary-500 hover:text-white transition-all duration-200">🏠</a>
+                <button 
+                    class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 hover:bg-primary-500 hover:text-white transition-all duration-200"
+                    id="theme-toggle"
+                >🌙</button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md mb-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex flex-col gap-4">
+                <div class="flex gap-4">
+                    <input 
+                        type="text" 
+                        class="flex-1 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                        placeholder="Enter your GitHub username..." 
+                        id="username-input"
+                    >
+                    <button 
+                        class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200"
+                        id="search-button"
+                    >Search</button>
+                </div>
+                <div id="error-message" class="text-red-500 hidden"></div>
+            </div>
+        </div>
+
+        <div id="user-info" class="hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md mb-6 border border-gray-200 dark:border-gray-700 animate-fade-in">
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="text-center sm:text-left">
+                        <img id="avatar" src="" alt="GitHub Avatar" class="w-32 h-32 rounded-full mx-auto sm:mx-0 mb-4">
+                        <a id="profile-link" href="" target="_blank" class="text-primary-500 hover:text-primary-hover">View Profile</a>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 id="name" class="text-2xl font-bold"></h2>
+                            <span id="login" class="text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                        <p id="bio" class="text-gray-600 dark:text-gray-400 mb-4"></p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">ID:</span>
+                                <span id="id" class="font-mono"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">Followers:</span>
+                                <span id="followers"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">Following:</span>
+                                <span id="following"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">Repos:</span>
+                                <span id="repos"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">Gists:</span>
+                                <span id="gists"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-gray-400">Created:</span>
+                                <span id="created"></span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a id="email-link" href="" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">
+                                ✉️ <span></span>
+                            </a>
+                            <a id="blog-link" href="" target="_blank" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">
+                                🌐 <span></span>
+                            </a>
+                            <a id="twitter-link" href="" target="_blank" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">
+                                🐦 <span></span>
+                            </a>
+                            <span id="location" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300">
+                                📍 <span></span>
+                            </span>
+                            <span id="company" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300">
+                                🏢 <span></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700 animate-fade-in">
+                    <h3 class="text-xl font-bold mb-4">Recent Repositories</h3>
+                    <div id="repos-list" class="space-y-3"></div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700 animate-fade-in">
+                    <h3 class="text-xl font-bold mb-4">Recent Activity</h3>
+                    <div id="activity-list" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700 animate-fade-in">
+                <h3 class="text-xl font-bold mb-4">How to Use Your GitHub ID</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    Your GitHub ID is required when contributing to VTubers.TV translations. Add it to the contributors list in the translation file's metadata section:
+                </p>
+                <pre class="bg-gray-100 dark:bg-slate-700 p-4 rounded-lg overflow-x-auto">
+metadata:
+  contributors:
+    - <span id="id-example" class="text-primary-500"></span>  # Your GitHub ID</pre>
+                <button 
+                    id="copy-id" 
+                    class="mt-4 px-4 py-2 rounded-lg bg-primary-500 text-white hover:bg-primary-hover transition-all duration-200"
+                >Copy ID</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function setTheme(isDark) {
+            document.documentElement.classList.toggle('dark', isDark);
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // Initialize theme
+        setTheme(prefersDarkScheme.matches);
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            setTheme(!isDark);
+        });
+
+        // GitHub API functionality with caching
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+        const usernameInput = document.getElementById('username-input');
+        const searchButton = document.getElementById('search-button');
+        const userInfo = document.getElementById('user-info');
+        const errorMessage = document.getElementById('error-message');
+        const avatar = document.getElementById('avatar');
+        const name = document.getElementById('name');
+        const login = document.getElementById('login');
+        const bio = document.getElementById('bio');
+        const id = document.getElementById('id');
+        const followers = document.getElementById('followers');
+        const following = document.getElementById('following');
+        const repos = document.getElementById('repos');
+        const gists = document.getElementById('gists');
+        const created = document.getElementById('created');
+        const idExample = document.getElementById('id-example');
+        const profileLink = document.getElementById('profile-link');
+        const emailLink = document.getElementById('email-link');
+        const blogLink = document.getElementById('blog-link');
+        const twitterLink = document.getElementById('twitter-link');
+        const locationElement = document.getElementById('location');
+        const company = document.getElementById('company');
+        const reposList = document.getElementById('repos-list');
+        const activityList = document.getElementById('activity-list');
+        const copyId = document.getElementById('copy-id');
+
+        function getCachedData(username) {
+            const cached = localStorage.getItem(`github_${username}`);
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_DURATION) {
+                    return data;
+                }
+                localStorage.removeItem(`github_${username}`);
+            }
+            return null;
+        }
+
+        function setCachedData(username, data) {
+            const cacheData = {
+                data,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(`github_${username}`, JSON.stringify(cacheData));
+        }
+
+        async function fetchGitHubUser(username) {
+            const cachedData = getCachedData(username);
+            if (cachedData) {
+                return cachedData;
+            }
+
+            try {
+                const [userResponse, reposResponse, eventsResponse] = await Promise.all([
+                    fetch(`https://api.github.com/users/${username}`),
+                    fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=5`),
+                    fetch(`https://api.github.com/users/${username}/events?per_page=5`)
+                ]);
+
+                if (!userResponse.ok) {
+                    throw new Error('User not found');
+                }
+
+                const userData = await userResponse.ok ? await userResponse.json() : null;
+                const reposData = await reposResponse.ok ? await reposResponse.json() : [];
+                const eventsData = await eventsResponse.ok ? await eventsResponse.json() : [];
+
+                const data = { userData, reposData, eventsData };
+                setCachedData(username, data);
+                return data;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function displayUserInfo({ userData, reposData, eventsData }) {
+            // Basic info
+            avatar.src = userData.avatar_url;
+            name.textContent = userData.name || userData.login;
+            login.textContent = `@${userData.login}`;
+            bio.textContent = userData.bio || 'No bio available';
+            id.textContent = userData.id;
+            followers.textContent = userData.followers.toLocaleString();
+            following.textContent = userData.following.toLocaleString();
+            repos.textContent = userData.public_repos.toLocaleString();
+            gists.textContent = userData.public_gists.toLocaleString();
+            created.textContent = formatDate(userData.created_at);
+            idExample.textContent = userData.id;
+            profileLink.href = userData.html_url;
+
+            // Contact info
+            if (userData.email) {
+                emailLink.href = `mailto:${userData.email}`;
+                emailLink.querySelector('span').textContent = userData.email;
+                emailLink.classList.remove('hidden');
+                emailLink.classList.add('flex');
+            }
+
+            if (userData.blog) {
+                blogLink.href = userData.blog.startsWith('http') ? userData.blog : `https://${userData.blog}`;
+                blogLink.querySelector('span').textContent = userData.blog;
+                blogLink.classList.remove('hidden');
+                blogLink.classList.add('flex');
+            }
+
+            if (userData.twitter_username) {
+                twitterLink.href = `https://twitter.com/${userData.twitter_username}`;
+                twitterLink.querySelector('span').textContent = `@${userData.twitter_username}`;
+                twitterLink.classList.remove('hidden');
+                twitterLink.classList.add('flex');
+            }
+
+            if (userData.location) {
+                locationElement.querySelector('span').textContent = userData.location;
+                locationElement.classList.remove('hidden');
+                locationElement.classList.add('flex');
+            }
+
+            if (userData.company) {
+                company.querySelector('span').textContent = userData.company;
+                company.classList.remove('hidden');
+                company.classList.add('flex');
+            }
+
+            // Repositories
+            reposList.innerHTML = reposData.map(repo => `
+                <div class="flex items-center justify-between">
+                    <a href="${repo.html_url}" target="_blank" class="text-primary-500 hover:text-primary-hover">${repo.name}</a>
+                    <span class="text-sm text-gray-500">⭐ ${repo.stargazers_count}</span>
+                </div>
+            `).join('');
+
+            // Activity
+            activityList.innerHTML = eventsData.map(event => {
+                let actionText = '';
+                switch(event.type) {
+                    case 'PushEvent':
+                        actionText = `Pushed to ${event.repo.name}`;
+                        break;
+                    case 'CreateEvent':
+                        actionText = `Created ${event.payload.ref_type} in ${event.repo.name}`;
+                        break;
+                    case 'IssuesEvent':
+                        actionText = `${event.payload.action} issue in ${event.repo.name}`;
+                        break;
+                    default:
+                        actionText = `${event.type} in ${event.repo.name}`;
+                }
+                return `
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">${actionText}</span>
+                        <span class="text-sm text-gray-500">${formatDate(event.created_at)}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            userInfo.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+        }
+
+        function displayError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+            userInfo.classList.add('hidden');
+        }
+
+        async function handleSearch() {
+            const username = usernameInput.value.trim();
+            if (!username) {
+                displayError('Please enter a GitHub username');
+                return;
+            }
+
+            try {
+                const data = await fetchGitHubUser(username);
+                displayUserInfo(data);
+            } catch (error) {
+                displayError('User not found. Please check the username and try again.');
+            }
+        }
+
+        copyId.addEventListener('click', () => {
+            navigator.clipboard.writeText(id.textContent).then(() => {
+                const originalText = copyId.textContent;
+                copyId.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyId.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        searchButton.addEventListener('click', handleSearch);
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    </script>
+</body>
+</html> 
