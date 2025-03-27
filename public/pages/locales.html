@@ -120,7 +120,8 @@
                             ${showExpandButton ? `
                                 <button 
                                     class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200"
-                                    onclick="toggleCountries(this, ${JSON.stringify(locale.countries)})"
+                                    data-countries='${JSON.stringify(locale.countries)}'
+                                    onclick="toggleCountries(this)"
                                 >
                                     +${countryCount - maxCountries} more
                                 </button>
@@ -132,9 +133,10 @@
         }
 
         // Function to toggle countries visibility
-        window.toggleCountries = function(button, countries) {
+        window.toggleCountries = function(button) {
             const container = button.parentElement;
             const currentText = button.textContent;
+            const countries = JSON.parse(button.dataset.countries);
             
             if (currentText.includes('more')) {
                 // Show all countries
@@ -151,10 +153,12 @@
             } else {
                 // Hide extra countries
                 const maxCountries = 3;
-                const elements = container.children;
-                for (let i = maxCountries; i < elements.length; i++) {
-                    elements[i].remove();
-                }
+                const elements = Array.from(container.children);
+                elements.forEach((element, index) => {
+                    if (index >= maxCountries && element !== button) {
+                        element.remove();
+                    }
+                });
                 button.textContent = `+${countries.length - maxCountries} more`;
             }
         };
