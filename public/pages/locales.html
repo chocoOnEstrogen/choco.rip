@@ -3,7 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Locales</title>
+    <title>Language Locales - Comprehensive Language and Country Information</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Language Locales - Comprehensive Language and Country Information">
+    <meta name="description" content="Explore a comprehensive database of languages, their native names, ISO codes, and associated countries. Search and discover language information easily.">
+    <meta name="keywords" content="languages, locales, ISO 639, language codes, country codes, language database">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.choco.rip/pages/locales.html">
+    <meta property="og:title" content="Language Locales - Comprehensive Language and Country Information">
+    <meta property="og:description" content="Explore a comprehensive database of languages, their native names, ISO codes, and associated countries. Search and discover language information easily.">
+    <meta property="og:image" content="https://www.choco.rip/images/bg.gif">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.choco.rip/pages/locales.html">
+    <meta property="twitter:title" content="Language Locales - Comprehensive Language and Country Information">
+    <meta property="twitter:description" content="Explore a comprehensive database of languages, their native names, ISO codes, and associated countries. Search and discover language information easily.">
+    <meta property="twitter:image" content="https://www.choco.rip/images/bg.gif">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="Selina">
+    <link rel="canonical" href="https://www.choco.rip/pages/locales.html">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -45,6 +71,10 @@
                     class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 hover:bg-primary-500 hover:text-white transition-all duration-200"
                     id="theme-toggle"
                 >🌙</button>
+                <button
+                    class="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 hover:bg-primary-500 hover:text-white transition-all duration-200"
+                    id="download-json"
+                >📥 JSON</button>
             </div>
         </div>
         <div id="locales-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -69,6 +99,17 @@
         themeToggle.addEventListener('click', () => {
             const isDark = document.documentElement.classList.contains('dark');
             setTheme(!isDark);
+        });
+
+        // Download JSON functionality
+        document.getElementById('download-json').addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(langs, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "language-locales.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         });
 
         // Search functionality
