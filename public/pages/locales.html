@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Locales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#3b82f6',
+                            hover: '#2563eb',
+                        },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+            <h1 class="text-4xl font-bold text-primary-500">Language Locales</h1>
+            <div class="flex gap-4 w-full sm:w-auto">
+                <input 
+                    type="text" 
+                    class="flex-1 sm:w-64 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Search languages..." 
+                    id="search-input"
+                >
+                <button 
+                    class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 hover:bg-primary-500 hover:text-white transition-all duration-200"
+                    id="theme-toggle"
+                >🌙</button>
+            </div>
+        </div>
+        <div id="locales-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Locales will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="./langs.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function setTheme(isDark) {
+            document.documentElement.classList.toggle('dark', isDark);
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // Initialize theme
+        setTheme(prefersDarkScheme.matches);
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            setTheme(!isDark);
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const container = document.getElementById('locales-container');
+
+        function filterLocales(searchTerm) {
+            const filteredLangs = langs.filter(locale => 
+                locale.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                locale.nativeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                locale.countries.some(country => 
+                    country.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            );
+            
+            container.innerHTML = filteredLangs.map(locale => createLocaleCard(locale)).join('');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            filterLocales(e.target.value);
+        });
+
+        // Function to create a locale card
+        function createLocaleCard(locale) {
+            const countryCount = locale.countries.length;
+            const maxCountries = 3;
+            const showExpandButton = countryCount > maxCountries;
+            const displayCountries = showExpandButton ? locale.countries.slice(0, maxCountries) : locale.countries;
+
+            return `
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 animate-fade-in">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
+                        <div class="text-xl font-bold text-primary-500">${locale.name}</div>
+                        <div class="text-gray-600 dark:text-gray-400">${locale.nativeName}</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${locale.iso639_1 ? `<span class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">ISO 639-1: ${locale.iso639_1}</span>` : ''}
+                        ${locale.iso639_2 ? `<span class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">ISO 639-2: ${locale.iso639_2}</span>` : ''}
+                        ${locale.iso639_3 ? `<span class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">ISO 639-3: ${locale.iso639_3}</span>` : ''}
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Countries</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${displayCountries.map(country => `
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">
+                                    ${country.name} (${country.code})
+                                </span>
+                            `).join('')}
+                            ${showExpandButton ? `
+                                <button 
+                                    class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200"
+                                    onclick="toggleCountries(this, ${JSON.stringify(locale.countries)})"
+                                >
+                                    +${countryCount - maxCountries} more
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to toggle countries visibility
+        window.toggleCountries = function(button, countries) {
+            const container = button.parentElement;
+            const currentText = button.textContent;
+            
+            if (currentText.includes('more')) {
+                // Show all countries
+                const maxCountries = 3;
+                const remainingCountries = countries.slice(maxCountries);
+                const countryElements = remainingCountries.map(country => `
+                    <span class="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-primary-500 hover:text-white transition-colors duration-200">
+                        ${country.name} (${country.code})
+                    </span>
+                `).join('');
+                
+                container.insertAdjacentHTML('beforeend', countryElements);
+                button.textContent = 'Show less';
+            } else {
+                // Hide extra countries
+                const maxCountries = 3;
+                const elements = container.children;
+                for (let i = maxCountries; i < elements.length; i++) {
+                    elements[i].remove();
+                }
+                button.textContent = `+${countries.length - maxCountries} more`;
+            }
+        };
+
+        // Initial render with unique languages
+        const uniqueLangs = langs.reduce((acc, locale) => {
+            const key = `${locale.iso639_1}-${locale.iso639_2}-${locale.iso639_3}`;
+            if (!acc[key]) {
+                acc[key] = locale;
+            } else {
+                // Merge countries if same language
+                acc[key].countries = [...acc[key].countries, ...locale.countries];
+            }
+            return acc;
+        }, {});
+        container.innerHTML = Object.values(uniqueLangs).map(locale => createLocaleCard(locale)).join('');
+    </script>
+</body>
+</html> 
