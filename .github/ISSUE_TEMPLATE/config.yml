@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Crisis Support
+    url: /trans-help
+    about: 🚨 If you're in crisis, please visit our crisis support resources or call 988
+  - name: Email Contact
+    url: mailto:selina@choco.rip
+    about: For private inquiries, you can email me directly

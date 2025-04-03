@@ -1,0 +1,79 @@
+{
+  "rules": [
+    {
+      "userAgent": "*",
+      "allow": [
+        "/",
+        "/projects/*",
+        "/my-github/*",
+        "/helix/*",
+        "/public/*.json",
+        "/public/*.xml"
+      ],
+      "disallow": [
+        "/api/*",
+        "/internal/*",
+        "/*.json$",
+        "/*.xml$",
+        "/*.ts$",
+        "/*.tsx$",
+        "/*.js$",
+        "/*.jsx$",
+        "/*.css$",
+        "/*.scss$",
+        "/_next/*",
+        "/node_modules/*",
+        "/.next/*",
+        "/.git/*",
+        "/.env*",
+        "/.vscode/*",
+        "/.idea/*",
+        "/configs/*",
+        "/scripts/*"
+      ],
+      "sitemap": "https://choco.rip/sitemap.xml",
+      "crawlDelay": 5
+    },
+    {
+      "userAgent": "GPTBot",
+      "disallow": [
+        "/"
+      ]
+    },
+    {
+      "userAgent": "ChatGPT-User",
+      "disallow": [
+        "/"
+      ]
+    },
+    {
+      "userAgent": "Googlebot",
+      "allow": [
+        "/",
+        "/projects/*",
+        "/my-github/*",
+        "/helix/*"
+      ],
+      "disallow": [
+        "/api/*",
+        "/internal/*"
+      ],
+      "crawlDelay": 1
+    },
+    {
+      "userAgent": "Googlebot-Image",
+      "allow": [
+        "/",
+        "/projects/*",
+        "/my-github/*",
+        "/helix/*"
+      ],
+      "disallow": [
+        "/api/*",
+        "/internal/*"
+      ],
+      "crawlDelay": 1
+    }
+  ],
+  "outputPath": "public/robots.txt"
+} 

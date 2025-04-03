@@ -1,0 +1,8 @@
+{
+    "baseUrl": "https://choco.rip",
+    "outputPath": "public/sitemap.xml",
+    "includeDynamicRoutes": true,
+    "lastModified": true,
+    "changeFrequency": "weekly",
+    "priority": 0.7
+}

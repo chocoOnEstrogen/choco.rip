@@ -1,0 +1,76 @@
+name: Trans Resource Suggestion
+description: Suggest a new resource to add to the transgender resources page
+title: "[RESOURCE] "
+labels: 
+  - trans-resources
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a resource! Please fill out this form as completely as you can.
+
+  - type: input
+    id: resource-name
+    attributes:
+      label: "Resource Name"
+      description: "What is the name of the resource?"
+      placeholder: "e.g., Trans Healthcare Network"
+    validations:
+      required: true
+
+  - type: input
+    id: resource-url
+    attributes:
+      label: "Resource URL"
+      description: "What is the website or contact information for this resource?"
+      placeholder: "https://example.com"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resource-category
+    attributes:
+      label: "Resource Category"
+      description: "Which category does this resource best fit into?"
+      options:
+        - Crisis Support
+        - Mental Health
+        - Medical Resources
+        - Legal Resources
+        - Community Support
+        - Educational Materials
+        - DIY Resources
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: resource-description
+    attributes:
+      label: "Resource Description"
+      description: "Please provide a brief description of the resource and why it would be valuable to include"
+      placeholder: "This resource provides..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: resource-verification
+    attributes:
+      label: "Resource Verification"
+      description: "Please confirm the following about this resource"
+      options:
+        - label: "This resource is currently active and maintained"
+          required: true
+        - label: "This resource is trans-friendly and inclusive"
+          required: true
+        - label: "I have personally used or verified this resource"
+          required: false
+        - label: "This resource is accessible to a diverse audience"
+          required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: "Additional Information"
+      description: "Any other details about this resource that would be helpful to know? (e.g., specific services, costs, accessibility features)" 
