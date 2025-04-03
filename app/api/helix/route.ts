@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { Helix } from "@vtubers.tv/utils"
+import { Helix } from "@/lib/helix"
 
 export async function POST(request: Request) {
   try {
