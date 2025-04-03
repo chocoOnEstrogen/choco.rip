@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: "No Hello - Communication Guidelines",
   description: "Learn how to communicate effectively with me. Skip the small talk and get straight to the point for faster and more productive conversations.",
   keywords: "communication guidelines, no hello, effective communication, contact information, availability",
+  icons: {
+    icon: config.avatar,
+    shortcut: config.avatar,
+    apple: config.avatar,
+  },
   openGraph: {
     title: "No Hello - Communication Guidelines",
     description: "Learn how to communicate effectively with me. Skip the small talk and get straight to the point for faster and more productive conversations.",

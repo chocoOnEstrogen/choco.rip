@@ -20,12 +20,6 @@ export interface Config {
   /** Optional location information */
   location?: string;
   
-  /** Twitter profile URL */
-  twitter?: string;
-  
-  /** LinkedIn profile URL */
-  linkedin?: string;
-  
   /** Optional social media links */
   socials?: {
     /** GitHub profile URL */

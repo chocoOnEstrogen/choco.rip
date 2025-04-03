@@ -8,8 +8,6 @@ const config: Config = {
     email: "selina@choco.rip",
     location: "Waycross, GA, USA",
     url: "https://choco.rip",
-    twitter: "https://twitter.com/chocoOnEstrogen",
-    linkedin: "https://linkedin.com/in/yourusername",
     socials: {
         github: "https://github.com/chocoOnEstrogen",
         discord: "https://discord.com/users/765611223297318943",

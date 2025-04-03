@@ -54,8 +54,6 @@ export default function Header() {
   const socialLinks = [
     { icon: Mail, href: `mailto:${config.email}`, label: "Email" },
     { icon: Github, href: config.github, label: "GitHub" },
-    ...(config.twitter ? [{ icon: Twitter, href: config.twitter, label: "Twitter" }] : []),
-    ...(config.linkedin ? [{ icon: Linkedin, href: config.linkedin, label: "LinkedIn" }] : []),
   ]
 
   return (
