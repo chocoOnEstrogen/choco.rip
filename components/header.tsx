@@ -49,6 +49,7 @@ export default function Header() {
     { name: "Skills", href: isHomePage(pathname) ? "#skills" : "/#skills" },
     { name: "Contact", href: isHomePage(pathname) ? "#contact" : "/#contact" },
     { name: "VTubers.TV", href: "/vtubers.tv", label: "VTubers.TV" },
+    { name: "Tools", href: "/tools", label: "Tools" },
   ]
 
   const socialLinks = [
