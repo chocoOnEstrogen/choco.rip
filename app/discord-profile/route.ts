@@ -49,8 +49,8 @@ interface LanyardData {
     } | null;
 }
 
-// Cache TTL in seconds (1 hour)
-const CACHE_TTL = 3600
+// Cache TTL in seconds (5 minutes)
+const CACHE_TTL = 300
 
 async function fetchLanyardData(userId: string) {
     try {
