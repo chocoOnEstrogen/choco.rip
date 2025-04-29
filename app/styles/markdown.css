@@ -1,0 +1,177 @@
+/* Markdown Content Styling */
+.prose {
+  color: var(--foreground);
+  max-width: 65ch;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--foreground);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.prose h1 {
+  font-size: 2.25em;
+  font-weight: 800;
+}
+
+.prose h2 {
+  font-size: 1.875em;
+  font-weight: 700;
+}
+
+.prose h3 {
+  font-size: 1.5em;
+}
+
+.prose h4 {
+  font-size: 1.25em;
+}
+
+/* Paragraphs */
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+/* Links */
+.prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: var(--primary-hover);
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+/* Code blocks */
+.prose pre {
+  background-color: var(--muted);
+  border-radius: 0.5rem;
+  padding: 1.25em;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  overflow-x: auto;
+}
+
+.prose code {
+  background-color: var(--muted);
+  border-radius: 0.25rem;
+  padding: 0.125em 0.25em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1em;
+  margin-left: 0;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+
+/* Images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.75em;
+  text-align: left;
+}
+
+.prose th {
+  background-color: var(--muted);
+  font-weight: 600;
+}
+
+/* Horizontal Rule */
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+/* Task Lists */
+.prose ul[data-task-list] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose li[data-task-list-item] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.prose li[data-task-list-item] input[type="checkbox"] {
+  margin-top: 0.25em;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .prose {
+    color: var(--foreground);
+  }
+  
+  .prose pre,
+  .prose code {
+    background-color: var(--muted);
+  }
+  
+  .prose th {
+    background-color: var(--muted);
+  }
+}

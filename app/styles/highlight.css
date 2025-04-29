@@ -1,0 +1,28 @@
+/* Import the base highlight.js theme */
+@import 'highlight.js/styles/github-dark.css';
+
+/* Custom styles for code blocks */
+pre {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  background-color: #0d1117 !important;
+  position: relative;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+/* Language badge */
+pre code::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-family: system-ui, -apple-system, sans-serif;
+} 
