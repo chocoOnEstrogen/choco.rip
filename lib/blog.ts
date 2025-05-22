@@ -11,7 +11,9 @@ console.log("Marked plugins configured successfully")
 
 // Cache TTL in seconds (1 hour)
 const CACHE_TTL = 3600
+const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV !== 'production'
 console.log(`Cache TTL set to ${CACHE_TTL} seconds`)
+console.log(`Environment: ${isDevelopment ? 'development' : 'production'}`)
 
 interface BlogPost {
   slug: string
@@ -142,8 +144,16 @@ export function extractFrontmatter(content: string): {
  */
 export async function parseMarkdown(content: string): Promise<string> {
   console.log(`Parsing markdown content (${content.length} bytes)...`)
-  const html = await marked(content)
-  console.log(`Successfully converted markdown to HTML (${html.length} bytes)`)
+  
+  const renderer = new marked.Renderer()
+  renderer.image = ({ href, title, text }: { href: string; title: string | null; text: string }) => {
+    return `<figure>
+      <img src="${href}" alt="${text}" ${title ? `title="${title}"` : ''}>
+      <figcaption>${text}</figcaption>
+    </figure>`
+  }
+  
+  const html = await marked(content, { renderer })
   return html
 }
 
@@ -158,14 +168,18 @@ export async function getBlogPosts(year?: number, month?: number): Promise<BlogP
   console.log(`Fetching blog posts with cache key: ${cacheKey}`)
   
   try {
-    // Try to get from cache first
-    console.log("Checking redis cache...")
-    const cachedData = await redis.get<BlogPostsResponse>(cacheKey)
-    if (cachedData) {
-      console.log(`Cache hit for ${cacheKey}`)
-      return cachedData
+    // Try to get from cache first if not in development
+    if (!isDevelopment) {
+      console.log("Checking redis cache...")
+      const cachedData = await redis.get<BlogPostsResponse>(cacheKey)
+      if (cachedData) {
+        console.log(`Cache hit for ${cacheKey}`)
+        return cachedData
+      }
+      console.log(`Cache miss for ${cacheKey}, fetching from GitHub`)
+    } else {
+      console.log("Development mode: Skipping cache check")
     }
-    console.log(`Cache miss for ${cacheKey}, fetching from GitHub`)
 
     const years = await fetchGitHubContents("")
     console.log(`Found ${years.length} year directories`)
@@ -261,10 +275,14 @@ export async function getBlogPosts(year?: number, month?: number): Promise<BlogP
       }
     }
 
-    // Cache the result
-    console.log(`Caching results with key: ${cacheKey}`)
-    await redis.set(cacheKey, result, CACHE_TTL)
-    console.log(`Successfully cached results for ${CACHE_TTL} seconds`)
+    // Cache the result if not in development
+    if (!isDevelopment) {
+      console.log(`Caching results with key: ${cacheKey}`)
+      await redis.set(cacheKey, result, CACHE_TTL)
+      console.log(`Successfully cached results for ${CACHE_TTL} seconds`)
+    } else {
+      console.log("Development mode: Skipping cache write")
+    }
     
     return result
   } catch (error) {
@@ -287,14 +305,18 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   console.log(`Fetching blog post with slug: ${slug}`)
   
   try {
-    // Try to get from cache first
-    console.log(`Checking cache for key: ${cacheKey}`)
-    const cachedData = await redis.get<BlogPost>(cacheKey)
-    if (cachedData) {
-      console.log(`Cache hit for post: ${slug}`)
-      return cachedData
+    // Try to get from cache first if not in development
+    if (!isDevelopment) {
+      console.log(`Checking cache for key: ${cacheKey}`)
+      const cachedData = await redis.get<BlogPost>(cacheKey)
+      if (cachedData) {
+        console.log(`Cache hit for post: ${slug}`)
+        return cachedData
+      }
+      console.log(`Cache miss for post: ${slug}, fetching from GitHub`)
+    } else {
+      console.log("Development mode: Skipping cache check")
     }
-    console.log(`Cache miss for post: ${slug}, fetching from GitHub`)
 
     // First, get all years
     const years = await fetchGitHubContents("")
@@ -328,10 +350,14 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
                 month: parseInt(monthDir.name)
               }
 
-              // Cache the result
-              console.log(`Caching post with key: ${cacheKey}`)
-              await redis.set(cacheKey, result, CACHE_TTL)
-              console.log(`Successfully cached post for ${CACHE_TTL} seconds`)
+              // Cache the result if not in development
+              if (!isDevelopment) {
+                console.log(`Caching post with key: ${cacheKey}`)
+                await redis.set(cacheKey, result, CACHE_TTL)
+                console.log(`Successfully cached post for ${CACHE_TTL} seconds`)
+              } else {
+                console.log("Development mode: Skipping cache write")
+              }
               
               return result
             }
